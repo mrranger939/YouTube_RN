@@ -1,0 +1,27 @@
+.container {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50px; /* adjust the height to your liking */
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    z-index: 1; /* ensure the navbar is on top */
+  }
+  
+  .sidebarContainer {
+    margin-left: 200px; /* adjust the margin to your liking */
+    padding: 20px;
+  }
+  
+  .sidebar {
+    width: 200px; /* adjust the width to your liking */
+    background-color: #f0f0f0;
+    padding: 20px;
+  }
