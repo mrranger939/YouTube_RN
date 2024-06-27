@@ -4,155 +4,126 @@ import './Sidebar.css';
 const Sidebar = ({ sidebarOpen }) => {
   return (
     <div className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
-      <a href="/" className="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-        <svg className="bi pe-none me-2" width="40" height="32">
-          <use xlinkHref="#bootstrap" />
-        </svg>
-        <span className="fs-4">Sidebar</span>
-      </a>
-      <hr />
+      
       <ul className="nav nav-pills flex-column mb-auto">
         <li className="nav-item">
-          <a href="#" className="nav-link active" aria-current="page">
-            <svg className="bi pe-none me-2" width="16" height="16">
+          <a href="#" className="nav-link link-body-emphasis " aria-current="page">
+            {/* <svg className="bi pe-none me-2" width="16" height="16">
               <use xlinkHref="#home" />
-            </svg>
-            Home
+            </svg> */}
+<svg style={{marginRight:20}} xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24" height="24" viewBox="0 0 48 48">
+<path d="M39.5,43h-9c-1.381,0-2.5-1.119-2.5-2.5v-9c0-1.105-0.895-2-2-2h-4c-1.105,0-2,0.895-2,2v9c0,1.381-1.119,2.5-2.5,2.5h-9	C7.119,43,6,41.881,6,40.5V21.413c0-2.299,1.054-4.471,2.859-5.893L23.071,4.321c0.545-0.428,1.313-0.428,1.857,0L39.142,15.52	C40.947,16.942,42,19.113,42,21.411V40.5C42,41.881,40.881,43,39.5,43z"></path>
+</svg>          Home
           </a>
         </li>
         
         <li>
           <a href="#" className="nav-link link-body-emphasis">
-            <svg className="bi pe-none me-2" width="16" height="16">
-              <use xlinkHref="#grid" />
-            </svg>
+          <svg style={{marginRight:20}} xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24" height="24" viewBox="0 0 24 24">
+<path d="M 15.886719 1 C 14.974131 1 14.077693 1.2286385 13.287109 1.65625 L 5.5664062 5.7207031 L 5.5664062 5.71875 C 3.7637541 6.6652034 2.6367187 8.5322799 2.6367188 10.566406 C 2.6367188 11.911504 3.2225585 13.082394 4.046875 14.046875 C 3.2161002 15.0216 2.6367187 16.195885 2.6367188 17.521484 C 2.6367188 20.532674 5.1018215 23 8.1132812 23 C 9.0303925 23 9.9287625 22.773103 10.716797 22.341797 L 18.292969 18.353516 L 18.259766 18.369141 C 20.151702 17.459981 21.363281 15.531898 21.363281 13.433594 C 21.363281 12.088496 20.777441 10.917606 19.953125 9.953125 C 20.783897 8.9783946 21.363281 7.8041153 21.363281 6.4785156 C 21.363281 3.4673258 18.898179 1 15.886719 1 z M 15.886719 3 C 17.813259 3 19.363281 4.5517054 19.363281 6.4785156 C 19.363281 7.5499776 18.888956 8.5222239 18.080078 9.1777344 L 17.121094 9.9550781 L 18.080078 10.732422 C 18.871608 11.373406 19.363281 12.344494 19.363281 13.433594 C 19.363281 14.75529 18.584642 15.993566 17.392578 16.566406 L 17.376953 16.574219 L 9.7636719 20.583984 L 9.7578125 20.587891 C 9.2778524 20.850605 8.6961702 21 8.1132812 21 C 6.1867412 21 4.6367188 19.448295 4.6367188 17.521484 C 4.6367188 16.450022 5.1110438 15.477776 5.9199219 14.822266 L 6.8789062 14.044922 L 5.9199219 13.267578 C 5.1283915 12.626594 4.6367188 11.655506 4.6367188 10.566406 C 4.6367188 9.266533 5.3427459 8.095781 6.4960938 7.4902344 L 6.4980469 7.4902344 L 14.232422 3.4179688 L 14.238281 3.4140625 C 14.729251 3.1482632 15.309951 3 15.886719 3 z M 10 9 L 10 15 L 15 12 L 10 9 z"></path>
+</svg> 
+            Shorts
+          </a>
+        </li><li>
+          <a href="#" className="nav-link link-body-emphasis">
+        
+            <img style={{marginRight:20, height: 24}} src="./images/subscrip.png" alt="" />
+            Subscriptions
+          </a>
+        </li>
+        <hr />
+        <h5 style={{marginLeft:20}}>You</h5><li>
+          <a href="#" className="nav-link link-body-emphasis">
+            <img height={24} width={24} style={{marginRight:20}} src="./images/yt_history.png" alt="history" />
+            History
+          </a>
+        </li><li>
+          <a href="#" className="nav-link link-body-emphasis">
+            <img style={{height:24, marginRight: 20}} src="./images/play.webp" alt="" />
+            Playlists
+          </a>
+        </li><li>
+          <a href="#" className="nav-link link-body-emphasis">
+          <svg style={{marginRight:20, height:24, width:24}} xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="50" height="50" viewBox="0 0 50 50">
+<path d="M 25 2 C 12.309295 2 2 12.309295 2 25 C 2 37.690705 12.309295 48 25 48 C 37.690705 48 48 37.690705 48 25 C 48 12.309295 37.690705 2 25 2 z M 25 4 C 36.609824 4 46 13.390176 46 25 C 46 36.609824 36.609824 46 25 46 C 13.390176 46 4 36.609824 4 25 C 4 13.390176 13.390176 4 25 4 z M 24.984375 6.9863281 A 1.0001 1.0001 0 0 0 24 8 L 24 22.173828 A 3 3 0 0 0 22 25 A 3 3 0 0 0 22.294922 26.291016 L 16.292969 32.292969 A 1.0001 1.0001 0 1 0 17.707031 33.707031 L 23.708984 27.705078 A 3 3 0 0 0 25 28 A 3 3 0 0 0 28 25 A 3 3 0 0 0 26 22.175781 L 26 8 A 1.0001 1.0001 0 0 0 24.984375 6.9863281 z"></path>
+</svg>
+            Watch Later
+          </a>
+        </li><li>
+          <a href="#" className="nav-link link-body-emphasis">
+            <img style={{height:24, width:24, marginRight:20}} src="./images/like.png" alt="" />
+            Liked videos
+          </a>
+        </li>
+        <hr /><h5 style={{marginLeft:20}}>Subscriptions</h5><li>
+          <a href="#" className="nav-link link-body-emphasis">
+            <img style={{height:24, width:24, marginRight:20}} src="./images/list.png" alt="" />
+            All Subscriptions
+          </a>
+        </li>
+        <hr />
+        <h5 style={{marginLeft:20}}>Explore</h5><li>
+          <a href="#" className="nav-link link-body-emphasis">
+          <img style={{height:24, width:24, marginRight:20}} src="./images/trending.png" alt="" />
+            Trending
+          </a>
+        </li><li>
+          <a href="#" className="nav-link link-body-emphasis">
+          <img style={{height:24, width:24, marginRight:20}} src="./images/bag.png" alt="" />
+            Shopping
+          </a>
+        </li><li>
+          <a href="#" className="nav-link link-body-emphasis">
+          <svg style={{marginRight:20}} xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24" height="24" viewBox="0 0 50 50">
+<path d="M34.549,8.028C35.295,7.866,36,8.434,36,9.198v6.02c0,0.706-0.493,1.317-1.183,1.466l-8.053,1.743	C26.318,18.523,26,18.918,26,19.374c0,0,0,10.133,0,15.297S23.31,42,20,42c-3.635,0-5-2.164-5-3.862	c0-3.434,2.406-4.541,5.079-5.093C22.753,32.494,24,32.438,24,31.044c0-1.394,0-19.523,0-19.523c0-0.706,0.493-1.317,1.183-1.466	L34.549,8.028z"></path>
+</svg>
+            Music
+          </a>
+        </li><li>
+          <a href="#" className="nav-link link-body-emphasis">
+          <img style={{height:24, width:24, marginRight:20}} src="./images/film.png" alt="" />
+            Film
+          </a>
+        </li><li>
+          <a href="#" className="nav-link link-body-emphasis">
+          <svg style={{marginRight: 20}} xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24" height="24" viewBox="0 0 50 50">
+<path d="M 8.03125 8.4570312 C 7.770375 8.4589063 7.5103125 8.5625312 7.3203125 8.7695312 C 3.3953125 13.041531 1 18.741 1 25 C 1 31.259 3.3953125 36.958469 7.3203125 41.230469 C 7.7003125 41.644469 8.3569063 41.643094 8.7539062 41.246094 L 10.882812 39.117188 C 11.265812 38.734187 11.263391 38.124656 10.900391 37.722656 C 7.8553906 34.352656 6 29.889 6 25 C 6 20.111 7.8553906 15.647344 10.900391 12.277344 C 11.263391 11.875344 11.265813 11.266812 10.882812 10.882812 L 8.7539062 8.7539062 C 8.5554063 8.5554063 8.292125 8.4551562 8.03125 8.4570312 z M 41.96875 8.4570312 C 41.707625 8.4554062 41.444594 8.5554062 41.246094 8.7539062 L 39.115234 10.884766 C 38.732234 11.267766 38.734656 11.875344 39.097656 12.277344 C 42.143656 15.646344 44 20.111 44 25 C 44 29.889 42.144609 34.352656 39.099609 37.722656 C 38.736609 38.124656 38.734188 38.733187 39.117188 39.117188 L 41.246094 41.246094 C 41.643094 41.643094 42.299687 41.643469 42.679688 41.230469 C 46.604687 36.958469 49 31.259 49 25 C 49 18.741 46.604687 13.041531 42.679688 8.7695312 C 42.489688 8.5625312 42.229875 8.4586563 41.96875 8.4570312 z M 35.625 14.837891 C 35.355125 14.824516 35.079594 14.920406 34.871094 15.128906 L 32.740234 17.259766 C 32.381234 17.618766 32.341969 18.196938 32.667969 18.585938 C 34.123969 20.323937 35 22.561 35 25 C 35 27.439 34.123969 29.675109 32.667969 31.412109 C 32.341969 31.801109 32.381234 32.379281 32.740234 32.738281 L 34.871094 34.871094 C 35.288094 35.288094 35.967516 35.250687 36.353516 34.804688 C 38.625516 32.175687 40 28.748 40 25 C 40 21.252 38.625516 17.824312 36.353516 15.195312 C 36.160516 14.972313 35.894875 14.851266 35.625 14.837891 z M 14.375 14.839844 C 14.105125 14.853219 13.839484 14.974266 13.646484 15.197266 C 11.374484 17.825266 10 21.252 10 25 C 10 28.748 11.374484 32.175688 13.646484 34.804688 C 14.032484 35.250687 14.711906 35.288094 15.128906 34.871094 L 17.259766 32.740234 C 17.618766 32.381234 17.658031 31.803062 17.332031 31.414062 C 15.876031 29.676062 15 27.439 15 25 C 15 22.561 15.876031 20.324891 17.332031 18.587891 C 17.658031 18.198891 17.618766 17.620719 17.259766 17.261719 L 15.128906 15.128906 C 14.920406 14.920406 14.644875 14.826469 14.375 14.839844 z M 25 19 C 21.686 19 19 21.686 19 25 C 19 28.314 21.686 31 25 31 C 28.314 31 31 28.314 31 25 C 31 21.686 28.314 19 25 19 z"></path>
+</svg>
             Products
           </a>
         </li><li>
           <a href="#" className="nav-link link-body-emphasis">
-            <svg className="bi pe-none me-2" width="16" height="16">
-              <use xlinkHref="#grid" />
-            </svg>
-            Products
+          <img style={{height:24, width:24, marginRight:20}} src="./images/game.png" alt="" />
+            Gaming
           </a>
         </li><li>
           <a href="#" className="nav-link link-body-emphasis">
-            <svg className="bi pe-none me-2" width="16" height="16">
-              <use xlinkHref="#grid" />
-            </svg>
-            Products
+          <svg style={{marginRight:20}}  xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24" height="24" viewBox="0 0 48 48">
+<path d="M40,19h-5v-8c0-1.654-1.346-3-3-3H8c-1.654,0-3,1.346-3,3v28c0,2.757,2.243,5,5,5h24h4c2.757,0,5-2.243,5-5V22	C43,20.346,41.654,19,40,19z"></path><path fill="#fff" d="M40,14h-6v27h4c2.209,0,4-1.791,4-4V16C42,14.895,41.105,14,40,14z"></path><path d="M38,42h-4c-0.552,0-1-0.448-1-1V14c0-0.552,0.448-1,1-1h6c1.654,0,3,1.346,3,3v21C43,39.757,40.757,42,38,42z M35,40h3	c1.654,0,3-1.346,3-3V16c0-0.551-0.449-1-1-1h-5V40z"></path><path fill="#fff" d="M10,41c-2.209,0-4-1.791-4-4V9c0-1.105,0.895-2,2-2h24c1.105,0,2,0.895,2,2v28c0,2.209,1.791,4,4,4	H10z"></path><path d="M38,42H10c-2.757,0-5-2.243-5-5V9c0-1.654,1.346-3,3-3h24c1.654,0,3,1.346,3,3v28c0,1.654,1.346,3,3,3c0.552,0,1,0.448,1,1	S38.552,42,38,42z M8,8C7.449,8,7,8.449,7,9v28c0,1.654,1.346,3,3,3h24.002C33.374,39.164,33,38.125,33,37V9c0-0.551-0.449-1-1-1H8z"></path><path d="M29,21h-7c-0.552,0-1,0.448-1,1s0.448,1,1,1h7c0.552,0,1-0.448,1-1S29.552,21,29,21z"></path><path d="M18,21h-7c-0.552,0-1,0.448-1,1s0.448,1,1,1h7c0.552,0,1-0.448,1-1S18.552,21,18,21z"></path><path d="M29,25h-7c-0.552,0-1,0.448-1,1s0.448,1,1,1h7c0.552,0,1-0.448,1-1S29.552,25,29,25z"></path><path d="M18,25h-7c-0.552,0-1,0.448-1,1s0.448,1,1,1h7c0.552,0,1-0.448,1-1S18.552,25,18,25z"></path><path d="M29,29h-7c-0.552,0-1,0.448-1,1s0.448,1,1,1h7c0.552,0,1-0.448,1-1S29.552,29,29,29z"></path><path d="M18,29h-7c-0.552,0-1,0.448-1,1s0.448,1,1,1h7c0.552,0,1-0.448,1-1S18.552,29,18,29z"></path><path d="M29,33h-7c-0.552,0-1,0.448-1,1s0.448,1,1,1h7c0.552,0,1-0.448,1-1S29.552,33,29,33z"></path><path d="M34,21h3c0.552,0,1-0.448,1-1s-0.448-1-1-1h-3c-0.552,0-1,0.448-1,1S33.448,21,34,21z"></path><path d="M37,23h-3c-0.552,0-1,0.448-1,1s0.448,1,1,1h3c0.552,0,1-0.448,1-1S37.552,23,37,23z"></path><path d="M37,27h-3c-0.552,0-1,0.448-1,1s0.448,1,1,1h3c0.552,0,1-0.448,1-1S37.552,27,37,27z"></path><path d="M37,31h-3c-0.552,0-1,0.448-1,1s0.448,1,1,1h3c0.552,0,1-0.448,1-1S37.552,31,37,31z"></path><path d="M18,33h-7c-0.552,0-1,0.448-1,1s0.448,1,1,1h7c0.552,0,1-0.448,1-1S18.552,33,18,33z"></path><path d="M29,12H11c-0.552,0-1,0.448-1,1v2c0,0.552,0.448,1,1,1h18c0.552,0,1-0.448,1-1v-2C30,12.448,29.552,12,29,12z"></path>
+</svg>
+            News
+          </a>
+        </li><hr /><li>
+          <a href="#" className="nav-link link-body-emphasis">
+          <svg style={{marginRight:20}} xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24" height="24" viewBox="0 0 50 50">
+<path d="M 22.205078 2 A 1.0001 1.0001 0 0 0 21.21875 2.8378906 L 20.246094 8.7929688 C 19.076509 9.1331971 17.961243 9.5922728 16.910156 10.164062 L 11.996094 6.6542969 A 1.0001 1.0001 0 0 0 10.708984 6.7597656 L 6.8183594 10.646484 A 1.0001 1.0001 0 0 0 6.7070312 11.927734 L 10.164062 16.873047 C 9.583454 17.930271 9.1142098 19.051824 8.765625 20.232422 L 2.8359375 21.21875 A 1.0001 1.0001 0 0 0 2.0019531 22.205078 L 2.0019531 27.705078 A 1.0001 1.0001 0 0 0 2.8261719 28.691406 L 8.7597656 29.742188 C 9.1064607 30.920739 9.5727226 32.043065 10.154297 33.101562 L 6.6542969 37.998047 A 1.0001 1.0001 0 0 0 6.7597656 39.285156 L 10.648438 43.175781 A 1.0001 1.0001 0 0 0 11.927734 43.289062 L 16.882812 39.820312 C 17.936999 40.39548 19.054994 40.857928 20.228516 41.201172 L 21.21875 47.164062 A 1.0001 1.0001 0 0 0 22.205078 48 L 27.705078 48 A 1.0001 1.0001 0 0 0 28.691406 47.173828 L 29.751953 41.1875 C 30.920633 40.838997 32.033372 40.369697 33.082031 39.791016 L 38.070312 43.291016 A 1.0001 1.0001 0 0 0 39.351562 43.179688 L 43.240234 39.287109 A 1.0001 1.0001 0 0 0 43.34375 37.996094 L 39.787109 33.058594 C 40.355783 32.014958 40.813915 30.908875 41.154297 29.748047 L 47.171875 28.693359 A 1.0001 1.0001 0 0 0 47.998047 27.707031 L 47.998047 22.207031 A 1.0001 1.0001 0 0 0 47.160156 21.220703 L 41.152344 20.238281 C 40.80968 19.078827 40.350281 17.974723 39.78125 16.931641 L 43.289062 11.933594 A 1.0001 1.0001 0 0 0 43.177734 10.652344 L 39.287109 6.7636719 A 1.0001 1.0001 0 0 0 37.996094 6.6601562 L 33.072266 10.201172 C 32.023186 9.6248101 30.909713 9.1579916 29.738281 8.8125 L 28.691406 2.828125 A 1.0001 1.0001 0 0 0 27.705078 2 L 22.205078 2 z M 23.056641 4 L 26.865234 4 L 27.861328 9.6855469 A 1.0001 1.0001 0 0 0 28.603516 10.484375 C 30.066026 10.848832 31.439607 11.426549 32.693359 12.185547 A 1.0001 1.0001 0 0 0 33.794922 12.142578 L 38.474609 8.7792969 L 41.167969 11.472656 L 37.835938 16.220703 A 1.0001 1.0001 0 0 0 37.796875 17.310547 C 38.548366 18.561471 39.118333 19.926379 39.482422 21.380859 A 1.0001 1.0001 0 0 0 40.291016 22.125 L 45.998047 23.058594 L 45.998047 26.867188 L 40.279297 27.871094 A 1.0001 1.0001 0 0 0 39.482422 28.617188 C 39.122545 30.069817 38.552234 31.434687 37.800781 32.685547 A 1.0001 1.0001 0 0 0 37.845703 33.785156 L 41.224609 38.474609 L 38.53125 41.169922 L 33.791016 37.84375 A 1.0001 1.0001 0 0 0 32.697266 37.808594 C 31.44975 38.567585 30.074755 39.148028 28.617188 39.517578 A 1.0001 1.0001 0 0 0 27.876953 40.3125 L 26.867188 46 L 23.052734 46 L 22.111328 40.337891 A 1.0001 1.0001 0 0 0 21.365234 39.53125 C 19.90185 39.170557 18.522094 38.59371 17.259766 37.835938 A 1.0001 1.0001 0 0 0 16.171875 37.875 L 11.46875 41.169922 L 8.7734375 38.470703 L 12.097656 33.824219 A 1.0001 1.0001 0 0 0 12.138672 32.724609 C 11.372652 31.458855 10.793319 30.079213 10.427734 28.609375 A 1.0001 1.0001 0 0 0 9.6328125 27.867188 L 4.0019531 26.867188 L 4.0019531 23.052734 L 9.6289062 22.117188 A 1.0001 1.0001 0 0 0 10.435547 21.373047 C 10.804273 19.898143 11.383325 18.518729 12.146484 17.255859 A 1.0001 1.0001 0 0 0 12.111328 16.164062 L 8.8261719 11.46875 L 11.523438 8.7734375 L 16.185547 12.105469 A 1.0001 1.0001 0 0 0 17.28125 12.148438 C 18.536908 11.394293 19.919867 10.822081 21.384766 10.462891 A 1.0001 1.0001 0 0 0 22.132812 9.6523438 L 23.056641 4 z M 25 17 C 20.593567 17 17 20.593567 17 25 C 17 29.406433 20.593567 33 25 33 C 29.406433 33 33 29.406433 33 25 C 33 20.593567 29.406433 17 25 17 z M 25 19 C 28.325553 19 31 21.674447 31 25 C 31 28.325553 28.325553 31 25 31 C 21.674447 31 19 28.325553 19 25 C 19 21.674447 21.674447 19 25 19 z"></path>
+</svg>
+            Settings
           </a>
         </li><li>
           <a href="#" className="nav-link link-body-emphasis">
-            <svg className="bi pe-none me-2" width="16" height="16">
-              <use xlinkHref="#grid" />
-            </svg>
-            Products
+          <img style={{height:24, width:24, marginRight:20}} src="./images/flag.png" alt="" />
+            Report history
           </a>
         </li><li>
           <a href="#" className="nav-link link-body-emphasis">
-            <svg className="bi pe-none me-2" width="16" height="16">
-              <use xlinkHref="#grid" />
-            </svg>
-            Products
+          <img style={{height:24, width:24, marginRight:20}} src="./images/help.png" alt="" />
+            Help
           </a>
         </li><li>
           <a href="#" className="nav-link link-body-emphasis">
-            <svg className="bi pe-none me-2" width="16" height="16">
-              <use xlinkHref="#grid" />
-            </svg>
-            Products
-          </a>
-        </li><li>
-          <a href="#" className="nav-link link-body-emphasis">
-            <svg className="bi pe-none me-2" width="16" height="16">
-              <use xlinkHref="#grid" />
-            </svg>
-            Products
-          </a>
-        </li><li>
-          <a href="#" className="nav-link link-body-emphasis">
-            <svg className="bi pe-none me-2" width="16" height="16">
-              <use xlinkHref="#grid" />
-            </svg>
-            Products
-          </a>
-        </li><li>
-          <a href="#" className="nav-link link-body-emphasis">
-            <svg className="bi pe-none me-2" width="16" height="16">
-              <use xlinkHref="#grid" />
-            </svg>
-            Products
-          </a>
-        </li><li>
-          <a href="#" className="nav-link link-body-emphasis">
-            <svg className="bi pe-none me-2" width="16" height="16">
-              <use xlinkHref="#grid" />
-            </svg>
-            Products
-          </a>
-        </li><li>
-          <a href="#" className="nav-link link-body-emphasis">
-            <svg className="bi pe-none me-2" width="16" height="16">
-              <use xlinkHref="#grid" />
-            </svg>
-            Products
-          </a>
-        </li><li>
-          <a href="#" className="nav-link link-body-emphasis">
-            <svg className="bi pe-none me-2" width="16" height="16">
-              <use xlinkHref="#grid" />
-            </svg>
-            Products
-          </a>
-        </li><li>
-          <a href="#" className="nav-link link-body-emphasis">
-            <svg className="bi pe-none me-2" width="16" height="16">
-              <use xlinkHref="#grid" />
-            </svg>
-            Products
-          </a>
-        </li><li>
-          <a href="#" className="nav-link link-body-emphasis">
-            <svg className="bi pe-none me-2" width="16" height="16">
-              <use xlinkHref="#grid" />
-            </svg>
-            Products
-          </a>
-        </li><li>
-          <a href="#" className="nav-link link-body-emphasis">
-            <svg className="bi pe-none me-2" width="16" height="16">
-              <use xlinkHref="#grid" />
-            </svg>
-            Products
-          </a>
-        </li><li>
-          <a href="#" className="nav-link link-body-emphasis">
-            <svg className="bi pe-none me-2" width="16" height="16">
-              <use xlinkHref="#grid" />
-            </svg>
-            Products
-          </a>
-        </li><li>
-          <a href="#" className="nav-link link-body-emphasis">
-            <svg className="bi pe-none me-2" width="16" height="16">
-              <use xlinkHref="#grid" />
-            </svg>
-            Products
-          </a>
-        </li><li>
-          <a href="#" className="nav-link link-body-emphasis">
-            <svg className="bi pe-none me-2" width="16" height="16">
-              <use xlinkHref="#grid" />
-            </svg>
-            Products
-          </a>
-        </li><li>
-          <a href="#" className="nav-link link-body-emphasis">
-            <svg className="bi pe-none me-2" width="16" height="16">
-              <use xlinkHref="#grid" />
-            </svg>
-            Products
+          <img style={{height:24, width:24, marginRight:20}} src="./images/feed.png" alt="" />
+          Send feedback
           </a>
         </li>
       </ul>
