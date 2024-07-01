@@ -10,7 +10,7 @@ export default function Navbar({ onMenuClick }) {
           <FontAwesomeIcon icon={faBars} />
         </button>
         <a className="navbar-brand" href="#">
-          <img src="./images/youtube_logo-removebg-preview.png" alt="Logo" height="40" />
+          <img src="./images/youtube_logo-removebg-preview.png" alt="Logo" height="35" />
         </a>
         <form className="d-flex mx-auto" style={{ maxWidth: "600px", flex: 1 }}>
           <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />

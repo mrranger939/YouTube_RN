@@ -5,7 +5,7 @@ const Sidebar = ({ sidebarOpen }) => {
   return (
     <div className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
       
-      <ul className="nav nav-pills flex-column mb-auto">
+      <ul className="nav nav-pills flex-column mb-auto m-3">
         <li className="nav-item">
           <a href="#" className="nav-link link-body-emphasis " aria-current="page">
             {/* <svg className="bi pe-none me-2" width="16" height="16">

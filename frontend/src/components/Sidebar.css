@@ -104,7 +104,7 @@
   .sidebar {
     position: fixed;
     left: -280px;
-    top: 66px; 
+    top: 60px; 
     width: 280px;
     height: calc(100vh - 66px); 
     overflow-y: auto;
