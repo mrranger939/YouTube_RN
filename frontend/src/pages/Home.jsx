@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 
 export default function Home() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const handleMenuClick = () => {
     setSidebarOpen(!sidebarOpen);
@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <>
       <Navbar onMenuClick={handleMenuClick} />
-      <div style={{ display: "flex", paddingTop: '66px' }}>
+      <div style={{ display: "flex", paddingTop: '60px' }}>
         <Sidebar sidebarOpen={sidebarOpen} />
         <div id="content" style={{ marginLeft: sidebarOpen ? '290px' : '0', transition: 'margin-left 0.3s ease-in-out', width: '100%' }}>
         
