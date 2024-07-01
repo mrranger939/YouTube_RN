@@ -6,7 +6,7 @@ export default function Navbar({ onMenuClick }) {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light" style={{ position: "fixed", width: '100%' }}>
       <div className="container-fluid">
-        <button id="menu" className="btn" onClick={onMenuClick}>
+        <button id="menu" className="btn" style={{padding: "0px 15px"}} onClick={onMenuClick}>
           <FontAwesomeIcon icon={faBars} />
         </button>
         <a className="navbar-brand" href="#">
