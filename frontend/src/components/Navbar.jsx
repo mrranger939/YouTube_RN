@@ -2,30 +2,30 @@ import React from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell, faUserCircle, faVideo, faMagnifyingGlass, faBars } from '@fortawesome/free-solid-svg-icons';
 
-export default function Navbar({ onMenuClick }) {
+export default function App({ onMenuClick }) {
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light" style={{ position: "fixed", width: '100%' }}>
-      <div className="container-fluid">
-        <button id="menu" className="btn" onClick={onMenuClick}>
+    <nav className="fixed w-full bg-white ">
+      <div className="flex items-center justify-between p-4">
+        <button id="menu" style={{paddingLeft:'0.5rem'}} className="text-gray-700" onClick={onMenuClick}>
           <FontAwesomeIcon icon={faBars} />
         </button>
-        <a className="navbar-brand" href="#">
-          <img src="./images/youtube_logo-removebg-preview.png" alt="Logo" height="40" />
+        <a className="flex items-center" href="#">
+          <img src="./images/youtube_logo-removebg-preview.png" alt="Logo" className="h-10 max-w-full" />
         </a>
-        <form className="d-flex mx-auto" style={{ maxWidth: "600px", flex: 1 }}>
-          <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-          <button className="btn" type="submit">
+        <form className="flex flex-grow max-w-lg mx-auto">
+          <input className="form-input px-4 py-2 w-full border border-gray-300 rounded-l-md" type="search" placeholder="Search" aria-label="Search" />
+          <button className="bg-gray-200 px-4 py-2 rounded-r-md" type="submit">
             <FontAwesomeIcon icon={faMagnifyingGlass} />
           </button>
         </form>
-        <div className="d-flex">
-          <button className="btn btn-light me-2" type="button">
+        <div className="flex items-center space-x-7">
+          <button className="text-gray-700" type="button">
             <FontAwesomeIcon icon={faVideo} />
           </button>
-          <button className="btn btn-light me-2" type="button">
+          <button className="text-gray-700" type="button">
             <FontAwesomeIcon icon={faBell} />
           </button>
-          <button className="btn btn-light" type="button">
+          <button className="text-gray-700" type="button">
             <FontAwesomeIcon icon={faUserCircle} />
           </button>
         </div>
