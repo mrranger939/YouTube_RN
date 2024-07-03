@@ -4,7 +4,7 @@ import Sidebar from "../components/Sidebar";
 import './Home.css'
 export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+
 
   const handleMenuClick = () => {
     setSidebarOpen(!sidebarOpen);
