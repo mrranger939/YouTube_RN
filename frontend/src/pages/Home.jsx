@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
+import Cards from "../components/Cards";
 import './Home.css'
 export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -18,15 +19,18 @@ export default function Home() {
         <Sidebar sidebarOpen={sidebarOpen}  />
         <div
           id="content"
-          className={`transition-all duration-300 ease-in-out ${sidebarOpen ? 'ml-72' : 'ml-0'} w-full pt-16`} >
+          className={`transition-all duration-300 ease-in-out ${sidebarOpen ? 'ml-64' : 'ml-0'} w-full pt-12`} >
+          {/* <h1>Content Here</h1>
           <h1>Content Here</h1>
           <h1>Content Here</h1>
           <h1>Content Here</h1>
           <h1>Content Here</h1>
           <h1>Content Here</h1>
           <h1>Content Here</h1>
-          <h1>Content Here</h1>
-          <h1>Content Here</h1><h1>Content Here</h1>
+          <h1>Content Here</h1><h1>Content Here</h1> */}
+
+            <Cards/>
+
         </div>
       </div>
     </div>

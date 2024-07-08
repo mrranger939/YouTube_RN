@@ -5,8 +5,8 @@ import { faBell, faUserCircle, faVideo, faMagnifyingGlass, faBars } from '@forta
 export default function App({ onMenuClick }) {
   return (
     <nav className="fixed w-full bg-white ">
-      <div className="flex items-center justify-between p-4">
-        <button id="menu" style={{paddingLeft:'0.5rem'}} className="text-gray-700" onClick={onMenuClick}>
+      <div className="flex items-center justify-between px-4 py-2">
+        <button id="menu" className="text-gray-700 px-2 mr-2" onClick={onMenuClick}>
           <FontAwesomeIcon icon={faBars} />
         </button>
         <a className="flex items-center" href="#">
@@ -18,7 +18,7 @@ export default function App({ onMenuClick }) {
             <FontAwesomeIcon icon={faMagnifyingGlass} />
           </button>
         </form>
-        <div className="flex items-center space-x-7">
+        <div className="flex items-center space-x-7 px-4">
           <button className="text-gray-700" type="button">
             <FontAwesomeIcon icon={faVideo} />
           </button>

@@ -1,0 +1,25 @@
+
+.youtubern_customcardgrid{
+    display: grid;
+    grid-template-columns: 33% 33% 33%
+}
+
+/* .youtubern_customcards{
+    display: flex;
+
+}
+.youtubern_customcards_img{
+    min-width: 370.11px;
+    min-height: 208.19px;
+} */
+
+@media(max-width:1200px) {
+    .youtubern_customcardgrid{
+        grid-template-columns: 50% 50%;
+    }
+}
+@media(max-width:900px) {
+    .youtubern_customcardgrid{
+        grid-template-columns: 100%;
+    }
+}
