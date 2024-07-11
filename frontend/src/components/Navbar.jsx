@@ -19,8 +19,8 @@ export default function App({ onMenuClick }) {
           </button>
         </form>
         <div className="flex items-center space-x-7 px-4">
-          <button className="text-gray-700" type="button">
-            <FontAwesomeIcon icon={faVideo} />
+          <button  className="text-gray-700" type="button">
+          <a href='/studio'><FontAwesomeIcon icon={faVideo} /></a>
           </button>
           <button className="text-gray-700" type="button">
             <FontAwesomeIcon icon={faBell} />

@@ -1,13 +1,18 @@
-import Home from "./pages/Home.jsx"
+import ReactDOM from "react-dom/client";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-
-function App() {
-
+import Home from "./pages/Home";
+import Upload from "./pages/Studio";
+import Video from "./pages/Video";
+export default function App() {
   return (
-    <>
-    <Home/>
-    </>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/studio" element={<Upload />} />
+        <Route path="/:data_id" element={<Video />} />
+        {/* Add other routes here */}
+      </Routes>
+    </BrowserRouter>
+  );
 }
-
-export default App
