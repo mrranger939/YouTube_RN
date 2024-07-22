@@ -32,7 +32,7 @@ export default function Upload() {
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('An error occurred.');
+      alert('An error occurred : '+error);
     }
   };
 

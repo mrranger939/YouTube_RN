@@ -4,7 +4,7 @@ import { faBell, faUserCircle, faVideo, faMagnifyingGlass, faBars } from '@forta
 
 export default function App({ onMenuClick }) {
   return (
-    <nav className="fixed w-full bg-white ">
+    <nav className="fixed w-full bg-white " style={{zIndex:50}}>
       <div className="flex items-center justify-between px-4 py-2">
         <button id="menu" className="text-gray-700 px-2 mr-2" onClick={onMenuClick}>
           <FontAwesomeIcon icon={faBars} />
