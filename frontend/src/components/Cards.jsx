@@ -12,29 +12,10 @@ function Cards() {
   var upload_time = "69 minutes";
   var desc = no_views + " views • " + upload_time + " ago";
 
-  const [sub_status, set_sub_status] = useState("Subscribe");
-  const [sub_color, set_sub_color] = useState("danger");
-  const [sub_text, set_sub_text] = useState("text-tiny text-white");
-  const [sub_btn, set_sub_btn] = useState("solid");
-
-  const chg_sub_status = () => {
-    if (sub_status === "Subscribe") {
-      set_sub_status("Subscribed");
-      set_sub_color("default");
-      set_sub_text("text-tiny text-dark")
-      set_sub_btn("ghost")
-    }
-    else{
-      set_sub_status("Subscribe");
-      set_sub_color("danger");
-      set_sub_text("text-tiny text-white")
-      set_sub_btn("solid")
-    }
-  };
+  
 
   return (
-    <div className="youtubern_customcardgrid"
-    >
+    <div className="youtubern_customcardgrid">
       <Card isFooterBlurred radius="lg" className="youtubern_customcards flex m-2"  fullWidth="false">
         <CardHeader>
         <Image
@@ -75,12 +56,13 @@ function Cards() {
           alt="Woman listing to music"
           className="object-cover youtubern_customcards_img"
           height={999}
-          // src="https://nextui.org/images/hero-card.jpeg"
+          
           src={thumb2}
           width={999}
         />
         </CardHeader>
-        {/* <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10"> */}
+        
+        
         <CardFooter className="justify-between">
           <User
             name="Nawaz"
@@ -89,17 +71,8 @@ function Cards() {
               src: nawphot,
             }}
           ></User>
-          {/* <p className="text-tiny text-dark/80">Available soon.</p> */}
-          {/* <Button
-            className={sub_text}
-            variant={sub_btn}
-            color={sub_color}
-            radius="lg"
-            size="sm"
-            onClick={chg_sub_status}
-          >
-            {sub_status}
-          </Button> */}
+          
+          
         </CardFooter>
       </Card>
 
@@ -109,12 +82,12 @@ function Cards() {
           alt="Woman listing to music"
           className="object-cover youtubern_customcards_img"
           height={999}
-          // src="https://nextui.org/images/hero-card.jpeg"
+          
           src={thumb3}
           width={999}
         />
         </CardHeader>
-        {/* <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10"> */}
+        
         <CardFooter className="justify-between">
           <User
             name="Nawaz"
@@ -123,17 +96,7 @@ function Cards() {
               src: nawphot,
             }}
           ></User>
-          {/* <p className="text-tiny text-dark/80">Available soon.</p> */}
-          {/* <Button
-            className={sub_text}
-            variant={sub_btn}
-            color={sub_color}
-            radius="lg"
-            size="sm"
-            onClick={chg_sub_status}
-          >
-            {sub_status}
-          </Button> */}
+          
         </CardFooter>
       </Card>
 
@@ -143,12 +106,12 @@ function Cards() {
           alt="Woman listing to music"
           className="object-cover youtubern_customcards_img"
           height={999}
-          // src="https://nextui.org/images/hero-card.jpeg"
+          
           src={thumb4}
           width={999}
         />
         </CardHeader>
-        {/* <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10"> */}
+        
         <CardFooter className="justify-between">
           <User
             name="Nawaz"
@@ -156,18 +119,7 @@ function Cards() {
             avatarProps={{
               src: nawphot,
             }}
-          ></User>
-          {/* <p className="text-tiny text-dark/80">Available soon.</p> */}
-          {/* <Button
-            className={sub_text}
-            variant={sub_btn}
-            color={sub_color}
-            radius="lg"
-            size="sm"
-            onClick={chg_sub_status}
-          >
-            {sub_status}
-          </Button> */}
+          ></User>          
         </CardFooter>
       </Card>
 
