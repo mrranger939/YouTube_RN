@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HLS Video Player</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <link rel="icon" type="image/x-icon">
+</head>
+<body>
+    <h1>HLS Video Player</h1>
+    <video id="video" controls width="50%" height="50%"></video>
+    
+    <script>
+        var video = document.getElementById('video');
+        if (Hls.isSupported()) {
+            var hls = new Hls();
+            console.log('{{link}}')
+            hls.loadSource('{{ link }}');
+            hls.attachMedia(video);
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = '{{ link }}';
+            console.log('{{link}}')
+        }
+    </script>
+</body>
+</html>

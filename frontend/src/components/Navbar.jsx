@@ -10,7 +10,7 @@ export default function App({ onMenuClick }) {
           <FontAwesomeIcon icon={faBars} />
         </button>
         <a className="flex items-center" href="#">
-          <img src="./images/youtube_logo-removebg-preview.png" alt="Logo" className="h-10 max-w-full" />
+          <img src="/images/youtube_logo-removebg-preview.png" alt="Logo" className="h-10 max-w-full" />
         </a>
         <form className="flex flex-grow max-w-lg mx-auto">
           <input className="form-input px-4 py-2 w-full border border-gray-300 rounded-l-md" id="search_key" name="search_key" type="search" placeholder="Search" aria-label="Search" />

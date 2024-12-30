@@ -17,9 +17,11 @@ export default function Upload() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
+    
+    // UpDATE YOUR IP ADDRESS BEFORE RUNNING
 
     try {
-      const response = await axios.post('http://localhost:8000/upload', formData, {
+      const response = await axios.post('http://192.168.1.3:8000/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
