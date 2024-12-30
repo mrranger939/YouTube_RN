@@ -3,8 +3,9 @@ import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import Cards from "../components/Cards";
 import './Home.css'
+// import Hehe from "../components/Hehe";
 export default function Home() {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
 
   const handleMenuClick = () => {
@@ -30,6 +31,7 @@ export default function Home() {
           <h1>Content Here</h1><h1>Content Here</h1> */}
 
             <Cards/>
+            {/* <Hehe/> */}
 
         </div>
       </div>

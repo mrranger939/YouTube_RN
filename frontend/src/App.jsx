@@ -10,7 +10,8 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/studio" element={<Upload />} />
-        <Route path="/:data_id" element={<Video />} />
+        <Route path="/v/:data_id" element={<Video />} />
+        {/* <Route path="/*" element={<Lost.jsx />} />    ERROR 404 to be made    */}
         {/* Add other routes here */}
       </Routes>
     </BrowserRouter>
