@@ -1,18 +1,14 @@
 import React, { useState } from "react";
 import { Navigate } from 'react-router-dom';
-import Navbar from "../components/Navbar";
-import Sidebar from "../components/Sidebar";
+import Cookies from "js-cookie";
 import axios from "axios";
 import './Home.css';
 import './Studio.css';
 
 export default function Upload() {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+
   const [uploadSuccess, setUploadSuccess] = useState(false);
 
-  const handleMenuClick = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -21,8 +17,10 @@ export default function Upload() {
     // UpDATE YOUR IP ADDRESS BEFORE RUNNING
 
     try {
-      const response = await axios.post('http://192.168.1.3:8000/upload', formData, {
+      const ipAddress = import.meta.env.VITE_IP_ADD;
+      const response = await axios.post(`http://${ipAddress}:8000/upload`, formData, {
         headers: {
+          Authorization: `Bearer ${Cookies.get('authToken')}`,
           'Content-Type': 'multipart/form-data',
         },
       });
@@ -44,14 +42,7 @@ export default function Upload() {
   }
 
   return (
-    <div className="flex flex-col">
-      <Navbar onMenuClick={handleMenuClick} />
-      <div className="flex mt-7">
-        <Sidebar sidebarOpen={sidebarOpen} />
-        <div
-          id="content"
-          className={`transition-all duration-300 ease-in-out ${sidebarOpen ? 'ml-64' : 'ml-0'} w-full pt-12`}
-        >
+
           <div className="uploaddata">
             <h1>Upload your Thumbnail and Video</h1>
             <form id="uploadform" onSubmit={handleSubmit} encType="multipart/form-data">
@@ -62,8 +53,6 @@ export default function Upload() {
               <input type="submit" value="Upload Image and Video" />
             </form>
           </div>
-        </div>
-      </div>
-    </div>
+
   );
 }

@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import Cards from "../components/Cards";
 import './Home.css'
-export default function Home() {
+export default function Layout({children}) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
 
@@ -20,16 +20,16 @@ export default function Home() {
         <div
           id="content"
           className={`transition-all duration-300 ease-in-out ${sidebarOpen ? 'ml-64' : 'ml-0'} w-full pt-12`} >
+{/*           <h1>Content Here</h1>
           <h1>Content Here</h1>
           <h1>Content Here</h1>
           <h1>Content Here</h1>
           <h1>Content Here</h1>
           <h1>Content Here</h1>
           <h1>Content Here</h1>
-          <h1>Content Here</h1>
-          <h1>Content Here</h1><h1>Content Here</h1>
+          <h1>Content Here</h1><h1>Content Here</h1> */}
 
-
+          {children}
 
         </div>
       </div>

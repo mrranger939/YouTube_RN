@@ -16,9 +16,14 @@
     "axios": "^1.7.2",
     "framer-motion": "^11.2.12",
     "hls.js": "^1.5.18",
+    "js-cookie": "^3.0.5",
+    "jwt-decode": "^4.0.0",
+    "plyr": "^3.7.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.24.1"
+    "react-router-dom": "^6.24.1",
+    "video.js": "^8.21.0",
+    "videojs-contrib-hls": "^1.3.12"
   },
   "devDependencies": {
     "@types/react": "^18.2.56",

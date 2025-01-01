@@ -1,6 +1,9 @@
 import six
 import sys
-
+from dotenv import load_dotenv
+import os
+load_dotenv()
+ip_address = os.getenv('IP_ADD')
 # Workaround for Python 3.12
 if sys.version_info >= (3, 12, 0):
     sys.modules['kafka.vendor.six.moves'] = six.moves
@@ -9,7 +12,7 @@ from kafka import KafkaAdminClient
 from kafka.admin import NewTopic
 
 # Kafka server configuration
-bootstrap_servers = '192.168.1.3:9092'
+bootstrap_servers = f'{ip_address}:9092'
 
 # Create an admin client
 admin_client = KafkaAdminClient(bootstrap_servers=bootstrap_servers)

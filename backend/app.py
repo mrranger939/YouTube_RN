@@ -1,7 +1,10 @@
   # !!! NOTE !!!
 # Install all the Libraries by running the command : pip install -r req.txt
+from dotenv import load_dotenv
+import os
+load_dotenv()
 
-from flask import Flask, request, jsonify, redirect, send_file, render_template
+from flask import Flask, request, jsonify, redirect, send_file, render_template, make_response, g
 from flask_cors import CORS
 
 # import gridfs
@@ -9,7 +12,10 @@ from flask_cors import CORS
 # import io
 
 
-
+# getting IP 
+ip_address = os.getenv('IP_ADD')
+frontend_url = "http://localhost:5173"
+print(frontend_url)
 
 # MongoDB Libraires
 from pymongo import MongoClient
@@ -29,18 +35,74 @@ import hashlib
 import time
 import random
 
-
-
+from flask_bcrypt import Bcrypt
+import jwt
+from datetime import datetime, timedelta,timezone
+from functools import wraps
 app = Flask(__name__)
-CORS(app)
+CORS(app,supports_credentials=True,origins=[frontend_url])
+app.config['JWT_SECRET_KEY'] = "your_secret_key"
+bcrypt = Bcrypt(app)
+
+""" middle ware """
+
+def optional_token(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.headers.get('Authorization')
+
+        if token:
+            try:
+                decoded = jwt.decode(token, app.config['JWT_SECRET_KEY'], algorithms=["HS256"])
+                user_id = decoded.get('user_id')
+                username = decoded.get('username')  
+                v_id = decoded.get('vid')
+                kwargs['user_id'] = user_id
+                kwargs['username'] = username
+                kwargs['vid'] = v_id
+            except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
+                kwargs['user_id'] = None
+                kwargs['username'] = 'Guest'
+                kwargs['vid'] = 'https://img.freepik.com/free-psd/contact-icon-illustration-isolated_23-2151903337.jpg?t=st=1735644828~exp=1735648428~hmac=8ba2c46028f37515cb8e51613746e5b23aaf913b99bbfd2cc807e474d883acc6&w=740'
+        else:
+            kwargs['user_id'] = None
+            kwargs['username'] = 'Guest'
+
+        return f(*args, **kwargs)
+
+    return decorated
+
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.headers.get('Authorization')
+        print(token)
+        if not token or not token.startswith("Bearer "):
+            return jsonify({"error": "Token is missing"}), 401
+        token = token.split(" ")[1]
+        print(token)
+        try:
+            decoded = jwt.decode(token, app.config['JWT_SECRET_KEY'], algorithms=["HS256"])
+            g.user_id = decoded['user_id']
+            g.username = decoded['username']
+            g.vid = decoded['vid']
+        except jwt.ExpiredSignatureError:
+            return jsonify({"error": "Token has expired"}), 401
+        except jwt.InvalidTokenError:
+            return jsonify({"error": "Invalid token"}), 401
+
+        return f(*args, **kwargs)
+
+    return decorated
 
 
-
+""" middle ware """
 
 """ database connection """
 mgdb_client = MongoClient("mongodb://localhost:27017/")
 db = mgdb_client['YoutubeRN']
 VIDEOS=db.get_collection("videos")
+PROFILES = db.get_collection("users")
 # db = client['image_uploads']
 # fs = gridfs.GridFS(db)
 # allids = db.get_collection('allids')
@@ -49,7 +111,7 @@ VIDEOS=db.get_collection("videos")
 
 # Kafka configuration
 KAFKA_TOPIC = 'video-uploads'
-KAFKA_BOOTSTRAP_SERVER = '192.168.1.3:9092'
+KAFKA_BOOTSTRAP_SERVER = f'{ip_address}:9092'
 
 # Initialize Kafka producer
 producer = KafkaProducer(
@@ -64,7 +126,8 @@ producer = KafkaProducer(
 S3_U_BUCKET = 'untranscoded'
 S3_I_BUCKET = 'thumbnail'
 S3_V_BUCKET = 'video-abr'
-LOCALSTACK_URL = 'http://192.168.1.3:4566'
+S3_X_BUCKET = 'profiles'
+LOCALSTACK_URL = f'http://{ip_address}:4566'
 
 # Initialize S3 client for LocalStack
 s3_client = boto3.client(
@@ -140,10 +203,14 @@ def generate_unique_id(file_name, min_len=3, max_len=8):
 
 
 @app.route('/upload', methods=['POST'])
+@token_required
 def upload_file():
     if 'image' not in request.files or 'video' not in request.files:
         return jsonify('failed'), 400
-
+    user_id = g.user_id
+    username = g.username
+    vid = g.vid
+    print("in upload file", user_id, username, vid)
     image_file = request.files['image']
     video_file = request.files['video']
 
@@ -165,11 +232,19 @@ def upload_file():
                 
                 print({'Video and Thumbnail ': v_id})
                 print(producer)
-                if VIDEOS.insert_one({'video_id':v_id}):
-                    print("successfully Uploaded data to MongoDB")
-                # Send a message to Kafka
+                if VIDEOS.insert_one({
+                    'video_id': v_id,
+                    'channel_id': user_id,          
+                    'likes': 0,                     
+                    'dislikes': 0,                
+                    'views': 0,                     
+                    'comments': [],                  
+                    'timestamp': datetime.now(timezone.utc)  
+                }):
+                    print("Successfully uploaded data to MongoDB")
+               
                 if producer.send(KAFKA_TOPIC, value={'filename': v_name}):
-                    producer.flush()  # Ensure the message is sent
+                    producer.flush()  
                     print('Video and Image uploaded successfully and message sent to Kafka')
                 else:
                     print("Kafka message not sent")
@@ -194,7 +269,79 @@ def upload_file():
     return jsonify('failed'), 500
 
 
+@app.post("/signup")
+def signin():
+    if 'profilePic' not in request.files:
+        return jsonify('failed'), 400
+    image_file = request.files['profilePic']
+    if image_file.filename == '':
+        return jsonify({"error": "No file selected for upload"}), 400
 
+    username = request.form.get('username')
+    email = request.form.get('email')
+    password = request.form.get('password')
+    channel_name = request.form.get('channelName')
+    if not all([username, email, password, channel_name]):
+        return jsonify({"error": "All fields are required"}), 400
+    existing_user = PROFILES.find_one({'username':username})
+    if existing_user:
+        return jsonify({"error": "Username already exists"}), 400
+    hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+    
+    if image_file:
+        print("We have the image")
+        try:
+            # user = PROFILES.find_one()
+            v_id = generate_unique_id(secure_filename(image_file.filename))
+            extension=image_file.filename.split('.')[-1]
+            i_name=v_id+'.'+extension
+            if upload_to_s3(image_file, S3_X_BUCKET, i_name):
+                print({'uploaded the channel image with video Id: ': v_id})
+                PROFILES.insert_one({
+                    "username": username,
+                    "email": email,
+                    "password": hashed_password,
+                    "channelName": channel_name,
+                    "profilePic": f'{LOCALSTACK_URL}/{S3_X_BUCKET}/{v_id}.jpg',
+                    "videos": [],          
+                    "likedVideos": [],       
+                    "watchHistory": [],      
+                    "subscriptions": []       
+                })
+                return jsonify({"message": "success"}), 201
+        except Exception as e:
+            print(e)
+    
+    return jsonify('failed'), 500
+   
+@app.post("/login")
+def login():
+    data = request.get_json()
+    print("data", data)
+    email = data.get('email')
+    password = data.get('password')
+    if not email or not password:
+        return jsonify({"error": "Username and password are required"}), 400
+    user = PROFILES.find_one({"email": email})
+    if not user:
+        return jsonify({"error": "Invalid username or password"}), 401
+    if not bcrypt.check_password_hash(user['password'], password):
+        return jsonify({"error": "Invalid username or password"}), 401
+    
+    token = jwt.encode({
+        "user_id": str(user["_id"]),
+        "username": user["username"], 
+        "vid": user['profilePic'],  
+        "exp": datetime.now(timezone.utc) + timedelta(hours=1)
+    }, app.config['JWT_SECRET_KEY'], algorithm="HS256")
+
+#    response = jsonify({"message": "success"})
+#    response.set_cookie("authToken", token, httponly=True, max_age=3600, secure=False, samesite="None")
+#    return response, 200
+    return jsonify({
+        "message": "success",
+        "token": token
+    }), 200
 
 @app.route('/')
 def index():
@@ -238,8 +385,9 @@ def get_video_data():
 def stream_video(video_id):
     # Construct the S3 link for the index.m3u8 file
     s3_link = f"{LOCALSTACK_URL}/{S3_V_BUCKET}/{video_id}/master.m3u8"
+    posterlink = f'{LOCALSTACK_URL}/{S3_I_BUCKET}/{video_id}.jpg'
     print(s3_link)
-    return jsonify(link=s3_link)
+    return jsonify(link=s3_link, posterlink=posterlink)
     # return render_template('index.html', link=s3_link)
 
 

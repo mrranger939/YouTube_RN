@@ -2,4 +2,8 @@ Flask
 Flask-Cors
 pymongo
 kafka-python
+kafka-python-ng
 boto3
+python-dotenv
+flask-bcrypt
+pyjwt

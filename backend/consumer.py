@@ -6,7 +6,10 @@ from kafka import KafkaConsumer
 from botocore.exceptions import NoCredentialsError
 import shutil
 from datetime import datetime
-
+from dotenv import load_dotenv
+load_dotenv()
+# getting IP 
+ip_address = os.getenv('IP_ADD')
 # s3 Configuration
 s3_BUCKET_UNTRANSCODED = 'untranscoded'
 s3_BUCKET_VIDEO_ABR = 'video-abr'
@@ -51,7 +54,7 @@ def s3_init():
 # Initialize Kafka consumer
 consumer = KafkaConsumer(
     'video-uploads',
-    bootstrap_servers='192.168.1.3:9092',
+    bootstrap_servers=f'{ip_address}:9092',
     auto_offset_reset='latest',
     enable_auto_commit=True,
     group_id='video-consumers',
@@ -116,7 +119,12 @@ def generate_hls(input_file):
                 print(f"Error creating {resolution}: {process.stderr}")
                 return f"FFmpeg error for {resolution}: {process.stderr}"
 
-            playlists.append(f"#EXT-X-STREAM-INF:BANDWIDTH={settings['video_bitrate'].strip('k')}000,RESOLUTION={settings['scale']}\n{resolution}.m3u8")
+            resolution_split = settings['scale'].split(':')  # Split width and height
+            playlists.append(
+                f"#EXT-X-STREAM-INF:BANDWIDTH={settings['video_bitrate'].strip('k')}000,RESOLUTION={resolution_split[0]}x{resolution_split[1]}\n{resolution}.m3u8"
+            )
+            print(f"playlist here ################################# {playlists}")
+
 
         # Create a master playlist
         master_playlist_path = os.path.join(output_dir, "master.m3u8")

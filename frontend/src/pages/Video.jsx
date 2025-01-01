@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Skeleton, Button } from "@nextui-org/react";
-import Navbar from "../components/Navbar";
-import Sidebar from "../components/Sidebar";
+
 import axios from "axios";
 import Hls from "hls.js";
 import { useParams } from "react-router-dom";
 import "./Home.css";
+import Plyr from "plyr";
+import "plyr/dist/plyr.css";
 
 function Subcr() {
   // Subscription State
@@ -41,24 +42,47 @@ function Subcr() {
     </Button>
   );
 }
-
 function Vid() {
   const { data_id } = useParams();
   const videoRef = useRef(null);
+  const hlsRef = useRef(null);
+
   useEffect(() => {
     const fetchVideoData = async () => {
       try {
-        const { data } = await axios.get(`http://192.168.1.3:8000/v/${data_id}`);
+        const ipAddress = import.meta.env.VITE_IP_ADD;
+        const { data } = await axios.get(
+          `http://${ipAddress}:8000/v/${data_id}`
+        );
 
         if (data.link) {
+          // Set the poster image for the video
+          if (videoRef.current) {
+            videoRef.current.poster = data.posterlink;
+          }
+
           if (Hls.isSupported()) {
             const hls = new Hls();
-
             hls.loadSource(data.link);
             hls.attachMedia(videoRef.current);
 
+            hls.on(Hls.Events.MANIFEST_PARSED, () => {
+              console.log("HLS Manifest Parsed");
 
-            return () => hls.destroy();
+              // Initialize Plyr
+              const player = new Plyr(videoRef.current, {
+                controls: [
+                  "play", "volume", "progress", "current-time", "mute",
+                  "settings", "fullscreen", 
+                ],
+                settings:['speed']
+              });
+
+              console.log("Plyr Initialized");
+
+            });
+
+            hlsRef.current = hls;
           } else {
             videoRef.current.src = data.link;
           }
@@ -67,54 +91,46 @@ function Vid() {
         console.error("Error fetching video data:", error);
       }
     };
+
     fetchVideoData();
+
+    // Cleanup on unmount
+    return () => {
+      hlsRef.current?.destroy();
+    };
   }, [data_id]);
 
   return (
-    
+    <div className="video-container">
       <video
-        ref={videoRef}
+        ref={videoRef} // Attach Plyr and HLS.js to this video element
+        className="w-full min-w-4xl h-fit flex rounded-xl object-contain"
         controls
-        className="w-full min-w-4xl h-auto flex rounded-xl object-contain"
-        style={{}}
         onError={(e) => console.error("Error loading video", e)}
         onLoadedData={(e) => console.log("Video loaded successfully", e)}
-      ></video>
-
+      >
+        {/* No need to add the source here */}
+      </video>
+    </div>
   );
 }
 
+
 export default function Video() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
-
   return (
     <>
-      <div className="flex flex-col">
-        <Navbar onMenuClick={toggleSidebar} />
-        <div className="flex mt-7">
-          <Sidebar sidebarOpen={sidebarOpen} />
-
           <div
-            id="content"
-            className={`transition-all duration-300 ease-in-out ${
-              sidebarOpen ? "ml-64" : "m-3 mt-0"
-            } w-full pt-12`}
-            style={{ display: "grid", gridTemplateColumns: "70% 30%" }}>
-
+            
+            style={{ display: "grid", gridTemplateColumns: "70% 30%" }}
+          >
             <div
               className="video"
-              style={{ display: "grid", gridTemplateRows: "auto 13% 25%" }}>
-
-
+              style={{ display: "grid", gridTemplateRows: "auto 13% 25%" }}
+            >
               <div className="w-full max-w-7xl h-auto flex rounded-xl mt-3 object-contain justify-center items-baseline">
                 <Vid />
               </div>
 
-              
               <div className="video-details bg-light m-3 rounded-xl">
                 <h1
                   className="v-title font-bold"
@@ -251,8 +267,7 @@ export default function Video() {
               style={{ height: "100vh" }}
             ></div>
           </div>
-        </div>
-      </div>
+
     </>
   );
 }
