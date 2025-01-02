@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 import os
 load_dotenv()
 
-from flask import Flask, request, jsonify, redirect, send_file, render_template, make_response, g
+from flask import Flask, request, jsonify, redirect, g
 from flask_cors import CORS
 
 # import gridfs
@@ -14,7 +14,7 @@ from flask_cors import CORS
 
 # getting IP 
 ip_address = os.getenv('IP_ADD')
-frontend_url = "http://localhost:5173"
+frontend_url = f"http://{ip_address}:5173"
 print(frontend_url)
 
 # MongoDB Libraires
@@ -302,7 +302,8 @@ def signin():
                     "email": email,
                     "password": hashed_password,
                     "channelName": channel_name,
-                    "profilePic": f'{LOCALSTACK_URL}/{S3_X_BUCKET}/{v_id}.jpg',
+                    # "profilePic": f'{LOCALSTACK_URL}/{S3_X_BUCKET}/{v_id}.jpg',
+                    "profilePic": f'{LOCALSTACK_URL}/{S3_X_BUCKET}/{i_name}',
                     "videos": [],          
                     "likedVideos": [],       
                     "watchHistory": [],      
@@ -391,6 +392,12 @@ def stream_video(video_id):
     # return render_template('index.html', link=s3_link)
 
 
+@app.get("/list")
+def v_list():
+    vl = VIDEOS.find({},{'_id':0,'dislikes':0,'comments':0})
+    a=vl.to_list()
+    print(a)
+    return a
 
 
 # @app.route('/video/<video_id>')

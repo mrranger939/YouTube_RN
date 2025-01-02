@@ -35,8 +35,11 @@ const Hehe = () => {
   };
 
   const formatViews = (views) => {
+    if (views >= 1000000) {
+      return (views / 1000000).toFixed(1) + 'M'; // Convert to 'k' format
+    }
     if (views >= 1000) {
-      return (views / 1000).toFixed(1) + 'k'; // Convert to 'k' format
+      return (views / 1000).toFixed(1) + 'K'; // Convert to 'k' format
     }
     return views.toString(); // Otherwise, just return the views as is
   };

@@ -37,7 +37,7 @@ export default function Navbar({ onMenuClick }) {
         >
           <FontAwesomeIcon icon={faBars} />
         </button>
-        <a className="flex items-center" href="#">
+        <a className="flex items-center" href="/">
           <img
             src="/images/youtube_logo-removebg-preview.png"
             alt="Logo"

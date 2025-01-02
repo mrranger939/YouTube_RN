@@ -10,8 +10,8 @@ docker run -it -d --rm --name localstack ^
 
 @REM docker start localstack || docker run -d --name localstack --network youtubern localstack/localstack
 
-REM Wait for 15 seconds
-@REM timeout /t 15
+REM Wait for 5 seconds
+timeout /t 5
 
 REM Start Zookeeper
 docker run -d --rm --name zookeeper --network youtubern -p 2181:2181 zookeeper
@@ -21,8 +21,8 @@ timeout /t 15
 
 REM Start Kafka container in detached mode
 docker run -d --rm --network youtubern -p 9092:9092 --name kafka ^
--e KAFKA_ZOOKEEPER_CONNECT=192.168.1.3:2181 ^
--e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://192.168.1.3:9092 ^
+-e KAFKA_ZOOKEEPER_CONNECT=192.168.1.5:2181 ^
+-e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://192.168.1.5:9092 ^
 -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 ^
 confluentinc/cp-kafka
 

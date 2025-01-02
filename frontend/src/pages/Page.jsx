@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
-import Cards from "../components/Cards";
+// import Cards from "../components/Cards";
 import './Home.css'
 export default function Layout({children}) {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
 
   const handleMenuClick = () => {
