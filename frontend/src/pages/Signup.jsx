@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import axios from "axios";
+import {Input} from "@nextui-org/react";
 export default function Signup() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -54,36 +55,42 @@ export default function Signup() {
         <h2 className="text-2xl font-bold mb-6 text-center">Create Account</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-2">Username</label>
-            <input
+{/*             <label className="block text-sm font-medium mb-2">Username</label> */}
+            <Input
               type="text"
-              className="w-full border rounded px-3 py-2"
+              className="w-full rounded px-3 py-2"
               name="username"
+              label="Username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
+              variant={"underlined"}
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-2">Email</label>
-            <input
+   {/*          <label className="block text-sm font-medium mb-2">Email</label> */}
+            <Input
               type="email"
-              className="w-full border rounded px-3 py-2"
+              className="w-full rounded px-3 py-2"
               value={email}
+              label="Email"
               name="email"
               onChange={(e) => setEmail(e.target.value)}
               required
+              variant={"underlined"}
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-2">Password</label>
-            <input
+            {/* <label className="block text-sm font-medium mb-2">Password</label> */}
+            <Input
               type="password"
-              className="w-full border rounded px-3 py-2"
+              className="w-full rounded px-3 py-2"
               value={password}
               name="password"
+              label="Password"
               onChange={(e) => setPassword(e.target.value)}
               required
+              variant={"underlined"}
             />
           </div>
           <div className="mb-4">
@@ -97,14 +104,16 @@ export default function Signup() {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-2">Channel Name</label>
-            <input
+            {/* <label className="block text-sm font-medium mb-2">Channel Name</label> */}
+            <Input
               type="text"
-              className="w-full border rounded px-3 py-2"
+              className="w-full rounded px-3 py-2"
               value={channelName}
               name="channelName"
+              label="Channel Name"
               onChange={(e) => setChannelName(e.target.value)}
               required
+              variant={"underlined"}
             />
           </div>
           <button

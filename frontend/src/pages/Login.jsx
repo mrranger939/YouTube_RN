@@ -3,6 +3,7 @@ import { Link, Navigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import {Input} from "@nextui-org/react";
 export default function Login() {
     const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -45,24 +46,29 @@ export default function Login() {
         <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-2">Email</label>
-            <input
+{/*             <label className="block text-sm font-medium mb-2">Email</label> */}
+
+            <Input
               type="email"
-              className="w-full border rounded px-3 py-2"
+              label='Email'
+              className="w-full  rounded px-3 py-2"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              
+              variant={"bordered"}
             />
+
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-2">Password</label>
-            <input
+{/*             <label className="block text-sm font-medium mb-2">Password</label> */}
+            <Input
               type="password"
-              className="w-full border rounded px-3 py-2"
+              label="Password"
+              className="w-full rounded px-3 py-2"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              variant={"bordered"}
               
             />
           </div>
