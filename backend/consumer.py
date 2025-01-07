@@ -10,6 +10,9 @@ from dotenv import load_dotenv
 load_dotenv()
 # getting IP 
 ip_address = os.getenv('IP_ADD')
+# getting GPU Config 
+gpu_config = os.getenv('GPU')
+
 # s3 Configuration
 s3_BUCKET_UNTRANSCODED = 'untranscoded'
 s3_BUCKET_VIDEO_ABR = 'video-abr'
@@ -105,13 +108,23 @@ def generate_hls(input_file):
 
         for resolution, settings in resolutions.items():
             output_m3u8 = f"{output_dir}/{resolution}.m3u8"
-            command = (
-                f"ffmpeg -i {input_file} -vf scale={settings['scale']} -c:a aac -ar 48000 "
+            if gpu_config == "NVIDIA":
+                command = (
+                f"ffmpeg -hwaccel cuda -hwaccel_output_format cuda -i {input_file} "
+                f"-vf scale_cuda={settings['scale']} -c:a aac -ar 48000 "
+                f"-b:a {settings['audio_bitrate']} -c:v h264_nvenc -preset fast "
+                f"-crf 20 -g 48 -keyint_min 48 -hls_time 10 -hls_playlist_type vod "
+                f"-b:v {settings['video_bitrate']} -maxrate {settings['video_bitrate']} -bufsize 2000k "
+                f"-hls_segment_filename {output_dir}/{resolution}_%03d.ts {output_m3u8}"
+                )
+            else :
+                command = (
+                f"ffmpeg -hwaccel auto -i {input_file} -vf scale={settings['scale']} -c:a aac -ar 48000 "
                 f"-b:a {settings['audio_bitrate']} -c:v h264 -profile:v main -crf 20 "
                 f"-sc_threshold 0 -g 48 -keyint_min 48 -hls_time 10 -hls_playlist_type vod "
                 f"-b:v {settings['video_bitrate']} -maxrate {settings['video_bitrate']} -bufsize 2000k "
                 f"-hls_segment_filename {output_dir}/{resolution}_%03d.ts {output_m3u8}"
-            )
+                )
             print(f"Running command: {command}")  # Debugging
             process = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
