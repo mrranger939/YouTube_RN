@@ -43,11 +43,10 @@ function Subcr() {
   );
 }
 
-function Vid({setGr,setHe}) {
+function Vid({ setGr, setHe }) {
   const { data_id } = useParams();
   const videoRef = useRef(null);
   const hlsRef = useRef(null);
-  
 
   useEffect(() => {
     const fetchVideoData = async () => {
@@ -59,9 +58,9 @@ function Vid({setGr,setHe}) {
 
         if (data.link) {
           // Set the poster image for the video
-          if (videoRef.current) {
-            // videoRef.current.poster = data.posterlink;
-          }
+          // if (videoRef.current) {
+          //   // videoRef.current.poster = data.posterlink;
+          // }
 
           if (Hls.isSupported()) {
             const hls = new Hls();
@@ -123,8 +122,8 @@ function Vid({setGr,setHe}) {
       controls
       onError={(e) => console.error("Error loading video", e)}
       onLoadedData={(e) => {
-        setHe(`h-[${videoRef.current.clientHeight+2}px]`)
-        setGr(`${videoRef.current.clientHeight+6}px`)
+        setHe(`h-[${videoRef.current.clientHeight + 2}px]`);
+        setGr(`${videoRef.current.clientHeight + 6}px`);
         console.log("Video Height (intrinsic):", videoRef.current.videoHeight);
         console.log("Video Height (rendered):", videoRef.current.clientHeight);
         console.log("Video loaded successfully", e);
@@ -136,30 +135,29 @@ function Vid({setGr,setHe}) {
 }
 
 export default function Video() {
-  const [He,setHe] = useState("h-auto")
-  const [Gr,setGr] = useState("auto")
+  const [VD, setVD] = useState(false);
+  const [He, setHe] = useState("h-auto");
+  const [Gr, setGr] = useState("auto");
   return (
     <>
       <div
         className="mt-1 mx-8"
         style={{ display: "grid", gridTemplateColumns: "65% 35%" }}
       >
-
-
         <div
           className="video mx-2"
-          style={{ display: "grid", gridTemplateRows: `${Gr} auto auto` }}>
-
-
-
+          style={{ display: "grid", gridTemplateRows: `${Gr} auto auto` }}
+        >
           {/* <div className="w-full max-w-[640px] h-auto max-h-[360px] flex rounded-xl mx-2 object-contain justify-center items-baseline"> */}
-          <div className={"w-full "+ He +" flex rounded-xl mb-2 object-contain justify-center items-baseline"}>
-            <Vid setGr={setGr} setHe={setHe}  />
+          <div
+            className={
+              "w-full " +
+              He +
+              " flex rounded-xl mb-2 object-contain justify-center items-baseline"
+            }
+          >
+            <Vid setGr={setGr} setHe={setHe} />
           </div>
-
-
-
-
 
           <div className="video-details bg-light mx-1 rounded-xl">
             <h1 className="v-title font-bold" style={{ fontSize: "20px" }}>
@@ -176,7 +174,11 @@ export default function Video() {
             >
               <div className="max-w-[350px] w-full flex items-center gap-3 mt-2">
                 <div>
-                  <Skeleton className="flex rounded-full w-10 h-10" />
+                  {VD ? (
+                    <Skeleton className="flex rounded-full w-10 h-10" />
+                  ) : (
+                    <Skeleton className="flex rounded-full w-10 h-10" />
+                  )}
                 </div>
 
                 <div className="w-full flex flex-col gap-2">
@@ -287,19 +289,13 @@ export default function Video() {
           </div>
 
           <div className="discription bg-black m-3 mt-2 rounded-xl"></div>
-
-
-
         </div>
-
 
         <div
           className="cards bg-black ml-5 rounded-xl"
           style={{ height: "100vh" }}
         ></div>
-
       </div>
-
     </>
   );
 }

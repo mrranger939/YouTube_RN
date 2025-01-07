@@ -14,6 +14,7 @@ from flask_cors import CORS
 
 # getting IP 
 ip_address = os.getenv('IP_ADD')
+local_frontend_url = f"http://localhost:5173"
 frontend_url = f"http://{ip_address}:5173"
 print(frontend_url)
 
@@ -40,7 +41,7 @@ import jwt
 from datetime import datetime, timedelta,timezone
 from functools import wraps
 app = Flask(__name__)
-CORS(app,supports_credentials=True,origins=[frontend_url])
+CORS(app,supports_credentials=True,origins=[frontend_url,local_frontend_url])
 app.config['JWT_SECRET_KEY'] = "your_secret_key"
 bcrypt = Bcrypt(app)
 
@@ -103,6 +104,7 @@ mgdb_client = MongoClient("mongodb://localhost:27017/")
 db = mgdb_client['YoutubeRN']
 VIDEOS=db.get_collection("videos")
 PROFILES = db.get_collection("users")
+CHANNELS = db.get_collection("channels")
 # db = client['image_uploads']
 # fs = gridfs.GridFS(db)
 # allids = db.get_collection('allids')
@@ -139,14 +141,18 @@ s3_client = boto3.client(
 )
 
 # Function to Upload File to S3 Bucket
-def upload_to_s3(file, bucket_name, file_name):
+def upload_to_s3(file, bucket_name, file_name,img=None,exp=6000):
     """Upload a file to S3"""
     try:
         # Create the bucket if it doesn't exist (LocalStack requires explicit bucket creation)
         s3_client.create_bucket(Bucket=bucket_name)
 
         # Upload the file to LocalStack S3
-        s3_client.upload_fileobj(file, bucket_name, file_name)
+        if img:
+            # Cache the IMG file for 50 minutes
+            s3_client.upload_fileobj(file, bucket_name, file_name,ExtraArgs={'CacheControl': f'max-age={exp}',})
+        else:
+            s3_client.upload_fileobj(file, bucket_name, file_name)
         print(f"File uploaded successfully to {bucket_name}/{file_name}")
         return True
     except NoCredentialsError:
@@ -228,7 +234,7 @@ def upload_file():
             extension=image_file.filename.split('.')[-1]
             i_name=v_id+'.'+extension
             
-            if upload_to_s3(video_file, S3_U_BUCKET, v_name) and upload_to_s3(image_file, S3_I_BUCKET, i_name):
+            if upload_to_s3(video_file, S3_U_BUCKET, v_name) and upload_to_s3(image_file, S3_I_BUCKET, i_name, img=True):
                 
                 print({'Video and Thumbnail ': v_id})
                 print(producer)
@@ -284,8 +290,11 @@ def signin():
     if not all([username, email, password, channel_name]):
         return jsonify({"error": "All fields are required"}), 400
     existing_user = PROFILES.find_one({'username':username})
+    existing_chan = CHANNELS.find_one({"channelName":channel_name})
     if existing_user:
         return jsonify({"error": "Username already exists"}), 400
+    if existing_chan:
+        return jsonify({"error": "Channelname already exists"}), 400
     hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
     
     if image_file:
@@ -295,23 +304,37 @@ def signin():
             v_id = generate_unique_id(secure_filename(image_file.filename))
             extension=image_file.filename.split('.')[-1]
             i_name=v_id+'.'+extension
-            if upload_to_s3(image_file, S3_X_BUCKET, i_name):
+            if upload_to_s3(image_file, S3_X_BUCKET, i_name,img=True,exp=86400):
                 print({'uploaded the channel image with video Id: ': v_id})
-                PROFILES.insert_one({
+                profile_pic_link = f'{LOCALSTACK_URL}/{S3_X_BUCKET}/{i_name}'
+                user_id = PROFILES.insert_one({
                     "username": username,
                     "email": email,
                     "password": hashed_password,
-                    "channelName": channel_name,
+
                     # "profilePic": f'{LOCALSTACK_URL}/{S3_X_BUCKET}/{v_id}.jpg',
-                    "profilePic": f'{LOCALSTACK_URL}/{S3_X_BUCKET}/{i_name}',
-                    "videos": [],          
+                    
+                    "profilePic": profile_pic_link,
                     "likedVideos": [],       
                     "watchHistory": [],      
                     "subscriptions": []       
                 })
+                CHANNELS.insert_one({
+                    "channel_id": str(user_id.inserted_id), 
+                    "channelName": channel_name,
+                    "logo" : profile_pic_link,
+                    "subscribers": 0,
+                    "chn_banner":'',
+                    "description":"",
+                    "videos": [],   
+                    "shorts":[],
+                    "created_date":datetime.now(timezone.utc)
+                })
                 return jsonify({"message": "success"}), 201
         except Exception as e:
             print(e)
+    else:
+        return jsonify({"error": "Image doesnt exists"}), 400
     
     return jsonify('failed'), 500
    
@@ -328,7 +351,7 @@ def login():
         return jsonify({"error": "Invalid username or password"}), 401
     if not bcrypt.check_password_hash(user['password'], password):
         return jsonify({"error": "Invalid username or password"}), 401
-    
+    print(str(user["_id"]))
     token = jwt.encode({
         "user_id": str(user["_id"]),
         "username": user["username"], 
@@ -386,18 +409,30 @@ def get_video_data():
 def stream_video(video_id):
     # Construct the S3 link for the index.m3u8 file
     s3_link = f"{LOCALSTACK_URL}/{S3_V_BUCKET}/{video_id}/master.m3u8"
-    posterlink = f'{LOCALSTACK_URL}/{S3_I_BUCKET}/{video_id}.jpg'
     print(s3_link)
-    return jsonify(link=s3_link, posterlink=posterlink)
+    return jsonify(link=s3_link)
     # return render_template('index.html', link=s3_link)
+
+
+@app.get('/chn/card/<chn_id>')
+def chn_det(chn_id):
+    try:
+        print("\n\n",chn_id)
+        chn_det=CHANNELS.find_one({"channel_id":chn_id},{"_id":0,"channelName":1,'logo':1})
+        print(chn_det)
+        return chn_det
+    except Exception as e:
+        print(e)
 
 
 @app.get("/list")
 def v_list():
     vl = VIDEOS.find({},{'_id':0,'dislikes':0,'comments':0})
+    li=vl.distinct(key="channel_id")
     a=vl.to_list()
+    print(li)
     print(a)
-    return a
+    return jsonify(a=a,li=li)
 
 
 # @app.route('/video/<video_id>')
