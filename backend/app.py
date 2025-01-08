@@ -295,6 +295,8 @@ def signin():
         return jsonify({"error": "Username already exists"}), 400
     if existing_chan:
         return jsonify({"error": "Channelname already exists"}), 400
+    
+    
     hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
     
     if image_file:
@@ -311,6 +313,7 @@ def signin():
                     "username": username,
                     "email": email,
                     "password": hashed_password,
+                    "channel_id": None,
 
                     # "profilePic": f'{LOCALSTACK_URL}/{S3_X_BUCKET}/{v_id}.jpg',
                     
@@ -351,7 +354,8 @@ def login():
         return jsonify({"error": "Invalid username or password"}), 401
     if not bcrypt.check_password_hash(user['password'], password):
         return jsonify({"error": "Invalid username or password"}), 401
-    print(str(user["_id"]))
+    
+    
     token = jwt.encode({
         "user_id": str(user["_id"]),
         "username": user["username"], 
@@ -428,11 +432,9 @@ def chn_det(chn_id):
 @app.get("/list")
 def v_list():
     vl = VIDEOS.find({},{'_id':0,'dislikes':0,'comments':0})
-    li=vl.distinct(key="channel_id")
     a=vl.to_list()
-    print(li)
     print(a)
-    return jsonify(a=a,li=li)
+    return jsonify(data=a)
 
 
 # @app.route('/video/<video_id>')
