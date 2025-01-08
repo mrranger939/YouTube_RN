@@ -7,9 +7,7 @@ import { Input } from "@nextui-org/react";
 import { Textarea } from "@nextui-org/react";
 export default function CreateChannel() {
     const navigate = useNavigate()
-  // const [username, setUsername] = useState("");
   const [description, setDescription] = useState("");
-  //  const [password, setPassword] = useState("");
   const [channelName, setChannelName] = useState("");
   const [channelBanner, setChannelBanner] = useState(null);
   const [uploadSuccess, setUploadSuccess] = useState(false);
@@ -19,13 +17,9 @@ export default function CreateChannel() {
     const token = Cookies.get("authToken")
     if(token){
         const decodedData = jwtDecode(token);
-
-        // console.log("Creating account:", { username, email, password, channelName, profilePic });
         const formData = new FormData();
         formData.append("channelName", channelName);
         formData.append("description", description);
-        // formData.append("password", password);
-        // formData.append("channelName", channelName);
         formData.append("channelBanner", channelBanner);
         formData.append("usedId", decodedData.user_id)
     
@@ -71,42 +65,7 @@ export default function CreateChannel() {
       <div className="w-full max-w-md bg-white p-8 rounded shadow">
         <h2 className="text-2xl font-bold mb-6 text-center">Create Channel</h2>
         <form onSubmit={handleSubmit}>
-          {/*<div className="mb-4">
-            <Input
-              type="text"
-              className="w-full rounded px-3 py-2"
-              name="username"
-              label="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-              variant={"underlined"}
-            />
-          </div> */}
-          {/*           <div className="mb-4">
-            <Input
-              type="email"
-              className="w-full rounded px-3 py-2"
-              value={email}
-              label="Email"
-              name="email"
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              variant={"underlined"}
-            />
-          </div> */}
-          {/*           <div className="mb-4">
-            <Input
-              type="password"
-              className="w-full rounded px-3 py-2"
-              value={password}
-              name="password"
-              label="Password"
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              variant={"underlined"}
-            />
-          </div> */}
+          {/* sorry i did keep some trash in the last commit here removed it now  */}
           <div className="mb-4">
             <Input
               type="text"
