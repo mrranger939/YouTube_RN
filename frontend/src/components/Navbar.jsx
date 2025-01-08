@@ -89,8 +89,7 @@ export default function Navbar({ onMenuClick }) {
               <img
                 src={profilePic}
                 alt="Profile"
-                className="rounded-full"
-                style={{ width: "25px", height: "25px" }}
+                className="rounded-full w-6 h-6"
               />
             ) : (
               <FontAwesomeIcon icon={faUserCircle} />
