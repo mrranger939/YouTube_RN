@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Navigate } from 'react-router-dom';
 import Cookies from "js-cookie";
 import axios from "axios";
@@ -8,8 +8,6 @@ import './Studio.css';
 export default function Upload() {
 
   const [uploadSuccess, setUploadSuccess] = useState(false);
-
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);

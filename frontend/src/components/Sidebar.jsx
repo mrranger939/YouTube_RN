@@ -51,7 +51,7 @@ const Sidebar = ({ sidebarOpen }) => {
                             
                             <span className="ml-2  font-medium"><h3>You</h3></span>
                         </a>
-                        <a className="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-300" href="#">
+                        <a className="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-300" href="/createChannel">
                         <svg
                             version="1.1"
                             id="Layer_1"

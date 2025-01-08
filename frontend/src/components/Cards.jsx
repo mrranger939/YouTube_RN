@@ -10,7 +10,6 @@ import {
 } from "@nextui-org/react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
 
 const ip = import.meta.env.VITE_IP_ADD;
 
@@ -55,12 +54,11 @@ export default function Cards({ vid_list }) {
     return `${minutesAgo} minutes ago`;
   };
 
-  const vlist = vid_list.a;
 
   useEffect(() => {
     // Fetch channel details in parallel after cards are rendered
     const fetchChannels = () => {
-      vlist.forEach((item) => {
+      vid_list.forEach((item) => {
         if (!channelDetails[item.channel_id]) {
           fetchChannelDetails(item.channel_id)
             .then((data) => {
@@ -79,11 +77,11 @@ export default function Cards({ vid_list }) {
     };
 
     fetchChannels();
-  }, [vlist, channelDetails]);
+  }, [vid_list, channelDetails]);
 
   return (
     <div className="youtubern_customcardgrid">
-      {vlist.map((item) => {
+      {vid_list.map((item) => {
         const channel = channelDetails[item.channel_id];
         console.log("In return : ",channel)
         return (
@@ -94,20 +92,20 @@ export default function Cards({ vid_list }) {
             className="youtubern_customcards flex m-2"
             isPressable="true"
             fullWidth="false"
-            onPress={() => n(`/v/${item.video_id}`)}
+            
           >
-            <CardHeader>
+            <CardHeader onClick={() => n(`/v/${item.video_id}`)}>
+              <div className="w-full h-40 ">
               <Image
                 alt="Thumbnail"
-                className="object-cover youtubern_customcards_img"
+                className="object-contain youtubern_customcards_img w-full h-40 "
                 src={`http://${ip}:4566/thumbnail/${item.video_id}.jpg`} // Thumbnail URL
-                height={999}
-                width={999}
               />
+              </div>
             </CardHeader>
 
             <CardFooter className="justify-between">
-              <User
+              <User onClick={() => n(`/channel/${item.channel_id}`)}
                 name={channel ? channel.channelName : "Loading..."} // Display 'Loading...' until the channel details are available
                 description={`${formatViews(
                   item.views

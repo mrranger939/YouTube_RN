@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Skeleton, Button } from "@nextui-org/react";
-
 import axios from "axios";
 import Hls from "hls.js";
 import { useParams } from "react-router-dom";
