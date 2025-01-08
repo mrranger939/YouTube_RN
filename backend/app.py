@@ -506,7 +506,7 @@ def v_list():
     a=vl.to_list()
     print(a)
     return jsonify(data=a)
-    return jsonify(data=a)
+
 
 
 # @app.route('/video/<video_id>')
