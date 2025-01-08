@@ -30,11 +30,11 @@ export default function Channel() {
     const fetchChannelDetails = async () => {
       try {
         const ipAddress = import.meta.env.VITE_IP_ADD;
-        const Wholedata  = await axios.get(
+        const Wholedata = await axios.get(
           `http://${ipAddress}:8000/channel/${channelid}`
         );
-        console.log(Wholedata.data)
-        const data = Wholedata.data.channelData
+        console.log(Wholedata.data);
+        const data = Wholedata.data.channelData;
         setChannelName(data.channelName);
         setBanner(data.chn_banner);
         setDescription(data.description);
@@ -110,7 +110,13 @@ function Subcr() {
   );
 }
 
-export function ProfileCard2({channelName, description, logo, numOfVideos, subscribers}) {
+export function ProfileCard2({
+  channelName,
+  description,
+  logo,
+  numOfVideos,
+  subscribers,
+}) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
@@ -125,14 +131,18 @@ export function ProfileCard2({channelName, description, logo, numOfVideos, subsc
         </div>
         <div className="mx-auto text-center md:text-left md:ml-3">
           <div className="md:mx-0">
-            <div className="text-2xl font-extrabold">{channelName ? channelName : "Funny Videos"}</div>
+            <div className="text-2xl font-extrabold">
+              {channelName ? channelName : "Funny Videos"}
+            </div>
             <div className="flex mx-auto w-fit md:w-auto space-x-2 text-gray-500 text-xs">
               <p>{subscribers ? subscribers : "0"} Subscribers</p>
-              <p>{numOfVideos ? numOfVideos: "0"} Videos</p>
+              <p>{numOfVideos ? numOfVideos : "0"} Videos</p>
             </div>
             <div className="text-xs">
               <p>
-                {description ? description.slice(0,50) + "....  " : "iam a good Youtuber"}
+                {description
+                  ? description.slice(0, 50) + "....  "
+                  : "iam a good Youtuber"}
                 <button className="text-blue-700" onClick={onOpen}>
                   More
                 </button>
@@ -140,7 +150,7 @@ export function ProfileCard2({channelName, description, logo, numOfVideos, subsc
             </div>
             <div className="subscribe ml-1">
               <Subcr />
-            </div>                
+            </div>
           </div>
         </div>
       </div>
@@ -153,15 +163,16 @@ export function ProfileCard2({channelName, description, logo, numOfVideos, subsc
               </ModalHeader>
               <ModalBody>
                 <p>
-                  {description}
+                  {description
+                    ? description
+                    : "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc."}
                 </p>
-
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
                   Close
                 </Button>
-{/*                 <Button color="primary" onPress={onClose}>
+                {/*                 <Button color="primary" onPress={onClose}>
                   Action
                 </Button> */}
               </ModalFooter>
@@ -173,8 +184,8 @@ export function ProfileCard2({channelName, description, logo, numOfVideos, subsc
   );
 }
 
-export function AllVideos({videos}) {
-  console.log(`in videos ########## ${videos} and type is ${typeof(videos)}`)
+export function AllVideos({ videos }) {
+  console.log(`in videos ########## ${videos} and type is ${typeof videos}`);
   return (
     <div className="flex w-full flex-col">
       <Tabs aria-label="Options" variant="underlined">
