@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Skeleton, Button } from "@nextui-org/react";
-import confetti from 'canvas-confetti';
+import confetti from "canvas-confetti";
 
 import axios from "axios";
 import Hls from "hls.js";
@@ -9,49 +9,68 @@ import "./Home.css";
 // import Plyr from "plyr";
 // import "plyr/dist/plyr.css";
 
+import VCards from "../components/VCards";
+
 const ipAddress = import.meta.env.VITE_IP_ADD;
 
 function Subcr() {
   // Subscription State
-  const [sub_status, setSubStatus] = useState("Subscribe");
-  const [sub_color, setSubColor] = useState("danger");
-  const [sub_text, setSubText] = useState("text-tiny text-white");
-  const [sub_btn, setSubBtn] = useState("solid");
+  const [sub, setSub] = useState({
+    text: "Subscribe",
+    status: false,
+    color: "danger",
+    class: "text-white",
+    btn: "solid",
+  });
 
   const toggleSubscription = () => {
-    if (sub_status === "Subscribe") {
-      setSubStatus("Subscribed");
-      setSubColor("default");
-      setSubText("text-tiny text-dark");
-      setSubBtn("ghost");
+    console.log(sub);
+    if (sub.status) {
+      setSub({
+        text: "Subscribe",
+        status: false,
+        color: "danger",
+        class: "text-white",
+        btn: "solid",
+      });
     } else {
-      setSubStatus("Subscribe");
-      setSubColor("danger");
-      setSubText("text-tiny text-white");
-      setSubBtn("solid");
+      setSub({
+        text: "Subscribed",
+        status: true,
+        color: "default",
+        class: "text-dark",
+        btn: "ghost",
+      });
     }
   };
 
   const handleConfetti = () => {
-    confetti({origin:{x:0.18,y:0.75},particleCount:100,spread:60});
+    if (!sub.status)
+      confetti({
+        origin: { x: 0.18, y: 0.75 },
+        particleCount: 500,
+        gravity: 0.25,
+        decay: 0.6,
+        spread: 360,
+      });
   };
 
   return (
     <Button
-      className={sub_text}
-      variant={sub_btn}
-      color={sub_color}
+      className={`text-tiny ${sub.class}`}
+      variant={sub.btn}
+      color={sub.color}
       radius="full"
       size="md"
       onClick={toggleSubscription}
       onPress={handleConfetti}
     >
-      {sub_status}
+      {sub.text}
     </Button>
   );
 }
 
-function Vid({ setGr, setHe, link }) {
+function Vid({ link }) {
   const videoRef = useRef(null);
   const hlsRef = useRef(null);
 
@@ -92,8 +111,6 @@ function Vid({ setGr, setHe, link }) {
       controls
       onError={(e) => console.error("Error loading video", e)}
       onLoadedData={(e) => {
-        setHe(`h-[${videoRef.current.clientHeight + 2}px]`);
-        setGr(`${videoRef.current.clientHeight + 6}px`);
         console.log("Video Height (intrinsic):", videoRef.current.videoHeight);
         console.log("Video Height (rendered):", videoRef.current.clientHeight);
         console.log("Video loaded successfully", e);
@@ -108,8 +125,6 @@ export default function Video() {
   const { data_id } = useParams();
   const [VD, setVD] = useState(false);
   const [CD, setCD] = useState(false);
-  const [He, setHe] = useState("h-auto");
-  const [Gr, setGr] = useState("auto");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false); // Error state
 
@@ -177,16 +192,17 @@ export default function Video() {
           {/* <div className="w-full max-w-[640px] h-auto max-h-[360px] flex rounded-xl mx-2 object-contain justify-center items-baseline"> */}
           <div
             className={
-              "w-full " +
-              He +
-              " flex rounded-xl mb-2 object-contain justify-center items-baseline"
+              "w-full h-auto flex rounded-xl mb-2 object-contain justify-center items-baseline"
             }
           >
-            <Vid setGr={setGr} setHe={setHe} link={VD.link} />
+            <Vid link={VD.link} />
           </div>
 
           <div className="video-details bg-light mx-1 rounded-xl">
-            <h1 className="v-title font-bold tracking-tight" style={{ fontSize: "20px" }}>
+            <h1
+              className="v-title font-bold tracking-tight"
+              style={{ fontSize: "20px" }}
+            >
               {VD.data.title ? (
                 VD.data.title
               ) : (
@@ -207,20 +223,24 @@ export default function Video() {
                   />
                 ) : (
                   // <img src={CD.logo}  className="flex rounded-full" />
-                  <Skeleton />
+                  <Skeleton className="rounded-full w-10 h-10" />
                 )}
               </div>
               <div>
                 <div className="mx-2 w-32 flex flex-col">
                   {CD ? (
                     <>
-                      <p className="w-full font-semibold tracking-tight text-base">{CD.channelName}</p>
-                      <p className=" w-full text-sm">{CD.subscribers} subscribers</p>
+                      <p className="w-full font-semibold tracking-tight text-base">
+                        {CD.channelName}
+                      </p>
+                      <p className=" w-full text-xs ease-in-out duration-500 text-gray-400">
+                        17{CD.subscribers}K subscribers
+                      </p>
                     </>
                   ) : (
                     <>
-                      <Skeleton className="h-3 w-4/5 rounded-xl" />
-                      <Skeleton className="h-3 w-3/5 rounded-xl" />
+                      <Skeleton className="h-3 w-4/5 my-1 rounded-xl" />
+                      <Skeleton className="h-3 w-3/5 my-1 rounded-xl" />
                     </>
                   )}
                 </div>
@@ -330,9 +350,14 @@ export default function Video() {
         </div>
 
         <div
-          className="cards bg-gray-400 ml-5 rounded-xl"
+          // className="cards bg-gray-400 ml-5 rounded-xl"
+          className="cards ml-5 rounded-xl"
           style={{ height: "100vh" }}
-        ></div>
+        >
+          {CD?
+          <VCards Vdata={VD.data} Cdata={CD} />:<></>
+        }
+        </div>
       </div>
     </>
   );

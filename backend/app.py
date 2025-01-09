@@ -452,6 +452,7 @@ def chn_vid_det(chn_id):
         chn_det=CHANNELS.find_one({"channel_id":chn_id},{"_id":0,"channelName":1,'logo':1,'subscribers':1})
         print(chn_det)
         if chn_det:
+            time.sleep(2)
             return chn_det
         else:
             return jsonify({'error': 'Channel not found'}), 404
