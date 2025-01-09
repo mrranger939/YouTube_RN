@@ -13,7 +13,6 @@ function OGCards() {
   var desc = no_views + " views • " + upload_time + " ago";
 
   
-
   return (
     <div className="youtubern_customcardgrid">
       <Card isFooterBlurred radius="lg" className="youtubern_customcards flex m-2"  fullWidth="false">
@@ -21,10 +20,10 @@ function OGCards() {
         <Image
           alt="Woman listing to music"
           className="object-cover youtubern_customcards_img"
-          height={999}
+          // height={999}
           // src="https://nextui.org/images/hero-card.jpeg"
           src={thumb1}
-          width={999}
+          // width={999}
         />
         </CardHeader>
         {/* <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10"> */}
@@ -55,10 +54,10 @@ function OGCards() {
         <Image
           alt="Woman listing to music"
           className="object-cover youtubern_customcards_img"
-          height={999}
+          // height={999}
           
           src={thumb2}
-          width={999}
+          // width={999}
         />
         </CardHeader>
         
@@ -81,10 +80,10 @@ function OGCards() {
         <Image
           alt="Woman listing to music"
           className="object-cover youtubern_customcards_img"
-          height={999}
+          // height={999}
           
           src={thumb3}
-          width={999}
+          // width={999}
         />
         </CardHeader>
         
@@ -105,10 +104,10 @@ function OGCards() {
         <Image
           alt="Woman listing to music"
           className="object-cover youtubern_customcards_img"
-          height={999}
+          // height={999}
           
           src={thumb4}
-          width={999}
+          // width={999}
         />
         </CardHeader>
         
@@ -127,10 +126,10 @@ function OGCards() {
         <Image
           alt="Woman listing to music"
           className="object-cover youtubern_customcards_img"
-          height={999}
+          // height={999}
           
           src={thumb2}
-          width={999}
+          // width={999}
         />
         </CardHeader>
         
@@ -153,10 +152,10 @@ function OGCards() {
         <Image
           alt="Woman listing to music"
           className="object-cover youtubern_customcards_img"
-          height={999}
+          // height={999}
           
           src={thumb2}
-          width={999}
+          // width={999}
         />
         </CardHeader>
         

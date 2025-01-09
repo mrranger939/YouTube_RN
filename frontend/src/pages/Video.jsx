@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Skeleton, Button } from "@nextui-org/react";
 
-import confetti from "canvas-confetti";
 
 import axios from "axios";
 import Hls from "hls.js";
@@ -10,66 +9,13 @@ import "./Home.css";
 // import Plyr from "plyr";
 // import "plyr/dist/plyr.css";
 
+
 import VCards from "../components/VCards";
+import SubcrBtn from "../components/SubcrBtn";
+
+
 
 const ipAddress = import.meta.env.VITE_IP_ADD;
-
-function Subcr() {
-  // Subscription State
-  const [sub, setSub] = useState({
-    text: "Subscribe",
-    status: false,
-    color: "danger",
-    class: "text-white",
-    btn: "solid",
-  });
-
-  const toggleSubscription = () => {
-    console.log(sub);
-    if (sub.status) {
-      setSub({
-        text: "Subscribe",
-        status: false,
-        color: "danger",
-        class: "text-white",
-        btn: "solid",
-      });
-    } else {
-      setSub({
-        text: "Subscribed",
-        status: true,
-        color: "default",
-        class: "text-dark",
-        btn: "ghost",
-      });
-    }
-  };
-
-  const handleConfetti = () => {
-    if (!sub.status)
-      confetti({
-        origin: { x: 0.18, y: 0.75 },
-        particleCount: 500,
-        gravity: 0.25,
-        decay: 0.6,
-        spread: 360,
-      });
-  };
-
-  return (
-    <Button
-      className={`text-tiny ${sub.class}`}
-      variant={sub.btn}
-      color={sub.color}
-      radius="full"
-      size="md"
-      onClick={toggleSubscription}
-      onPress={handleConfetti}
-    >
-      {sub.text}
-    </Button>
-  );
-}
 
 function Vid({ link }) {
   const videoRef = useRef(null);
@@ -248,7 +194,7 @@ export default function Video() {
               </div>
 
               <div className="subscribe mr-4">
-                <Subcr />
+                <SubcrBtn />
               </div>
               <div className="">
                 <Button

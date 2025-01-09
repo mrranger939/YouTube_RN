@@ -17,6 +17,7 @@ const ip = import.meta.env.VITE_IP_ADD;
 const fetchChannelDetails = async (channelId) => {
   try {
     const { data } = await axios.get(`http://${ip}:8000/chn/card/${channelId}`);
+    console.log("fetched")
     
     return data;
   } catch (error) {
@@ -72,8 +73,6 @@ export default function Cards({ vid_list }) {
             });
         }
       });
-      console.log("In useEffect : ",typeof channelDetails);
-      console.log("In useEffect : ",channelDetails);
     };
 
     fetchChannels();
@@ -95,13 +94,11 @@ export default function Cards({ vid_list }) {
             
           >
             <CardHeader onClick={() => n(`/v/${item.video_id}`)}>
-              <div className="w-full h-40 ">
               <Image
                 alt="Thumbnail"
-                className="object-contain youtubern_customcards_img w-full h-40 "
+                className="object-contain youtubern_customcards_img"
                 src={`http://${ip}:4566/thumbnail/${item.video_id}.jpg`} // Thumbnail URL
               />
-              </div>
             </CardHeader>
 
             <CardFooter className="justify-between">
@@ -111,47 +108,13 @@ export default function Cards({ vid_list }) {
                   item.views
                 )} views • ${formatUploadTime(item.timestamp)}`}
                 avatarProps={{
-                  src: channel
-                    // ? `http://${ip}:4566/profile/${channel.logo}`
-                    ? channel.logo
-                    : "loading-logo.jpg", // Default loading logo
+                  src: channel?channel.logo:"https://avatars.githubusercontent.com/u/30373425?v=4",
                 }}
               />
             </CardFooter>
           </Card>
         );
 
-        // <Card
-        //   key={item.video_id}
-        //   isFooterBlurred
-        //   radius="lg"
-        //   className="youtubern_customcards flex m-2"
-        //   isPressable="true"
-        //   fullWidth="false"
-        //   onPress={()=>{n(`/v/${item.video_id}`)}}
-        // >
-        //   <CardHeader>
-        //     <Image
-        //       alt="Thumbnail"
-        //       className="object-cover youtubern_customcards_img"
-        //       src={`http://${ip}:4566/thumbnail/${item.video_id}.jpg`} // You can customize this as per your data
-        //       height={999}
-        //       width={999}
-        //     />
-        //   </CardHeader>
-
-        //   <CardFooter className="justify-between">
-        //     <User
-        //       name={item.channel_id}
-        //       description={`${formatViews(
-        //         item.views
-        //       )} views • ${formatUploadTime(item.timestamp)}`}
-        //       avatarProps={{
-        //         src: "nawphot", // Customize this as per your data
-        //       }}
-        //     />
-        //   </CardFooter>
-        // </Card>
       })}
     </div>
   );
