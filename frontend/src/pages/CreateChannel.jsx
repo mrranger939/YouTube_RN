@@ -1,16 +1,43 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
 import { Input } from "@nextui-org/react";
 import { Textarea } from "@nextui-org/react";
+import {Spinner} from "@nextui-org/spinner";
 export default function CreateChannel() {
     const navigate = useNavigate()
   const [description, setDescription] = useState("");
   const [channelName, setChannelName] = useState("");
   const [channelBanner, setChannelBanner] = useState(null);
   const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [ifchannel, setIfChannel] = useState(false)
+  useEffect(()=>{
+
+    const if_channel = async ()=>{
+      const token = Cookies.get("authToken")
+      if(token){
+        const decoded = jwtDecode(token);
+        const ipAddress = import.meta.env.VITE_IP_ADD;
+        const response = await axios.get(`http://${ipAddress}:8000/checkifchannel/${decoded.user_id}`);
+        try {
+          if (response.data === 'success') {
+            setIfChannel(true);
+            navigate(`/channel/${decoded.user_id}`)
+          } 
+          else {
+            console.error("Unexpected response received:", response.data);
+          }
+        } catch (error) {
+          console.error("Error occurred while checking channel status:", error);
+        }
+      } else {
+        navigate("/login")
+      }
+    }
+    if_channel()
+  }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -61,11 +88,12 @@ export default function CreateChannel() {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
+    (  ifchannel ? <Spinner/> :
+
+    (<div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow">
         <h2 className="text-2xl font-bold mb-6 text-center">Create Channel</h2>
         <form onSubmit={handleSubmit}>
-          {/* sorry i did keep some trash in the last commit here removed it now  */}
           <div className="mb-4">
             <Input
               type="text"
@@ -124,6 +152,7 @@ export default function CreateChannel() {
           </button>
         </form>
       </div>
-    </div>
-  );
+    </div>)
+    )
+    )
 }

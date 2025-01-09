@@ -213,6 +213,10 @@ def generate_unique_id(file_name, min_len=3, max_len=8):
 def upload_file():
     if 'image' not in request.files or 'video' not in request.files:
         return jsonify('failed'), 400
+    description = request.form.get('description')
+    genre = request.form.get('genre')
+    videoTitle = request.form.get("videoTitle")
+    print(f"description: {description} and genre: {genre} and videoTitle: {videoTitle}")
     user_id = g.user_id
     print(user_id)
     username = g.username
@@ -254,7 +258,10 @@ def upload_file():
                     print("Failed to append. Channel not found or already updated.")
                 if VIDEOS.insert_one({
                     'video_id': v_id,
-                    'channel_id': user_id,          
+                    'channel_id': user_id,
+                    'videoTitle': videoTitle,
+                    'genre': genre,
+                    'videoDescription': description,      
                     'likes': 0,                     
                     'dislikes': 0,                
                     'views': 0,                     
@@ -520,12 +527,11 @@ def chn_vid_det(chn_id):
         return jsonify({'error': str(e)}), 500
 
 
-
+""" nawaz api hahahahahahaha!!! """
 
 @app.get('/channel/<channelId>')
 def channelData(channelId):
     try:
-        print(f"ChannelId is {channelId}")
         channelData = CHANNELS.find_one({"channel_id":channelId},{"_id":0})
         videos_list = channelData['videos']
         video_data = list(VIDEOS.find({"video_id": {"$in": videos_list}},{'_id':0,'dislikes':0,'comments':0}))
@@ -534,7 +540,18 @@ def channelData(channelId):
     except Exception as e:
         print(e)
 
+@app.get("/checkifchannel/<channelId>")
+def Channelclick(channelId):
+    try:
+        print(f"ChannelId is {channelId}")
+        existing_user = CHANNELS.find_one({"channel_id": channelId})
+        if not existing_user:
+            return jsonify('fail') 
+        return jsonify('success')
+    except Exception as e:
+        print(e)
 
+""" nawaz api hahahahahahaha!!! """
 
 
 
