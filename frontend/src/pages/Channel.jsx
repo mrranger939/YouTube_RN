@@ -3,6 +3,7 @@ import dfimg from "../assets/df.jpg";
 import { Button } from "@nextui-org/react";
 import { Tabs, Tab, Card, CardBody } from "@nextui-org/react";
 import OGCards from "../components/Orginal_Cards";
+
 import {
   Modal,
   ModalContent,
@@ -14,6 +15,7 @@ import {
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import Cards from "../components/Cards";
+import SubcrBtn from "../components/SubcrBtn";
 
 export default function Channel() {
   const { channelid } = useParams();
@@ -76,40 +78,6 @@ export default function Channel() {
   );
 }
 
-function Subcr() {
-  const [sub_status, setSubStatus] = useState("Subscribe");
-  const [sub_color, setSubColor] = useState("danger");
-  const [sub_text, setSubText] = useState("text-tiny text-white");
-  const [sub_btn, setSubBtn] = useState("solid");
-
-  const toggleSubscription = () => {
-    if (sub_status === "Subscribe") {
-      setSubStatus("Subscribed");
-      setSubColor("default");
-      setSubText("text-tiny text-dark");
-      setSubBtn("ghost");
-    } else {
-      setSubStatus("Subscribe");
-      setSubColor("danger");
-      setSubText("text-tiny text-white");
-      setSubBtn("solid");
-    }
-  };
-
-  return (
-    <Button
-      className={sub_text}
-      variant={sub_btn}
-      color={sub_color}
-      radius="full"
-      size="md"
-      onClick={toggleSubscription}
-    >
-      {sub_status}
-    </Button>
-  );
-}
-
 export function ProfileCard2({
   channelName,
   description,
@@ -131,7 +99,7 @@ export function ProfileCard2({
         </div>
         <div className="mx-auto text-center md:text-left md:ml-3">
           <div className="md:mx-0">
-            <div className="text-2xl font-extrabold">
+            <div className="text-2xl font-bold">
               {channelName ? channelName : "Funny Videos"}
             </div>
             <div className="flex mx-auto w-fit md:w-auto space-x-2 text-gray-500 text-xs">
@@ -149,7 +117,7 @@ export function ProfileCard2({
               </p>
             </div>
             <div className="subscribe ml-1">
-              <Subcr />
+              <SubcrBtn />
             </div>
           </div>
         </div>

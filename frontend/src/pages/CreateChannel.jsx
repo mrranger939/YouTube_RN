@@ -62,7 +62,7 @@ export default function CreateChannel() {
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
-      <div className="w-full max-w-md bg-white p-8 rounded shadow">
+      <div className="w-full max-w-md bg-white p-8 rounded-lg shadow">
         <h2 className="text-2xl font-bold mb-6 text-center">Create Channel</h2>
         <form onSubmit={handleSubmit}>
           {/* sorry i did keep some trash in the last commit here removed it now  */}
