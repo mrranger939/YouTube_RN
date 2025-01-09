@@ -8,7 +8,7 @@ from flask import Flask, request, jsonify, redirect, g
 from flask_cors import CORS
 
 # import gridfs
-# from bson import ObjectId
+from bson import ObjectId
 # import io
 
 
@@ -214,8 +214,13 @@ def upload_file():
     if 'image' not in request.files or 'video' not in request.files:
         return jsonify('failed'), 400
     user_id = g.user_id
+    print(user_id)
     username = g.username
     vid = g.vid
+    k = CHANNELS.find_one({"channel_id": user_id})
+    print(k)
+    if not k:
+        return jsonify('failed'), 400
     print("in upload file", user_id, username, vid)
     image_file = request.files['image']
     video_file = request.files['video']
@@ -227,7 +232,6 @@ def upload_file():
     
     if image_file and video_file:
         try:
-            
             v_id = generate_unique_id(secure_filename(video_file.filename))
             extension=video_file.filename.split('.')[-1]
             v_name=v_id+'.'+extension
@@ -238,6 +242,16 @@ def upload_file():
                 
                 print({'Video and Thumbnail ': v_id})
                 print(producer)
+                
+                result = CHANNELS.update_one(
+                    {"channel_id": user_id}, 
+                    {"$push": {"videos": v_id}} 
+                )
+
+                if result.modified_count > 0:
+                    print("Video ID appended successfully.")
+                else:
+                    print("Failed to append. Channel not found or already updated.")
                 if VIDEOS.insert_one({
                     'video_id': v_id,
                     'channel_id': user_id,          
@@ -286,17 +300,15 @@ def signin():
     username = request.form.get('username')
     email = request.form.get('email')
     password = request.form.get('password')
-    channel_name = request.form.get('channelName')
-    if not all([username, email, password, channel_name]):
-        return jsonify({"error": "All fields are required"}), 400
+    # channel_name = request.form.get('channelName')
+    """ if not all([username, email, password, channel_name]):
+        return jsonify({"error": "All fields are required"}), 400 """
     existing_user = PROFILES.find_one({'username':username})
-    existing_chan = CHANNELS.find_one({"channelName":channel_name})
+    """ existing_chan = CHANNELS.find_one({"channelName":channel_name}) """
     if existing_user:
         return jsonify({"error": "Username already exists"}), 400
-    if existing_chan:
-        return jsonify({"error": "Channelname already exists"}), 400
-    
-    
+    """ if existing_chan:
+        return jsonify({"error": "Channelname already exists"}), 400 """
     hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
     
     if image_file:
@@ -313,32 +325,28 @@ def signin():
                     "username": username,
                     "email": email,
                     "password": hashed_password,
-                    "channel_id": None,
-
-                    # "profilePic": f'{LOCALSTACK_URL}/{S3_X_BUCKET}/{v_id}.jpg',
-                    
                     "profilePic": profile_pic_link,
                     "likedVideos": [],       
                     "watchHistory": [],      
                     "subscriptions": []       
                 })
-                CHANNELS.insert_one({
-                    "channel_id": str(user_id.inserted_id), 
-                    "channelName": channel_name,
-                    "logo" : profile_pic_link,
-                    "subscribers": 0,
-                    "chn_banner":'',
-                    "description":"",
-                    "videos": [],   
-                    "shorts":[],
-                    "created_date":datetime.now(timezone.utc)
-                })
+
+#                CHANNELS.insert_one({
+#                   "channel_id": str(user_id.inserted_id), 
+#                   "channelName": "",
+#                   "logo" : profile_pic_link,
+#                   "subscribers": 0,
+#                   "chn_banner":'',
+#                   "description":"",
+#                   "videos": [],   
+#                   "shorts":[],
+#                   "created_date":datetime.now(timezone.utc)
+#               })
                 return jsonify({"message": "success"}), 201
         except Exception as e:
             print(e)
     else:
         return jsonify({"error": "Image doesnt exists"}), 400
-    
     return jsonify('failed'), 500
    
 @app.post("/login")
@@ -355,12 +363,11 @@ def login():
     if not bcrypt.check_password_hash(user['password'], password):
         return jsonify({"error": "Invalid username or password"}), 401
     
-    
     token = jwt.encode({
         "user_id": str(user["_id"]),
         "username": user["username"], 
         "vid": user['profilePic'],  
-        "exp": datetime.now(timezone.utc) + timedelta(hours=1)
+        "exp": datetime.now(timezone.utc) + timedelta(hours=24)
     }, app.config['JWT_SECRET_KEY'], algorithm="HS256")
 
 #    response = jsonify({"message": "success"})
@@ -370,6 +377,58 @@ def login():
         "message": "success",
         "token": token
     }), 200
+
+@app.post("/createChannel")
+@token_required
+def createChannel():
+    if 'channelBanner' not in request.files:
+        return jsonify('failed'), 400
+    image_file = request.files['channelBanner']
+    if image_file.filename == '':
+        return jsonify({"error": "No file selected for upload"}), 400
+
+    channelName = request.form.get("channelName")
+    description = request.form.get('description')
+    userId = request.form.get('usedId')
+    existing_user = CHANNELS.find_one({"channel_id": userId})
+    if existing_user:
+        return jsonify({'error': "You Already have a channel you cannot create one"}), 400
+
+    existing_chan = CHANNELS.find_one({"channelName":channelName})
+
+    #if already has a channel;
+
+    if existing_chan:
+        return jsonify({"error": "Channelname already exists"}), 400
+    if image_file:
+        try:
+            v_id = generate_unique_id(secure_filename(image_file.filename))
+            extension=image_file.filename.split('.')[-1]
+            i_name=v_id+'.'+extension
+            if upload_to_s3(image_file, S3_X_BUCKET, i_name,img=True,exp=86400):
+                print({'uploaded the channelBanner image with video Id: ': v_id})
+                channelBanner_link = f'{LOCALSTACK_URL}/{S3_X_BUCKET}/{i_name}'
+                profile_pic_link = PROFILES.find_one({"_id":ObjectId(userId)}, {"profilePic": 1, "_id": 0})
+                print(profile_pic_link)
+                CHANNELS.insert_one({
+                   "channel_id": str(userId), 
+                   "channelName": channelName,
+                   "logo" : profile_pic_link["profilePic"],
+                   "subscribers": 0,
+                   "chn_banner":channelBanner_link,
+                   "description":description,
+                   "videos": [],   
+                   "shorts":[],
+                   "created_date":datetime.now(timezone.utc)
+               })
+                return jsonify({"message": "success"}), 201
+        except Exception as e:
+            print(e)
+    else:
+        return jsonify({"error": "Image doesnt exists"}), 400
+    return jsonify('failed'), 500
+   
+
 
 @app.route('/')
 def index():
@@ -463,6 +522,18 @@ def chn_vid_det(chn_id):
 
 
 
+@app.get('/channel/<channelId>')
+def channelData(channelId):
+    try:
+        print(f"ChannelId is {channelId}")
+        channelData = CHANNELS.find_one({"channel_id":channelId},{"_id":0})
+        videos_list = channelData['videos']
+        video_data = list(VIDEOS.find({"video_id": {"$in": videos_list}},{'_id':0,'dislikes':0,'comments':0}))
+        send_data = jsonify({"channelData": channelData, "video_data": video_data})
+        return send_data
+    except Exception as e:
+        print(e)
+
 
 
 
@@ -489,7 +560,6 @@ def ch_list():
     a=ch.to_list()
     print(a)
     return jsonify(data=a)
-
 
 # @app.route('/video/<video_id>')
 # def image_data(video_id):

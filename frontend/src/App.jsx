@@ -6,6 +6,8 @@ import Upload from "./pages/Studio";
 import Video from "./pages/Video";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import Channel from "./pages/Channel";
+import CreateChannel from "./pages/CreateChannel";
 export default function App() {
   return (
     <BrowserRouter>
@@ -15,6 +17,8 @@ export default function App() {
         <Route path="/v/:data_id" element={<Layout><Video /></Layout>  } />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/channel/:channelid" element={<Layout><Channel /></Layout>} />
+        <Route path="/createChannel" element={<Layout><CreateChannel /></Layout>} />
         {/* <Route path="/*" element={<Lost.jsx />} />    ERROR 404 to be made    */}
         {/* Add other routes here */}
       </Routes>

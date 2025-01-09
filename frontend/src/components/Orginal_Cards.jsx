@@ -122,7 +122,57 @@ function OGCards() {
           ></User>          
         </CardFooter>
       </Card>
-
+      <Card isFooterBlurred radius="lg" className="youtubern_customcards flex m-2">
+        <CardHeader>
+        <Image
+          alt="Woman listing to music"
+          className="object-cover youtubern_customcards_img"
+          height={999}
+          
+          src={thumb2}
+          width={999}
+        />
+        </CardHeader>
+        
+        
+        <CardFooter className="justify-between">
+          <User
+            name="Nawaz"
+            description={desc}
+            avatarProps={{
+              src: nawphot,
+            }}
+          ></User>
+          
+          
+        </CardFooter>
+      </Card>
+      
+      <Card isFooterBlurred radius="lg" className="youtubern_customcards flex m-2">
+        <CardHeader>
+        <Image
+          alt="Woman listing to music"
+          className="object-cover youtubern_customcards_img"
+          height={999}
+          
+          src={thumb2}
+          width={999}
+        />
+        </CardHeader>
+        
+        
+        <CardFooter className="justify-between">
+          <User
+            name="Nawaz"
+            description={desc}
+            avatarProps={{
+              src: nawphot,
+            }}
+          ></User>
+          
+          
+        </CardFooter>
+      </Card>
       
     </div>
     

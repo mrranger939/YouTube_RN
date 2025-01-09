@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Skeleton, Button } from "@nextui-org/react";
+
 import confetti from "canvas-confetti";
 
 import axios from "axios";

@@ -6,7 +6,7 @@ export default function Signup() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [channelName, setChannelName] = useState("");
+/*   const [channelName, setChannelName] = useState(""); */
   const [profilePic, setProfilePic] = useState(null);
     const [uploadSuccess, setUploadSuccess] = useState(false);
 
@@ -17,7 +17,7 @@ export default function Signup() {
     formData.append("username", username);
     formData.append("email", email);
     formData.append("password", password);
-    formData.append("channelName", channelName);
+/*     formData.append("channelName", channelName); */
     formData.append("profilePic", profilePic);
 
     try{
@@ -103,8 +103,8 @@ export default function Signup() {
               accept="image/*"
             />
           </div>
-          <div className="mb-4">
-            {/* <label className="block text-sm font-medium mb-2">Channel Name</label> */}
+{/*           <div className="mb-4">
+            
             <Input
               type="text"
               className="w-full rounded px-3 py-2"
@@ -115,7 +115,7 @@ export default function Signup() {
               required
               variant={"underlined"}
             />
-          </div>
+          </div> */}
           <button
             type="submit"
             className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
