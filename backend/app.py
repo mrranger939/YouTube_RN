@@ -470,22 +470,57 @@ def get_video_data():
 
 @app.get('/v/<video_id>')
 def stream_video(video_id):
-    # Construct the S3 link for the index.m3u8 file
-    s3_link = f"{LOCALSTACK_URL}/{S3_V_BUCKET}/{video_id}/master.m3u8"
-    print(s3_link)
-    return jsonify(link=s3_link)
-    # return render_template('index.html', link=s3_link)
+    try:
+        vid_det = VIDEOS.find_one({"video_id":video_id},{"_id":0})
+        
+        if vid_det:
+        
+            # Construct the S3 link for the index.m3u8 file
+            s3_link = f"{LOCALSTACK_URL}/{S3_V_BUCKET}/{video_id}/master.m3u8"
+            print(s3_link)
+            return jsonify(link=s3_link,data=vid_det)
+            # return render_template('index.html', link=s3_link)
+
+        else:
+            return jsonify({'error': 'Video not found'}), 404
+
+    except Exception as e:
+        print(e)
+        return jsonify({'error': str(e)}), 500
 
 
 @app.get('/chn/card/<chn_id>')
-def chn_det(chn_id):
+def chn_card_det(chn_id):
     try:
         print("\n\n",chn_id)
         chn_det=CHANNELS.find_one({"channel_id":chn_id},{"_id":0,"channelName":1,'logo':1})
         print(chn_det)
-        return chn_det
+        if chn_det:
+            return chn_det
+        else:
+            return jsonify({'error': 'Channel not found'}), 404
     except Exception as e:
         print(e)
+        return jsonify({'error': str(e)}), 500
+    
+    
+@app.get('/chn/vid/<chn_id>')
+def chn_vid_det(chn_id):
+    try:
+        print("\n\n",chn_id)
+        chn_det=CHANNELS.find_one({"channel_id":chn_id},{"_id":0,"channelName":1,'logo':1,'subscribers':1})
+        print(chn_det)
+        if chn_det:
+            time.sleep(2)
+            return chn_det
+        else:
+            return jsonify({'error': 'Channel not found'}), 404
+    except Exception as e:
+        print(e)
+        return jsonify({'error': str(e)}), 500
+
+
+
 
 @app.get('/channel/<channelId>')
 def channelData(channelId):
@@ -500,14 +535,31 @@ def channelData(channelId):
         print(e)
 
 
-@app.get("/list")
-def v_list():
-    vl = VIDEOS.find({},{'_id':0,'dislikes':0,'comments':0})
+
+
+
+@app.get("/list/videos/cards")
+def vc_list():
+    vl = VIDEOS.find({},{'_id':0,'channel_id':1,"views":1,'video_id':1,'timestamp':1})
     a=vl.to_list()
     print(a)
     return jsonify(data=a)
 
 
+@app.get("/list/videos")
+def vd_list():
+    vl = VIDEOS.find({},{'_id':0,})
+    a=vl.to_list()
+    print(a)
+    return jsonify(data=a)
+
+
+@app.get("/list/channels")
+def ch_list():
+    ch = CHANNELS.find({},{'_id':0,})
+    a=ch.to_list()
+    print(a)
+    return jsonify(data=a)
 
 # @app.route('/video/<video_id>')
 # def image_data(video_id):

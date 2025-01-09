@@ -44,9 +44,9 @@ export default function Navbar({ onMenuClick }) {
             className="h-10 max-w-full"
           />
         </a>
-        <form className="flex flex-grow max-w-lg mx-auto">
+        <form className="flex flex-grow max-w-xl mx-auto">
           <input
-            className="form-input px-4 py-2 w-full border border-gray-300 rounded-l-md"
+            className="form-input px-4 py-1 w-full border border-gray-300 rounded-l-full"
             id="search_key"
             name="search_key"
             type="search"
@@ -54,7 +54,7 @@ export default function Navbar({ onMenuClick }) {
             aria-label="Search"
           />
           <button
-            className="bg-gray-200 px-4 py-2 rounded-r-md"
+            className="bg-gray-200 px-6 py-1 rounded-r-full"
             title="Search"
             type="submit"
           >
@@ -89,8 +89,7 @@ export default function Navbar({ onMenuClick }) {
               <img
                 src={profilePic}
                 alt="Profile"
-                className="rounded-full"
-                style={{ width: "25px", height: "25px" }}
+                className="rounded-full w-6 h-6"
               />
             ) : (
               <FontAwesomeIcon icon={faUserCircle} />

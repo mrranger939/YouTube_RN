@@ -21,8 +21,8 @@ timeout /t 15
 
 REM Start Kafka container in detached mode
 docker run -d --rm --network youtubern -p 9092:9092 --name kafka ^
--e KAFKA_ZOOKEEPER_CONNECT=192.168.1.4:2181 ^
--e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://192.168.1.4:9092 ^
+-e KAFKA_ZOOKEEPER_CONNECT=192.168.1.5:2181 ^
+-e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://192.168.1.5:9092 ^
 -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 ^
 confluentinc/cp-kafka
 

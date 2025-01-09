@@ -16,7 +16,7 @@ export default function Home() {
   useEffect(() => {
     const fetchVidList = async () => {
       try {
-        const {data} = await axios.get(`http://${ipAddress}:8000/list`);
+        const {data} = await axios.get(`http://${ipAddress}:8000/list/videos/cards`);
         console.log("Home :",data.data)
         setVidList(data.data); // Assuming response data is the list of videos
         console.log(`the vidlist is ${vidList} type is: ${typeof(vidList)}`)
