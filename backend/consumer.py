@@ -112,7 +112,7 @@ def generate_hls(input_file):
                 command = (
                 f"ffmpeg -hwaccel cuda -hwaccel_output_format cuda -i {input_file} "
                 f"-vf scale_cuda={settings['scale']} -c:a aac -ar 48000 "
-                f"-b:a {settings['audio_bitrate']} -c:v h264_nvenc -preset fast "
+                f"-b:a {settings['audio_bitrate']} -c:v h264_nvenc  "
                 f"-crf 20 -g 48 -keyint_min 48 -hls_time 10 -hls_playlist_type vod "
                 f"-b:v {settings['video_bitrate']} -maxrate {settings['video_bitrate']} -bufsize 2000k "
                 f"-hls_segment_filename {output_dir}/{resolution}_%03d.ts {output_m3u8}"

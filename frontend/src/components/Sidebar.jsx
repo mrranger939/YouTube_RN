@@ -1,10 +1,12 @@
 import React from 'react';
 import './Sidebar.css'
+import { ScrollShadow } from '@nextui-org/react';
 const Sidebar = ({ sidebarOpen }) => {
   return (
         <div className={`sidebar ${sidebarOpen ? 'open' : ''}  w-64  flex flex-col items-center   rounded`}  style={{ overflowY: 'auto',height: `calc(100vh - 74px)`}}>
+                <ScrollShadow size={100} className='w-full'>
                 <div className="w-full px-2">
-                    <div className="flex flex-col items-center w-full mt-3">
+                    <div className="flex flex-col items-center w-full ">
                         
                         <a className="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-300" href="/">
                         <svg  xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 48 48">
@@ -19,30 +21,8 @@ const Sidebar = ({ sidebarOpen }) => {
                             <span className="ml-2 text-sm font-medium">Shorts</span>
                         </a>
                         <a className="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-300" href="#">
-                        <svg
-    version="1.1"
-    id="Layer_1"
-    width="20"
-    height="20"
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 121.78 122.88"
-    style={{ enableBackground: 'new 0 0 121.78 122.88' }}
-  >
-    <style type="text/css">
-      {`.st0{fill-rule:evenodd;clip-rule:evenodd;}`}
-    </style>
-    <g>
-      <path
-        className="st0"
-        d="M30.06,0h61.65c3.43,0,6.23,2.81,6.23,6.23v6.47H23.83V6.23C23.83,2.8,26.63,0,30.06,0L30.06,0z M11.23,38.38
-        h99.32c6.18,0,11.23,5.05,11.23,11.23v62.04c0,6.18-5.05,11.23-11.23,11.23H11.23C5.05,122.88,0,117.83,0,111.65V49.61
-        C0,43.43,5.05,38.38,11.23,38.38L11.23,38.38z M54.11,58.38L81.4,77.41c0.45,0.29,0.86,0.67,1.18,1.13
-        c1.28,1.85,0.81,4.39-1.04,5.67L54.37,103c-0.7,0.58-1.6,0.92-2.59,0.92c-2.26,0-4.09-1.83-4.09-4.09V61.72h0.02
-        c0-0.81,0.24-1.62,0.73-2.33C49.73,57.54,52.27,57.09,54.11,58.38L54.11,58.38z M18.14,18.81h85.49c3.43,0,6.23,2.81,6.23,6.23
-        v6.72H11.91v-6.72C11.91,21.61,14.71,18.81,18.14,18.81L18.14,18.81z"
-      />
-    </g>
-  </svg>                            <span className="ml-2 text-sm font-medium"> Subscriptions</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" focusable="false" aria-hidden="true"><path clipRule="evenodd" d="M4 4.5A1.5 1.5 0 015.5 3h13A1.5 1.5 0 0120 4.5H4Zm16.5 3h-17v11h17v-11ZM3.5 6A1.5 1.5 0 002 7.5v11A1.5 1.5 0 003.5 20h17a1.5 1.5 0 001.5-1.5v-11A1.5 1.5 0 0020.5 6h-17Zm7.257 4.454a.5.5 0 00-.757.43v4.233a.5.5 0 00.757.429L15 13l-4.243-2.546Z" fillRule="evenodd"></path></svg>  
+                          <span className="ml-2 text-sm font-medium"> Subscriptions</span>
                         </a>
                     </div> <hr /><div>
                     
@@ -435,6 +415,7 @@ const Sidebar = ({ sidebarOpen }) => {
                     </svg>
                     <span className="ml-2 text-sm font-medium">Account</span>
                 </a>
+                </ScrollShadow>
             </div>
    
   );

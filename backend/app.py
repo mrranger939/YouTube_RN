@@ -518,7 +518,6 @@ def chn_vid_det(chn_id):
         chn_det=CHANNELS.find_one({"channel_id":chn_id},{"_id":0,"channelName":1,'logo':1,'subscribers':1})
         print(chn_det)
         if chn_det:
-            time.sleep(2)
             return chn_det
         else:
             return jsonify({'error': 'Channel not found'}), 404
@@ -557,7 +556,7 @@ def Channelclick(channelId):
 
 @app.get("/list/videos/cards")
 def vc_list():
-    vl = VIDEOS.find({},{'_id':0,'channel_id':1,"views":1,'video_id':1,'timestamp':1})
+    vl = VIDEOS.find({},{'_id':0,'channel_id':1,"videoTitle":1,"views":1,'video_id':1,'timestamp':1})
     a=vl.to_list()
     print(a)
     return jsonify(data=a)

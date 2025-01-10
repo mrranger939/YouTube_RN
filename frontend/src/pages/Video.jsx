@@ -150,8 +150,8 @@ export default function Video() {
               className="v-title font-bold tracking-tight"
               style={{ fontSize: "20px" }}
             >
-              {VD.data.title ? (
-                VD.data.title
+              {VD.data.videoTitle ? (
+                VD.data.videoTitle
               ) : (
                 <>
                   <Skeleton className="w-full h-3 rounded-xl my-3" />
@@ -180,7 +180,7 @@ export default function Video() {
                       <p className="w-full font-semibold tracking-tight text-base">
                         {CD.channelName}
                       </p>
-                      <p className=" w-full text-xs ease-in-out duration-500 text-gray-400">
+                      <p className=" w-full text-xs text-gray-400">
                         17{CD.subscribers}K subscribers
                       </p>
                     </>

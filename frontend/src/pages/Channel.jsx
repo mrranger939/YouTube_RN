@@ -57,7 +57,7 @@ export default function Channel() {
       <div className="w-full px-3 md:px-10">
         <img
           src={banner}
-          className="h-48 w-full mx-auto rounded-xl object-cover"
+          className="w-full mx-auto rounded-xl object-cover"
           alt="banner"
         />
       </div>
@@ -102,21 +102,21 @@ export function ProfileCard2({
             <div className="text-2xl font-bold">
               {channelName ? channelName : "Funny Videos"}
             </div>
-            <div className="flex mx-auto w-fit md:w-auto space-x-2 text-gray-500 text-xs">
+            <div className="flex mx-auto w-fit md:w-auto space-x-2 text-gray-600 text-xs">
               <p>{subscribers ? subscribers : "0"} Subscribers</p>
               <p>{numOfVideos ? numOfVideos : "0"} Videos</p>
             </div>
-            <div className="text-xs">
+            <div className="text-xs text-gray-800">
               <p>
                 {description
-                  ? description.slice(0, 50) + "....  "
+                  ? description.slice(0, 20) 
                   : "iam a good Youtuber"}
-                <button className="text-blue-700" onClick={onOpen}>
-                  More
+                <button className="font-bold" onClick={onOpen}>
+                  ...More
                 </button>
               </p>
             </div>
-            <div className="subscribe ml-1">
+            <div className="subscribe">
               <SubcrBtn />
             </div>
           </div>
@@ -156,6 +156,8 @@ export function AllVideos({ videos }) {
   console.log(`in videos ########## ${videos} and type is ${typeof videos}`);
   return (
     <div className="flex w-full flex-col">
+      
+      {/* <hr className="absolute w-full bottom-0"/> */}
       <Tabs aria-label="Options" variant="underlined">
         <Tab key="videos" title="Videos">
           {/*           <Card>
