@@ -16,9 +16,11 @@ export default function Home() {
   useEffect(() => {
     const fetchVidList = async () => {
       try {
-        const {data} = await axios.get(`http://${ipAddress}:8000/list/videos/cards`);
+        const { data } = await axios.get(
+          `http://${ipAddress}:8000/list/videos/cards`
+        );
         setVidList(data.data); // Assuming response data is the list of videos
-        console.log(`the vidlist is ${vidList} type is: ${typeof(vidList)}`)
+        console.log(data.data);
         setLoading(false); // Set loading to false after data is fetched
       } catch (err) {
         setError(err); // Set error if there is any
@@ -46,7 +48,7 @@ export default function Home() {
   if (vidList.length == 0) {
     return <OGCards />;
   }
-  console.log(`the vidlist is ${vidList} type is: ${typeof(vidList)}`)
+  console.log(`the vidlist is ${vidList} type is: ${typeof vidList}`);
   return (
     <>
       <Cards vid_list={vidList} />

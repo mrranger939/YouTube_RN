@@ -33,6 +33,7 @@ export default function SubcrBtn() {
           btn: "ghost",
         });
       }
+      handleConfetti()
     };
   
     const handleConfetti = () => {
@@ -53,8 +54,7 @@ export default function SubcrBtn() {
         color={sub.color}
         radius="full"
         size="md"
-        onClick={toggleSubscription}
-        onPress={handleConfetti}
+        onPress={toggleSubscription}
       >
         {sub.text}
       </Button>
