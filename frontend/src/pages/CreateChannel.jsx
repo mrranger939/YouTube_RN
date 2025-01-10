@@ -83,8 +83,55 @@ export default function CreateChannel() {
     return <Navigate to="/" />;
   }
 
-  const handleFileChange = (e) => {
-    setChannelBanner(e.target.files[0]);
+  const handleFileChange = async (e) => {
+    /* setChannelBanner(e.target.files[0]); */
+    const file = e.target.files[0];
+    if(!file){ return; }
+    if (!file.name.endsWith(".jpg")) {
+      alert("Please upload a valid JPG image.");
+      return;
+    }
+    const resizedBanner = await new Promise((resolve)=>{
+      const img = new Image()
+      img.src = URL.createObjectURL(file);
+      img.onload = () =>{
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        const targetWidth = 1060;
+        const targetHeight = 175;
+        const originalWidth = img.width;
+        const originalHeight = img.height;
+
+        const scaleFactor = Math.min(targetWidth / originalWidth, targetHeight / originalHeight);
+        const newWidth = originalWidth * scaleFactor;
+        const newHeight = originalHeight * scaleFactor;
+
+        canvas.width = targetWidth;
+        canvas.height = targetHeight;
+
+        ctx.fillStyle = "#000";
+        ctx.fillRect(0, 0, targetWidth, targetHeight);
+        ctx.drawImage(
+          img,
+          (targetWidth - newWidth) / 2,
+          (targetHeight - newHeight) / 2,
+          newWidth,
+          newHeight
+        );
+
+        canvas.toBlob(
+          (blob) => {
+            if (blob) {
+              resolve(blob); 
+            }
+          },
+          "image/jpeg",
+          0.9
+        );
+      };
+        
+    })
+    setChannelBanner(resizedBanner)
   };
 
   return (
@@ -114,8 +161,8 @@ export default function CreateChannel() {
               type="file"
               className="w-full"
               name="channelBanner"
+              accept=".jpg"
               onChange={handleFileChange}
-              accept="image/*"
             />
           </div>
           <div className="mb-4">

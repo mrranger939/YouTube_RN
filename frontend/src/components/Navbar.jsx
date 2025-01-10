@@ -104,10 +104,11 @@ export default function Navbar({ onMenuClick }) {
             title="Profile"
             onClick={() => {
               const token = Cookies.get("authToken");
+              const decoded = jwtDecode(token);
               if (!token) {
                 window.location.href = "/login";
               } else {
-                window.location.href = "/profile";
+                window.location.href = `/channel/${decoded.user_id}`;
               }
             }}
           >

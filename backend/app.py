@@ -211,22 +211,18 @@ def generate_unique_id(file_name, min_len=3, max_len=8):
 @app.route('/upload', methods=['POST'])
 @token_required
 def upload_file():
-    if 'image' not in request.files or 'video' not in request.files:
+    if 'resizedImage' not in request.files or 'video' not in request.files:
         return jsonify('failed'), 400
     description = request.form.get('description')
     genre = request.form.get('genre')
     videoTitle = request.form.get("videoTitle")
-    print(f"description: {description} and genre: {genre} and videoTitle: {videoTitle}")
     user_id = g.user_id
-    print(user_id)
     username = g.username
     vid = g.vid
     k = CHANNELS.find_one({"channel_id": user_id})
-    print(k)
     if not k:
         return jsonify('failed'), 400
-    print("in upload file", user_id, username, vid)
-    image_file = request.files['image']
+    image_file = request.files['resizedImage']
     video_file = request.files['video']
 
 

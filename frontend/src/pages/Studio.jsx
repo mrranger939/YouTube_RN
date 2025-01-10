@@ -47,7 +47,7 @@ export default function Upload() {
   const [ifchannel, setIfChannel] = useState(false);
   const [selectedGenre, setSelectedGenre] = useState("");
   const [selectShort, setSelectShort] = useState("");
-
+  const [resizedImage, setResizedImage] = useState(null);
   useEffect(() => {
     const if_channel = async () => {
       const token = Cookies.get("authToken");
@@ -77,26 +77,78 @@ export default function Upload() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const formData = new FormData(event.target);
-    formData.append("genre", selectedGenre);
-    formData.append("short", selectShort);
+    const formData = new FormData(event.target);  
     const imageFile = formData.get("image");
     const videoFile = formData.get("video");
-
+  
+    // Validate file extensions
     if (!imageFile.name.endsWith(".jpg")) {
       alert("Please upload a valid JPG image.");
       return;
     }
-
+  
     if (!videoFile.name.endsWith(".mp4")) {
       alert("Please upload a valid MP4 video.");
       return;
     }
+  
+    // Resize image
+    const resizedImageBlob = await new Promise((resolve) => {
+      const img = new Image();
+      img.src = URL.createObjectURL(imageFile);
+  
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+  
+        const targetWidth = 720;
+        const targetHeight = 404;
+        const originalWidth = img.width;
+        const originalHeight = img.height;
+  
+        const scaleFactor = Math.min(targetWidth / originalWidth, targetHeight / originalHeight);
+        const newWidth = originalWidth * scaleFactor;
+        const newHeight = originalHeight * scaleFactor;
+  
+        canvas.width = targetWidth;
+        canvas.height = targetHeight;
+  
+        ctx.fillStyle = "#000";
+        ctx.fillRect(0, 0, targetWidth, targetHeight);
+        ctx.drawImage(
+          img,
+          (targetWidth - newWidth) / 2,
+          (targetHeight - newHeight) / 2,
+          newWidth,
+          newHeight
+        );
+  
+        canvas.toBlob(
+          (blob) => {
+            if (blob) {
+              resolve(blob); // Resolve the promise with the resized image blob
+            }
+          },
+          "image/jpeg",
+          0.9
+        );
+      };
+    });
+  
+
+    const newFormData = new FormData();
+    newFormData.append("genre", selectedGenre);
+    newFormData.append("short", selectShort);
+    newFormData.append("video", videoFile);
+    newFormData.append("videoTitle", formData.get("videoTitle"));
+    newFormData.append("description", formData.get("description"));
+    newFormData.append("resizedImage", resizedImageBlob, "resized-image.jpg");
+
     try {
       const ipAddress = import.meta.env.VITE_IP_ADD;
       const response = await axios.post(
         `http://${ipAddress}:8000/upload`,
-        formData,
+        newFormData,
         {
           headers: {
             Authorization: `Bearer ${Cookies.get("authToken")}`,
@@ -104,7 +156,7 @@ export default function Upload() {
           },
         }
       );
-
+  
       if (response.data === "success") {
         setUploadSuccess(true);
       } else {
@@ -112,20 +164,22 @@ export default function Upload() {
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("An error occurred : " + error);
+      alert("An error occurred: " + error.message);
     }
   };
+  
   if (uploadSuccess) {
     return <Navigate to="/" />;
   }
-
+  
   return ifchannel ? (
     <div className="uploaddata">
-      <h1>Upload your Video</h1>
+      <h1 className="font-bold text-xl mb-2">Upload your Video</h1>
       <form
         id="uploadform"
         onSubmit={handleSubmit}
         encType="multipart/form-data"
+        className="text-sm"
       >
         <label htmlFor="image">Choose an image to upload:</label>
         <input type="file" id="image" name="image" accept=".jpg" required />
