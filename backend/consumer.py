@@ -20,7 +20,7 @@ s3_BUCKET_VIDEO_ABR = 'video-abr'
 # Initialize the s3 client
 s3_client = boto3.client(
     's3',
-    endpoint_url='http://localhost:4566',  # LocalStack endpoint
+    endpoint_url=f'http://{ip_address}:4566',  # LocalStack endpoint
     aws_access_key_id='test',  # Dummy credentials
     aws_secret_access_key='test'  # Dummy credentials
 )
@@ -136,7 +136,7 @@ def generate_hls(input_file):
             playlists.append(
                 f"#EXT-X-STREAM-INF:BANDWIDTH={settings['video_bitrate'].strip('k')}000,RESOLUTION={resolution_split[0]}x{resolution_split[1]}\n{resolution}.m3u8"
             )
-            print(f"playlist here ################################# {playlists}")
+
 
 
         # Create a master playlist

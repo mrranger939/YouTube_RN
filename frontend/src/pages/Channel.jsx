@@ -108,9 +108,7 @@ export function ProfileCard2({
             </div>
             <div className="text-xs text-gray-800">
               <p>
-                {description
-                  ? description.slice(0, 20) 
-                  : "iam a good Youtuber"}
+                {description ? description.slice(0, 20) : "iam a good Youtuber"}
                 <button className="font-bold" onClick={onOpen}>
                   ...More
                 </button>
@@ -156,7 +154,6 @@ export function AllVideos({ videos }) {
   console.log(`in videos ########## ${videos} and type is ${typeof videos}`);
   return (
     <div className="flex w-full flex-col">
-      
       {/* <hr className="absolute w-full bottom-0"/> */}
       <Tabs aria-label="Options" variant="underlined">
         <Tab key="videos" title="Videos">
