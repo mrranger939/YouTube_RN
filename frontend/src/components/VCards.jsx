@@ -1,4 +1,4 @@
-import { Skeleton } from "@nextui-org/react";
+import { Skeleton } from "@heroui/react";
 export default function VCards({ Vdata, Cdata }) {
   console.log(Vdata, Cdata);
 
@@ -79,7 +79,7 @@ export default function VCards({ Vdata, Cdata }) {
                 Cdata.channelName
               ) : (
                 // <img src={CD.logo}  className="flex rounded-full" />
-                <Skeleton className="rounded-full w-full h-2" />
+                (<Skeleton className="rounded-full w-full h-2" />)
               )}
             </div>
             <div className="vd my-1 text-gray-600 text-xs">
@@ -90,10 +90,10 @@ export default function VCards({ Vdata, Cdata }) {
 
               ) : (
                 // <img src={CD.logo}  className="flex rounded-full" />
-                <>
+                (<>
                   <Skeleton className="rounded-full mx-0.5 w-1/2 h-2" />
                   <Skeleton className="rounded-full mx-0.5 w-1/2 h-2" />
-                </>
+                </>)
               )}
             </div>
           </div>
@@ -120,7 +120,7 @@ export default function VCards({ Vdata, Cdata }) {
                 Cdata.channelName
               ) : (
                 // <img src={CD.logo}  className="flex rounded-full" />
-                <Skeleton className="rounded-full w-full h-2" />
+                (<Skeleton className="rounded-full w-full h-2" />)
               )}
             </div>
             <div className="vd my-1 text-gray-600 text-xs">
@@ -131,10 +131,10 @@ export default function VCards({ Vdata, Cdata }) {
 
               ) : (
                 // <img src={CD.logo}  className="flex rounded-full" />
-                <>
+                (<>
                   <Skeleton className="rounded-full mx-0.5 w-1/2 h-2" />
                   <Skeleton className="rounded-full mx-0.5 w-1/2 h-2" />
-                </>
+                </>)
               )}
             </div>
           </div>
@@ -161,7 +161,7 @@ export default function VCards({ Vdata, Cdata }) {
                 Cdata.channelName
               ) : (
                 // <img src={CD.logo}  className="flex rounded-full" />
-                <Skeleton className="rounded-full w-full h-2" />
+                (<Skeleton className="rounded-full w-full h-2" />)
               )}
             </div>
             <div className="vd my-1 text-gray-600 text-xs">
@@ -172,10 +172,10 @@ export default function VCards({ Vdata, Cdata }) {
 
               ) : (
                 // <img src={CD.logo}  className="flex rounded-full" />
-                <>
+                (<>
                   <Skeleton className="rounded-full mx-0.5 w-1/2 h-2" />
                   <Skeleton className="rounded-full mx-0.5 w-1/2 h-2" />
-                </>
+                </>)
               )}
             </div>
           </div>

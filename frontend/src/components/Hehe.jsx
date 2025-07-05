@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import "./Cards.css";
-import { User, Card, CardFooter, Image, Button, CardHeader } from "@nextui-org/react";
+import { User, Card, CardFooter, Image, Button, CardHeader } from "@heroui/react";
 import thumb1 from "/thumbnails/1.webp";
 import nawphot from "/images/nawaz_logo.jpg";
 

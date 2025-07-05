@@ -1,5 +1,5 @@
 
-import { Button } from "@nextui-org/react";
+import { Button } from "@heroui/react";
 import confetti from "canvas-confetti";
 import { useState } from "react";
 

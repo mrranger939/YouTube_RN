@@ -3,9 +3,9 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
-import { Input } from "@nextui-org/react";
-import { Textarea } from "@nextui-org/react";
-import {Spinner} from "@nextui-org/spinner";
+import { Input } from "@heroui/react";
+import { Textarea } from "@heroui/react";
+import {Spinner} from "@heroui/spinner";
 export default function CreateChannel() {
     const navigate = useNavigate()
   const [description, setDescription] = useState("");

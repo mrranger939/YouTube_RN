@@ -19,7 +19,7 @@ export default function Layout({children}) {
         <Sidebar sidebarOpen={sidebarOpen}  />
         <div
           id="content"
-          className={`transition-all duration-300 ease-in-out ${sidebarOpen ? 'ml-64' : 'ml-0'} w-full pt-12`} >
+          className={`transition-all duration-300 ease-in-out ${sidebarOpen ? 'ml-48' : 'ml-0'} w-full pt-10`} >
 {/*           <h1>Content Here</h1>
           <h1>Content Here</h1>
           <h1>Content Here</h1>

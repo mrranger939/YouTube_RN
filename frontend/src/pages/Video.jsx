@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Skeleton, Button } from "@nextui-org/react";
+import { Skeleton, Button } from "@heroui/react";
 
 
 import axios from "axios";
@@ -139,7 +139,7 @@ export default function Video() {
           {/* <div className="w-full max-w-[640px] h-auto max-h-[360px] flex rounded-xl mx-2 object-contain justify-center items-baseline"> */}
           <div
             className={
-              "w-full h-auto flex rounded-xl mb-2 object-contain justify-center items-baseline"
+              "w-full h-auto flex rounded-xl mt-2 mb-2 object-contain justify-center items-baseline"
             }
           >
             <Vid link={VD.link} />
@@ -170,7 +170,7 @@ export default function Video() {
                   />
                 ) : (
                   // <img src={CD.logo}  className="flex rounded-full" />
-                  <Skeleton className="rounded-full w-10 h-10" />
+                  (<Skeleton className="rounded-full w-10 h-10" />)
                 )}
               </div>
               <div>

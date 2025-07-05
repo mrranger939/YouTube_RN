@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import axios from "axios";
-import {Input} from "@nextui-org/react";
+import {Input} from "@heroui/react";
 export default function Signup() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");

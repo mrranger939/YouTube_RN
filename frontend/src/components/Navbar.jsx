@@ -72,7 +72,7 @@ export default function Navbar({ onMenuClick }) {
             </g>
           </svg>
         </a>
-        <form className="flex flex-grow max-w-xl mx-auto">
+        <form className="flex flex-grow py-1 max-w-xl mx-auto">
           <input
             className="form-input px-4 py-1 w-full border border-gray-300 rounded-l-full"
             id="search_key"
@@ -104,10 +104,11 @@ export default function Navbar({ onMenuClick }) {
             title="Profile"
             onClick={() => {
               const token = Cookies.get("authToken");
-              const decoded = jwtDecode(token);
+              console.log(token)
               if (!token) {
                 window.location.href = "/login";
               } else {
+                const decoded = jwtDecode(token);
                 window.location.href = `/channel/${decoded.user_id}`;
               }
             }}

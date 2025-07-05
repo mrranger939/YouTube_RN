@@ -9,7 +9,7 @@ import {
   CardBody,
   CardHeader,
   Skeleton
-} from "@nextui-org/react";
+} from "@heroui/react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -133,7 +133,7 @@ export default function Cards({ vid_list }) {
             <CardHeader  onClick={() => n(`/v/${item.video_id}`)}>
               <Image
                 alt="Thumbnail"
-                className="object-contain youtubern_customcards_img"
+                className="object-cover youtubern_customcards_img"
                 src={`http://${ip}:4566/thumbnail/${item.video_id}.jpg`} // Thumbnail URL
               />
             </CardHeader>

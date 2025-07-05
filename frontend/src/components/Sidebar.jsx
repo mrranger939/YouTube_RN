@@ -1,9 +1,9 @@
 import React from 'react';
 import './Sidebar.css'
-import { ScrollShadow } from '@nextui-org/react';
+import { ScrollShadow } from "@heroui/react";
 const Sidebar = ({ sidebarOpen }) => {
   return (
-        <div className={`sidebar ${sidebarOpen ? 'open' : ''}  w-64  flex flex-col items-center   rounded`}  style={{ overflowY: 'auto',height: `calc(100vh - 74px)`}}>
+        <div className={`sidebar ${sidebarOpen ? 'open' : ''}  w-48  flex flex-col items-center   rounded`}  style={{ overflowY: 'auto',height: `calc(100vh - 74px)`}}>
                 <ScrollShadow size={100} className='w-full'>
                 <div className="w-full px-2">
                     <div className="flex flex-col items-center w-full ">

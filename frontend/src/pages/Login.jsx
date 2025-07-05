@@ -3,7 +3,7 @@ import { Link, Navigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import {Input} from "@nextui-org/react";
+import {Input} from "@heroui/react";
 export default function Login() {
     const navigate = useNavigate();
   const [email, setEmail] = useState("");

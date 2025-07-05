@@ -5,14 +5,14 @@ import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import "./Home.css";
 import "./Studio.css";
-import { Spinner } from "@nextui-org/spinner";
-import { Textarea } from "@nextui-org/react";
+import { Spinner } from "@heroui/spinner";
+import { Textarea } from "@heroui/react";
 import {
   Autocomplete,
   AutocompleteSection,
   AutocompleteItem,
-} from "@nextui-org/autocomplete";
-import { Select, SelectSection, SelectItem } from "@nextui-org/select";
+} from "@heroui/autocomplete";
+import { Select, SelectSection, SelectItem } from "@heroui/select";
 export const genres = [
   { label: "Gaming", key: "gaming" },
   { label: "Education", key: "education" },

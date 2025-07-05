@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import dfimg from "../assets/df.jpg";
-import { Button } from "@nextui-org/react";
-import { Tabs, Tab, Card, CardBody } from "@nextui-org/react";
+import { Button } from "@heroui/react";
+import { Tabs, Tab, Card, CardBody } from "@heroui/react";
 import OGCards from "../components/Orginal_Cards";
 
 import {
@@ -11,7 +11,7 @@ import {
   ModalBody,
   ModalFooter,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import Cards from "../components/Cards";
