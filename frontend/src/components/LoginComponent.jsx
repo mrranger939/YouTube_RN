@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Input, Button } from "@heroui/react";
 import { useAuth } from "../Authentication/AuthContext";
 
-export default function LoginComponent() {
+export default function LoginComponent({ onClose }) {
   const navigate = useNavigate();
   const { login } = useAuth();
   const [email, setEmail] = useState("");
@@ -25,6 +25,7 @@ export default function LoginComponent() {
 
       if (response.data.message === "success") {
         login(response.data.token);
+        onClose()
         navigate("/");
       } else {
         alert("Login failed");

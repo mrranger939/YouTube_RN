@@ -89,11 +89,20 @@ export default function Navbar({ onMenuClick }) {
           </button>
         </form>
         <div className="flex items-center space-x-7 px-4">
-          <button className="text-gray-700" type="button" title="Upload">
-            <a href="/studio">
+          {isAuthenticated ? (
+            <a href="/studio" className="text-gray-700" title="Upload">
               <FontAwesomeIcon icon={faVideo} />
             </a>
-          </button>
+          ) : (
+            <button
+              className="text-gray-700"
+              type="button"
+              title="Upload"
+              onClick={onOpen}
+            >
+              <FontAwesomeIcon icon={faVideo} />
+            </button>
+          )}
           <button className="text-gray-700" type="button" title="Notifications">
             <FontAwesomeIcon icon={faBell} />
           </button>
@@ -187,7 +196,7 @@ export default function Navbar({ onMenuClick }) {
                 <>
                   {showLogin ? (
                     <>
-                      <LoginComponent />
+                      <LoginComponent onClose={onClose} />
                       <p className="mt-4 text-center text-sm pb-6">
                         Don't have an account?{" "}
                         <Link
