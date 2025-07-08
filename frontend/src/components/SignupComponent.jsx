@@ -1,15 +1,8 @@
 import React, { useState } from "react";
-import { Link, Navigate } from "react-router-dom";
 import axios from "axios";
 import { Input } from "@heroui/react";
 import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Button,
-  useDisclosure,
 } from "@heroui/react";
 export default function SignupComponent({setShowLogin}) {
   const [username, setUsername] = useState("");
@@ -53,7 +46,6 @@ export default function SignupComponent({setShowLogin}) {
   if (uploadSuccess) {
     setShowLogin(true)
     return
-    // return <Navigate to="/login" />;
   }
 
   const handleFileChange = async (e) => {
@@ -153,10 +145,6 @@ export default function SignupComponent({setShowLogin}) {
             />
           </div>
           <div className="mb-2 w-full">
-            {/* <label className="block text-sm font-medium mb-2">
-              Profile Picture
-            </label> */}
-            {/* <Button> */}
             <Input
               type="file"
               className="w-full rounded px-3 py-2"
@@ -167,22 +155,7 @@ export default function SignupComponent({setShowLogin}) {
               accept="image/*"
               variant={"bordered"}
             />
-            
-            {/* </Button> */}
           </div>
-          {/*           <div className="mb-4">
-            
-            <Input
-              type="text"
-              className="w-full rounded px-3 py-2"
-              value={channelName}
-              name="channelName"
-              label="Channel Name"
-              onChange={(e) => setChannelName(e.target.value)}
-              required
-              variant={"underlined"}
-            />
-          </div> */}
           <Button
             type="submit"
             className="px-5 bg-green-600 text-white py-2 rounded-xl hover:bg-green-700 mx-auto"
