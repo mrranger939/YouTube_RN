@@ -7,9 +7,12 @@ from botocore.exceptions import NoCredentialsError
 import shutil
 from datetime import datetime
 from dotenv import load_dotenv
+from Error_producer import send_error
+
 load_dotenv()
 # getting IP 
 ip_address = os.getenv('IP_ADD')
+
 # getting GPU Config 
 gpu_config = os.getenv('GPU')
 
@@ -54,15 +57,37 @@ def s3_init():
     except Exception as e:
         print(e)
 
+
+
+
+from kafka.errors import NoBrokersAvailable
+import time
+
+def create_kafka_consumer():
+    for _ in range(5):  # Retry up to 5 times
+        try:
+            consumer = KafkaConsumer(
+               'video-uploads',
+                bootstrap_servers=f'{ip_address}:9092',
+                auto_offset_reset='latest',
+                enable_auto_commit=True,
+                group_id='video-consumers',
+                value_deserializer=lambda x: json.loads(x.decode('utf-8'))
+            )
+            print("Kafka consumer initialized.")
+            return consumer
+        except NoBrokersAvailable:
+            print("Kafka broker not available. Retrying in 5 seconds...")
+            time.sleep(5)
+    raise Exception("Kafka broker is not available after multiple attempts.")
+
+
+
 # Initialize Kafka consumer
-consumer = KafkaConsumer(
-    'video-uploads',
-    bootstrap_servers=f'{ip_address}:9092',
-    auto_offset_reset='latest',
-    enable_auto_commit=True,
-    group_id='video-consumers',
-    value_deserializer=lambda x: json.loads(x.decode('utf-8'))
-)
+consumer = create_kafka_consumer()
+
+
+
 
 def download_from_s3(bucket_name, object_name):
     """Download a file from s3 and handle errors."""
@@ -130,7 +155,7 @@ def generate_hls(input_file):
 
             if process.returncode != 0:
                 print(f"Error creating {resolution}: {process.stderr}")
-                return f"FFmpeg error for {resolution}: {process.stderr}"
+                return output_dir,f"FFmpeg error for {resolution}: {process.stderr}"
 
             resolution_split = settings['scale'].split(':')  # Split width and height
             playlists.append(
@@ -147,70 +172,109 @@ def generate_hls(input_file):
             
         if os.path.exists(master_playlist_path):
             print(f"HLS playlist generated: {master_playlist_path}")
-            return output_dir
+            return output_dir,None
         else:
             print("Error: HLS playlist not generated.")
+            return output_dir, "Error: HLS playlist not generated."
     except Exception as e:
         print(f"Error during HLS generation: {str(e)}")
-
+        return output_dir,f"Error during HLS generation: {str(e)}"
     return None
 
 def process_videos():
     """Main function to process videos from Kafka."""
     
-    for message in consumer:
-        print(f"Kafka message received: {message.value}")
-        video_file = message.value.get('filename')
+    try:
+        for message in consumer:
+            print(f"Kafka message received: {message.value}")
+            video_file = message.value.get('filename')
+
+            if not video_file:
+                send_error("___","Kafka message does not contain 'filename'. Skipping message.","consumer.py")
+                print("Error: Kafka message does not contain 'filename'. Skipping message.")
+                continue
+
+            onlyname=video_file.removesuffix('.'+video_file.split('.')[-1])
+
+            print(f"Processing {video_file}")
+
+            # Download the video file from s3
+            local_video_path = download_from_s3(s3_BUCKET_UNTRANSCODED, video_file)
+
+            if not local_video_path:
+                send_error(video_file,f"Failed to download {video_file}. Skipping.","consumer.py")
+                print(f"Failed to download {video_file}. Skipping.")
+                continue
+                
+                
+                
+            start_t=datetime.now()
+            print(f"\n\n Start Time: {start_t} \n\n")
+
+
+            # Generate HLS files
+            hls_dir,err = generate_hls(local_video_path)
+
+
+            end_t=datetime.now()
+            print(f"\n\n End Time: {end_t} \n\n")
+            print(f"\n\n Total Time: {end_t - start_t} \n\n")
+
+            if err:
+                print(err)
+
+                send_error(video_file,err,"consumer.py")
+
+                input("Press Enter to Continue ... ")
+
+                shutil.rmtree(hls_dir)
+
+                # os.remove(hls_dir)
+                os.remove(local_video_path)
+
+                print(f"\n\nSuccessfully deleted video : {local_video_path} and folder : {hls_dir} from local storage \n\n\n")
+                continue            
+                
+            if not hls_dir:
+                send_error(video_file,f"Failed to generate HLS for {video_file}. Skipping.","consumer.py")
+                print(f"Failed to generate HLS for {video_file}. Skipping.")
+
+                continue
+
+            # Upload HLS files to s3
+            for root, _, files in os.walk(hls_dir):
+                for file in files:
+                    file_path = os.path.join(root, file)
+                    relative_path = os.path.relpath(file_path, hls_dir)
+                    upload_to_s3(file_path, s3_BUCKET_VIDEO_ABR, f"{onlyname}/{relative_path}")
+
+            print(f"Processed and uploaded HLS files for {video_file}.")
+            print("\n\n\n\n",hls_dir)
+            shutil.rmtree(hls_dir)
+
+            # os.remove(hls_dir)
+            os.remove(local_video_path)
+
+            print(f"\n\nSuccessfully deleted video : {local_video_path} and folder : {hls_dir} from local storage")
+
+            try:
+                response = s3_client.delete_object(Bucket=s3_BUCKET_UNTRANSCODED, Key=video_file)
+                print(f"Object {video_file} has been deleted successfully from bucket {s3_BUCKET_UNTRANSCODED}.\n\n")
+                print(response)
+            except Exception as e:
+                send_error(video_file,f"Error occurred while deleting the object: {e}","consumer.py")
+                print(f"Error occurred while deleting the object: {e}")
+
+    except KeyboardInterrupt:
+        print("🛑 Error consumer interrupted by user (Ctrl+C). Shutting down gracefully.")
+
+    except Exception as e:
+        print(f"Unhandled error during Kafka consumption: {e}")
         
-        onlyname=video_file.removesuffix('.'+video_file.split('.')[-1])
+    finally:
+        print("hello")
+        consumer.close()
 
-        if not video_file:
-            print("Error: Kafka message does not contain 'filename'. Skipping message.")
-            continue
-
-        print(f"Processing {video_file}")
-
-        # Download the video file from s3
-        local_video_path = download_from_s3(s3_BUCKET_UNTRANSCODED, video_file)
-
-        if not local_video_path:
-            print(f"Failed to download {video_file}. Skipping.")
-            continue
-        
-        start_t=datetime.now()
-        print(f"\n\n Start Time: {start_t} \n\n")
-        # Generate HLS files
-        hls_dir = generate_hls(local_video_path)
-        end_t=datetime.now()
-        print(f"\n\n End Time: {end_t} \n\n")
-        print(f"\n\n Total Time: {end_t - start_t} \n\n")
-        
-        if not hls_dir:
-            print(f"Failed to generate HLS for {video_file}. Skipping.")
-            continue
-
-        # Upload HLS files to s3
-        for root, _, files in os.walk(hls_dir):
-            for file in files:
-                file_path = os.path.join(root, file)
-                relative_path = os.path.relpath(file_path, hls_dir)
-                upload_to_s3(file_path, s3_BUCKET_VIDEO_ABR, f"{onlyname}/{relative_path}")
-
-        print(f"Processed and uploaded HLS files for {video_file}.")
-        
-        shutil.rmtree(hls_dir)
-
-        # os.remove(hls_dir)
-        os.remove(local_video_path)
-
-        print(f"\n\nSuccessfully deleted video : {local_video_path} and folder : {hls_dir} from local storage")
-        
-        try:
-            response = s3_client.delete_object(Bucket=s3_BUCKET_UNTRANSCODED, Key=video_file)
-            print(f"Object {video_file} has been deleted successfully from bucket {s3_BUCKET_UNTRANSCODED}.\n\n")
-            print(response)
-        except Exception as e:
-            print(f"Error occurred while deleting the object: {e}")
 
 if __name__ == '__main__':
     if not os.path.isdir("./tmp"):
@@ -220,5 +284,6 @@ if __name__ == '__main__':
     else:
         print("Folder /tmp already exists.")
     s3_init()
-    print("Consumer is starting...")
+    print("Video Consumer is starting...")
     process_videos()
+    print("🚦Video Consumer is starting...")
