@@ -60,7 +60,7 @@ def s3_init():
 
 
 
-from kafka.errors import NoBrokersAvailable
+from kafka.errors import NoBrokersAvailable,KafkaError
 import time
 
 def create_kafka_consumer():
@@ -267,7 +267,8 @@ def process_videos():
 
     except KeyboardInterrupt:
         print("🛑 Error consumer interrupted by user (Ctrl+C). Shutting down gracefully.")
-
+    except KafkaError as e:
+        print(f"Kafka error: {e}")
     except Exception as e:
         print(f"Unhandled error during Kafka consumption: {e}")
         
@@ -277,13 +278,20 @@ def process_videos():
 
 
 if __name__ == '__main__':
+   
     if not os.path.isdir("./tmp"):
         # If it's not a directory, create it
         os.makedirs("./tmp")
         print("Folder /tmp created.")
     else:
         print("Folder /tmp already exists.")
+   
+   
     s3_init()
-    print("Video Consumer is starting...")
+    print("🚦Video Consumer is starting...\n")
+    
+    print("ℹ️ GPU config: ",{"CPU" if gpu_config==None else gpu_config})
+   
     process_videos()
-    print("🚦Video Consumer is starting...")
+   
+    print("🛑Video Consumer is Ending...")

@@ -10,6 +10,7 @@ if sys.version_info >= (3, 12, 0):
 
 from kafka import KafkaAdminClient
 from kafka.admin import NewTopic
+from kafka.errors import KafkaError
 
 # Kafka server configuration
 bootstrap_servers = f'{ip_address}:9092'
@@ -17,22 +18,49 @@ bootstrap_servers = f'{ip_address}:9092'
 # Create an admin client
 admin_client = KafkaAdminClient(bootstrap_servers=bootstrap_servers)
 
+
+# Function to create topics
+def create_topic_if_not_exists(topics):
+    existing_topics = admin_client.list_topics()
+    print(f"existing topics : {existing_topics} ")
+    for i in topics:
+        if i not in existing_topics:
+            try :
+                # Create a new topic for Videos
+                topic = NewTopic(name=i, num_partitions=1, replication_factor=1)
+
+                # Create the topic
+                admin_client.create_topics(new_topics=[topic], validate_only=False)
+
+                print(f"Topic : {i} created successfully")
+            except KafkaError as e:
+                print(f"Error creating topic '{i}': {e}")
+            
+        else:
+            print(f"Topic : {i} already exists")
+
+
+
 # Create a new topic for Videos
-Vtopic = NewTopic(name="video-uploads", num_partitions=1, replication_factor=1)
+# Vtopic = NewTopic(name="video-uploads", num_partitions=1, replication_factor=1)
 
-# Create the topic
-admin_client.create_topics(new_topics=[Vtopic], validate_only=False)
+# # Create the topic
+# admin_client.create_topics(new_topics=[Vtopic], validate_only=False)
 
-print("video-upload Topic created successfully")
+# print("video-upload Topic created successfully")
 
 
-# Create a new topic for Errors
-Etopic = NewTopic(name="all-errors", num_partitions=1, replication_factor=1)
+# # Create a new topic for Errors
+# Etopic = NewTopic(name="all-errors", num_partitions=1, replication_factor=1)
 
-# Create the topic
-admin_client.create_topics(new_topics=[Etopic], validate_only=False)
+# # Create the topic
+# admin_client.create_topics(new_topics=[Etopic], validate_only=False)
 
-print("all-errors Topic created successfully")
+# print("all-errors Topic created successfully")
+
+
+
+create_topic_if_not_exists(["video-uploads","all-errors"])
 
 
 # docker exec -it 2745b00a3f9e kafka-console-consumer --topic video-uploads --bootstrap-server 0.0.0.0:9092

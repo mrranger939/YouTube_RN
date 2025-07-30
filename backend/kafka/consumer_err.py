@@ -1,7 +1,7 @@
 import os
 import json
 from kafka import KafkaConsumer
-from kafka.errors import NoBrokersAvailable
+from kafka.errors import NoBrokersAvailable,KafkaError
 from dotenv import load_dotenv
 import time
 
@@ -81,6 +81,9 @@ def process_errors():
     
     except KeyboardInterrupt:
         print("🛑 Error consumer interrupted by user (Ctrl+C). Shutting down gracefully.")
+    
+    except KafkaError as e:
+        print(f"Kafka error: {e}")
     
     except Exception as e:
         print(f"Unhandled error during Kafka consumption: {e}")

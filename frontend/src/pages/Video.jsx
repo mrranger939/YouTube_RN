@@ -301,9 +301,9 @@ export default function Video() {
           className="cards ml-5 rounded-xl"
           style={{ height: "100vh" }}
         >
-          {CD?
+          
           <VCards Vdata={VD.data} Cdata={CD} />:<></>
-        }
+        
         </div>
       </div>
     </>
