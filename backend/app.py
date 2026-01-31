@@ -553,7 +553,7 @@ def Channelclick(channelId):
 @app.get("/list/videos/cards")
 def vc_list():
     vl = VIDEOS.find({},{'_id':0,'channel_id':1,"videoTitle":1,"views":1,'video_id':1,'timestamp':1})
-    a=vl.to_list()
+    a=list(vl)
     print(a)
     return jsonify(data=a)
 
