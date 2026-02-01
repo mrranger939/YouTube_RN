@@ -3,12 +3,14 @@ import { tokenRequired } from "../middleware/auth.js";
 import authRoutes from "./auth.js";
 import uploadRoutes from "./upload.js";
 import videoRoutes from "./videos.js";
+import channelRoutes from "./channels.js";
 
 const router = Router();
 
 router.use("/", authRoutes);
 router.use("/", uploadRoutes);  
 router.use("/", videoRoutes);
+router.use("/", channelRoutes);
 
 router.get("/", (req, res) => {
   res.send("Server is running");
