@@ -1,8 +1,8 @@
-## Structure decided
+# Structure decided
+### node version: 22.16.0
 
-```
-backend/
-├─ services/
+```backend/
+─ services/
 │  ├─ web-api/                     # Express REST API (replaces Flask)
 │  │  ├─ src/
 │  │  │  ├─ index.js               # server bootstrap
