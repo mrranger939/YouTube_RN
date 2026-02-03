@@ -7,7 +7,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node --test",
+    "coverage": "c8 --reporter=text --reporter=lcov node --test",
     "start": "node src/index.js",
     "dev": "nodemon src/index.js"
   },
@@ -22,5 +23,8 @@
     "mongoose": "^9.1.5",
     "multer": "^2.0.2",
     "pino": "^10.3.0"
+  },
+  "devDependencies": {
+    "c8": "^8.0.0"
   }
 }
