@@ -30,4 +30,6 @@
 ├─ .env                            # local dev env (not committed secrets)
 └─ README_BACKEND.md
 
+video-worker: decided to be in flask itself never to be migrated to JS!
+
 ```
