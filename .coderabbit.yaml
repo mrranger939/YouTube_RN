@@ -1,17 +1,8 @@
-# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
-
 reviews:
-  profile: chill
+  profile: "assertive"
+  review_details: true
+  high_level_summary: true
+  poem: false
 
   auto_review:
     enabled: true
-
-  high_level_summary: false
-  walkthrough: false
-  poem: true
-  fortune: false
-  progress_updates: false
-
-tone:
-  emojis: false
-  style: professional
