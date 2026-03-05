@@ -1,0 +1,10 @@
+reviews:
+  auto_review: true
+  high_level_summary: true
+  collapse_walkthrough: false
+  poem: true
+  review_status: true
+
+tone:
+  style: professional
+  emojis: false
