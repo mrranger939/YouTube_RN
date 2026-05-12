@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Cards from "../components/Cards";
 import "./Home.css";
-import OGCards from "../components/Orginal_Cards";
+import StubCards from "../components/Orginal_Cards";
 import axios from "axios";
 
 // import Hehe from "../components/Hehe";
@@ -33,20 +33,20 @@ export default function Home() {
 
   // Render loading, error, or actual content
   if (loading) {
-    return <OGCards />;
+    return <StubCards />;
   }
 
   if (error) {
     return (
       <>
-        <OGCards />
+        <StubCards />
         Error: {error.message}
       </>
     );
   }
 
   if (vidList.length == 0) {
-    return <OGCards />;
+    return <StubCards />;
   }
   console.log(`the vidlist is ${vidList} type is: ${typeof vidList}`);
   return (

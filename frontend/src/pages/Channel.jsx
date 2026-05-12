@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import dfimg from "../assets/df.jpg";
 import { Button } from "@heroui/react";
 import { Tabs, Tab, Card, CardBody } from "@heroui/react";
-import OGCards from "../components/Orginal_Cards";
+import StubCards from "../components/Orginal_Cards";
 
 import {
   Modal,
@@ -174,7 +174,7 @@ export function AllVideos({ videos }) {
               cillum dolore eu fugiat nulla pariatur.
             </CardBody>
           </Card> */}
-          <OGCards />
+          <StubCards />
         </Tab>
         <Tab key="community" title="Community">
           {/*           <Card>
@@ -183,7 +183,7 @@ export function AllVideos({ videos }) {
               mollit anim id est laborum.
             </CardBody>
           </Card> */}
-          <OGCards />
+          <StubCards />
         </Tab>
       </Tabs>
     </div>
