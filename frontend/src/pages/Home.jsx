@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Cards from "../components/Cards";
 import "./Home.css";
-import StubCards from "../components/Orginal_Cards";
+import StubCards from "../components/StubCards";
 import axios from "axios";
 
 // import Hehe from "../components/Hehe";

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import dfimg from "../assets/df.jpg";
 import { Button } from "@heroui/react";
 import { Tabs, Tab, Card, CardBody } from "@heroui/react";
-import StubCards from "../components/Orginal_Cards";
+import StubCards from "../components/StubCards";
 
 import {
   Modal,
