@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Input, Button } from "@heroui/react";
 import { useAuth } from "../Authentication/AuthContext";
+import { API_BASE_URL } from "../config/api";
 
 export default function LoginComponent({ onClose }) {
   const navigate = useNavigate();
@@ -13,9 +14,8 @@ export default function LoginComponent({ onClose }) {
     e.preventDefault();
     const data = { email, password };
     try {
-      const ipAddress = import.meta.env.VITE_IP_ADD;
       const response = await axios.post(
-        `http://${ipAddress}:8000/login`,
+        `${API_BASE_URL}/login`,
         data,
         {
           headers: { "Content-Type": "application/json" },

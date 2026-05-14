@@ -16,6 +16,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import Cards from "../components/Cards";
 import SubcrBtn from "../components/SubcrBtn";
+import { API_BASE_URL } from "../config/api";
 
 export default function Channel() {
   const { channelid } = useParams();
@@ -31,9 +32,8 @@ export default function Channel() {
   useEffect(() => {
     const fetchChannelDetails = async () => {
       try {
-        const ipAddress = import.meta.env.VITE_IP_ADD;
         const Wholedata = await axios.get(
-          `http://${ipAddress}:8000/channel/${channelid}`
+          `${API_BASE_URL}/channel/${channelid}`
         );
         console.log(Wholedata.data);
         const data = Wholedata.data.channelData;
@@ -62,7 +62,7 @@ export default function Channel() {
         />
       </div>
       <div className="m-7">
-        <ProfileCard2
+        <ChannelProfile
           channelName={channelName}
           logo={logo}
           description={description}
@@ -78,7 +78,7 @@ export default function Channel() {
   );
 }
 
-export function ProfileCard2({
+export function ChannelProfile({
   channelName,
   description,
   logo,
@@ -138,9 +138,6 @@ export function ProfileCard2({
                 <Button color="danger" variant="light" onPress={onClose}>
                   Close
                 </Button>
-                {/*                 <Button color="primary" onPress={onClose}>
-                  Action
-                </Button> */}
               </ModalFooter>
             </>
           )}
@@ -154,35 +151,14 @@ export function AllVideos({ videos }) {
   console.log(`in videos ########## ${videos} and type is ${typeof videos}`);
   return (
     <div className="flex w-full flex-col">
-      {/* <hr className="absolute w-full bottom-0"/> */}
       <Tabs aria-label="Options" variant="underlined">
         <Tab key="videos" title="Videos">
-          {/*           <Card>
-            <CardBody>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-              incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-              exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-            </CardBody>
-          </Card> */}
           <Cards vid_list={videos} />
         </Tab>
         <Tab key="playlist" title="Playlist">
-          {/*           <Card>
-            <CardBody>
-              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-              ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-              cillum dolore eu fugiat nulla pariatur.
-            </CardBody>
-          </Card> */}
           <StubCards />
         </Tab>
         <Tab key="community" title="Community">
-          {/*           <Card>
-            <CardBody>
-              Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-              mollit anim id est laborum.
-            </CardBody>
-          </Card> */}
           <StubCards />
         </Tab>
       </Tabs>

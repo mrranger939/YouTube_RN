@@ -1,21 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { Skeleton, Button } from "@heroui/react";
-
-
 import axios from "axios";
 import Hls from "hls.js";
 import { useParams } from "react-router-dom";
 import "./Home.css";
-// import Plyr from "plyr";
-// import "plyr/dist/plyr.css";
-
-
 import VCards from "../components/VCards";
 import SubcrBtn from "../components/SubcrBtn";
+import { API_BASE_URL } from "../config/api";
 
-
-
-const ipAddress = import.meta.env.VITE_IP_ADD;
 
 function Vid({ link }) {
   const videoRef = useRef(null);
@@ -78,7 +70,7 @@ export default function Video() {
   const fetchChannelData = async (chn) => {
     try {
       const { data } = await axios.get(
-        `http://${ipAddress}:8000/chn/vid/${chn}`
+        `${API_BASE_URL}/chn/vid/${chn}`
       );
       console.log("\n\n CD : ", data); // Log the video data
       setCD(data);
@@ -90,7 +82,7 @@ export default function Video() {
     const fetchVideoData = async () => {
       try {
         const { data } = await axios.get(
-          `http://${ipAddress}:8000/v/${data_id}`
+          `${API_BASE_URL}/v/${data_id}`
         );
         console.log("\n\n VD : ", data); // Log the video data
         setVD(data);

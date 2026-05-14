@@ -13,33 +13,10 @@ import {
   AutocompleteItem,
 } from "@heroui/autocomplete";
 import { Select, SelectSection, SelectItem } from "@heroui/select";
-export const genres = [
-  { label: "Gaming", key: "gaming" },
-  { label: "Education", key: "education" },
-  { label: "Music", key: "music" },
-  { label: "Comedy", key: "comedy" },
-  { label: "Vlogs", key: "vlogs" },
-  { label: "Tech", key: "tech" },
-  { label: "Fitness", key: "fitness" },
-  { label: "Food", key: "food" },
-  { label: "Travel", key: "travel" },
-  { label: "Lifestyle", key: "lifestyle" },
-  { label: "DIY", key: "diy" },
-  { label: "Beauty", key: "beauty" },
-  { label: "Movies", key: "movies" },
-  { label: "Movie Reviews", key: "movie_reviews" },
-  { label: "ASMR", key: "asmr" },
-  { label: "Podcasts", key: "podcasts" },
-  { label: "Finance", key: "finance" },
-  { label: "Science", key: "science" },
-  { label: "Sports", key: "sports" },
-  { label: "Motivation", key: "motivation" },
-];
-
-export const videoType = [
-  { key: "video", label: "Video" },
-  { key: "short", label: "Short" },
-];
+import { resizeImage } from "../utils/imageUtils";
+import { genres } from "../Data/VideoGenre";
+import { videoType } from "../Data/VideoType";
+import { API_BASE_URL } from "../config/api";
 
 export default function Upload() {
   const navigate = useNavigate();
@@ -53,9 +30,8 @@ export default function Upload() {
       const token = Cookies.get("authToken");
       if (token) {
         const decoded = jwtDecode(token);
-        const ipAddress = import.meta.env.VITE_IP_ADD;
         const response = await axios.get(
-          `http://${ipAddress}:8000/checkifchannel/${decoded.user_id}`
+          `${API_BASE_URL}/checkifchannel/${decoded.user_id}`,
         );
         try {
           if (response.data === "success") {
@@ -77,64 +53,22 @@ export default function Upload() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const formData = new FormData(event.target);  
+    const formData = new FormData(event.target);
     const imageFile = formData.get("image");
     const videoFile = formData.get("video");
-  
+
     // Validate file extensions
     if (!imageFile.name.endsWith(".jpg")) {
       alert("Please upload a valid JPG image.");
       return;
     }
-  
+
     if (!videoFile.name.endsWith(".mp4")) {
       alert("Please upload a valid MP4 video.");
       return;
     }
-  
-    // Resize image
-    const resizedImageBlob = await new Promise((resolve) => {
-      const img = new Image();
-      img.src = URL.createObjectURL(imageFile);
-  
-      img.onload = () => {
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-  
-        const targetWidth = 720;
-        const targetHeight = 404;
-        const originalWidth = img.width;
-        const originalHeight = img.height;
-  
-        const scaleFactor = Math.min(targetWidth / originalWidth, targetHeight / originalHeight);
-        const newWidth = originalWidth * scaleFactor;
-        const newHeight = originalHeight * scaleFactor;
-  
-        canvas.width = targetWidth;
-        canvas.height = targetHeight;
-  
-        ctx.fillStyle = "#000";
-        ctx.fillRect(0, 0, targetWidth, targetHeight);
-        ctx.drawImage(
-          img,
-          (targetWidth - newWidth) / 2,
-          (targetHeight - newHeight) / 2,
-          newWidth,
-          newHeight
-        );
-  
-        canvas.toBlob(
-          (blob) => {
-            if (blob) {
-              resolve(blob); // Resolve the promise with the resized image blob
-            }
-          },
-          "image/jpeg",
-          0.9
-        );
-      };
-    });
-  
+
+    const resizedImageBlob = await resizeImage(file, 720, 404);
 
     const newFormData = new FormData();
     newFormData.append("genre", selectedGenre);
@@ -145,18 +79,17 @@ export default function Upload() {
     newFormData.append("resizedImage", resizedImageBlob, "resized-image.jpg");
 
     try {
-      const ipAddress = import.meta.env.VITE_IP_ADD;
       const response = await axios.post(
-        `http://${ipAddress}:8000/upload`,
+        `${API_BASE_URL}/upload`,
         newFormData,
         {
           headers: {
             Authorization: `Bearer ${Cookies.get("authToken")}`,
             "Content-Type": "multipart/form-data",
           },
-        }
+        },
       );
-  
+
       if (response.data === "success") {
         setUploadSuccess(true);
       } else {
@@ -167,12 +100,13 @@ export default function Upload() {
       alert("An error occurred: " + error.message);
     }
   };
-  
+
   if (uploadSuccess) {
     return <Navigate to="/" />;
   }
-  
-  return ifchannel ? (
+  if (ifchannel) return <Spinner />;
+
+  return (
     <div className="uploaddata">
       <h1 className="font-bold text-xl mb-2">Upload your Video</h1>
       <form
@@ -212,7 +146,7 @@ export default function Upload() {
           label="Select the video's genre"
           onSelectionChange={(value) => {
             setSelectedGenre(value);
-            console.log("Genre selected: ", value); 
+            console.log("Genre selected: ", value);
           }}
         >
           {genres.map((item) => (
@@ -236,7 +170,5 @@ export default function Upload() {
         <input type="submit" value="Upload Image and Video" />
       </form>
     </div>
-  ) : (
-    <Spinner />
   );
 }

@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {Input} from "@heroui/react";
+import { API_BASE_URL } from "../config/api";
 export default function Login() {
     const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -15,9 +16,8 @@ export default function Login() {
     const data = { email, password };
   
     try {
-      const ipAddress = import.meta.env.VITE_IP_ADD;
       const response = await axios.post(
-        `http://${ipAddress}:8000/login`,
+        `${API_BASE_URL}/login`,
         data,
         {
             headers: { 'Content-Type': 'application/json' },
