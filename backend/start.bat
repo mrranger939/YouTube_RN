@@ -70,7 +70,7 @@ echo [INFO] Starting Kafka...
 docker run -d --rm --name kafka ^
   --network youtubern -p 9092:9092 ^
   -e KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181 ^
-  -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://192.168.1.7:9092 ^
+  -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://192.168.1.9:9092 ^
   -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 ^
   confluentinc/cp-kafka
 

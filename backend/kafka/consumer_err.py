@@ -35,7 +35,7 @@ def create_kafka_consumer():
 consumer = create_kafka_consumer()
 
 
-LOG_FILE = "./logs/error_logs.jsonl"
+LOG_FILE = "./logs/error_logs.jsonl" #JSONL (JSON Lines) is a file format where each line is a valid, independent JSON object, separated by newline characters
 
 
 def process_errors():

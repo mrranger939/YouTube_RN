@@ -38,7 +38,7 @@ export default function VCards({ Vdata, Cdata }) {
   const formatViews = (views) => {
     // console.log("the no of views is : ",views," the type is : ",typeof(views)) //for testing purpose
     if (views >= 1000000) {
-      return Math.floor(views / 1000000).toFixed(1) + "M"; // Convert to 'k' format
+      return (views / 1000000).toFixed(1) + "M"; // Convert to 'k' format
     }
     if (views >= 1000) {
       if (views >= 10000) {

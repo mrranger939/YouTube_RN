@@ -16,7 +16,7 @@ start cmd.exe /k "cd backend && start.bat"
 
 
 REM ================================
-REM Start Frontend (in new window)
+REM Start Frontend (in existing window)
 REM ================================
 
 cd ./frontend
