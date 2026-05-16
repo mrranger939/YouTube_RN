@@ -1,25 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBell,
   faUserCircle,
   faVideo,
-  faMagnifyingGlass,
   faBars,
 } from "@fortawesome/free-solid-svg-icons";
-import { jwtDecode } from "jwt-decode";
-import Cookies from "js-cookie";
-import { Popover, PopoverTrigger, PopoverContent } from "@heroui/popover";
 import {
-  Modal,
-  ModalContent,
-  Button,
   useDisclosure,
-  Link,
 } from "@heroui/react";
-import LoginComponent from "./LoginComponent";
-import SignupComponent from "./SignupComponent";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../Authentication/AuthContext";
 import SearchBar from "./SearchBar";
 import ProfileMenu from "./ProfileMenu";
@@ -28,7 +17,6 @@ import AuthModal from "./AuthModal";
 export default function Navbar({ onMenuClick }) {
   const { profilePic, logout, isAuthenticated } = useAuth();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [showLogin, setShowLogin] = useState(true);
   return (
     <nav className="fixed w-full bg-white " style={{ zIndex: 50 }}>
       <div className="flex items-center justify-between px-4 py-2">
