@@ -290,7 +290,8 @@ if __name__ == '__main__':
     s3_init()
     print("🚦Video Consumer is starting...\n")
     
-    print("ℹ️ GPU config: ",{"CPU" if gpu_config==None else gpu_config})
+    # print("ℹ️ GPU config: ",{"CPU" if gpu_config==None else gpu_config})
+    print(f"ℹ️ GPU config: {{{'CPU' if gpu_config is None else gpu_config}}}")
    
     process_videos()
    
