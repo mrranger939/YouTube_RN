@@ -68,7 +68,7 @@ export default function Upload() {
       return;
     }
 
-    const resizedImageBlob = await resizeImage(file, 720, 404);
+    const resizedImageBlob = await resizeImage(imageFile, 720, 404);
 
     const newFormData = new FormData();
     newFormData.append("genre", selectedGenre);
@@ -104,7 +104,7 @@ export default function Upload() {
   if (uploadSuccess) {
     return <Navigate to="/" />;
   }
-  if (ifchannel) return <Spinner />;
+  if (!ifchannel) return <Spinner />;
 
   return (
     <div className="uploaddata">

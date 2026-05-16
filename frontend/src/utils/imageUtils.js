@@ -1,48 +1,56 @@
-export const resizeImage = async (file,targetWidth, targetHeight) => {
-  return await new Promise((resolve) => {
-    const img = new Image();
+export const resizeImage = async (file, targetWidth, targetHeight) => {
+    return await new Promise((resolve) => {
+        const img = new Image();
 
-    img.src = URL.createObjectURL(file);
+        const objectUrl = URL.createObjectURL(file);
+        img.src = objectUrl;
 
-    img.onload = () => {
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
-      const originalWidth = img.width;
-      const originalHeight = img.height;
+        img.onload = () => {
+            URL.revokeObjectURL(objectUrl);
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+            const originalWidth = img.width;
+            const originalHeight = img.height;
 
-      const scaleFactor = Math.min(
-        targetWidth / originalWidth,
-        targetHeight / originalHeight
-      );
+            const scaleFactor = Math.min(
+                targetWidth / originalWidth,
+                targetHeight / originalHeight
+            );
 
-      const newWidth = originalWidth * scaleFactor;
-      const newHeight = originalHeight * scaleFactor;
+            const newWidth = originalWidth * scaleFactor;
+            const newHeight = originalHeight * scaleFactor;
 
-      canvas.width = targetWidth;
-      canvas.height = targetHeight;
+            canvas.width = targetWidth;
+            canvas.height = targetHeight;
 
-      ctx.fillStyle = "#000";
+            ctx.fillStyle = "#000";
 
-      ctx.fillRect(0, 0, targetWidth, targetHeight);
+            ctx.fillRect(0, 0, targetWidth, targetHeight);
 
-      ctx.drawImage(
-        img,
-        (targetWidth - newWidth) / 2,
-        (targetHeight - newHeight) / 2,
-        newWidth,
-        newHeight
-      );
+            ctx.drawImage(
+                img,
+                (targetWidth - newWidth) / 2,
+                (targetHeight - newHeight) / 2,
+                newWidth,
+                newHeight
+            );
 
-      canvas.toBlob(
-        (blob) => {
-          if (blob) {
-            resolve(blob);
-          }
-        },
-        "image/jpeg",
-        0.9
-      );
-    };
-  });
+            canvas.toBlob(
+                (blob) => {
+                    if (blob) {
+                        resolve(blob);
+                    }
+                },
+                "image/jpeg",
+                0.9
+            );
+        };
+
+        img.onerror = () => {
+            URL.revokeObjectURL(objectUrl);
+            resolve(null);
+        };
+
+    });
 };
 

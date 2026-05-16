@@ -1,11 +1,9 @@
-import { useState } from "react";
 import "./Cards.css";
 import {
   User,
   Card,
   CardFooter,
   Image,
-  Button,
   CardHeader,
 } from "@heroui/react";
 import nawphot from "/images/nawaz_logo.jpg";

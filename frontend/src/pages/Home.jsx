@@ -27,7 +27,7 @@ export default function Home() {
     };
 
     fetchVidList();
-  }, [API_BASE_URL]);
+  }, []);
 
   if (loading) {
     return <StubCards />;

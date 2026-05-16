@@ -28,7 +28,7 @@ export default function AuthModal({isOpen, onOpenChange}) {
                                 className="text-blue-600 hover:underline"
                                 style={{cursor: "pointer"}}
                             >
-                                Create account
+                                {showLogin ? "Create account" : "Login"}
                             </Link>
                         </p>
                     </>
