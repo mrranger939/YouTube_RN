@@ -12,3 +12,4 @@ pyvenv.cfg
 .venv
 myenv
 pip-selfcheck.json
+logs/*.jsonl

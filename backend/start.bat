@@ -58,6 +58,7 @@ docker run -d --rm --name zookeeper ^
 
 
 
+echo Waiting for Zookeeper to initialize...
 REM Wait for Zookeeper to initialize
 timeout /t 15 
 
@@ -76,17 +77,37 @@ docker run -d --rm --name kafka ^
 
 
 
+echo Waiting for Kafka to initialize...
 REM Wait for Kafka to initialize
 timeout /t 15 
 
 
-cd kafka
+
+REM ================================
+REM Enter kafka directory
+REM ================================
+cd /d "%~dp0kafka" || (
+  echo [ERROR] Cannot enter kafka directory.
+  exit /b 1
+)
+
+
+
+
 
 REM ================================
 REM Create Kafka Topic (Python)
 REM ================================
 echo [INFO] Creating Kafka topic...
+
 python create_topic.py
+
+IF %ERRORLEVEL% NEQ 0 (
+  echo [ERROR] Kafka topic creation failed.
+  exit /b 1
+)
+
+
 
 
 echo -----------------------------------------------
@@ -97,21 +118,44 @@ REM ================================
 REM Start Kafka Consumers (in new window)
 REM ================================
 echo [INFO] Starting Kafka Error consumer...
-start cmd.exe /k python consumer_err.py
+@REM start cmd.exe /k python consumer_err.py
+start "Kafka Error Consumer" cmd.exe /k python consumer_err.py
+
+
 
 echo -----------------------------------------------
 timeout /t 10
 
 echo [INFO] Starting Kafka Video consumer...
-start cmd.exe /k python consumer_vid.py
+@REM start cmd.exe /k python consumer_vid.py
+start "Kafka Video Consumer" cmd.exe /k python consumer_vid.py
 
 
-cd ..
+
+
+
+
+REM ================================
+REM Return to project root
+REM ================================
+cd /d "%~dp0" || (
+  echo [ERROR] Failed to return to project root.
+  exit /b 1
+)
+
+
 
 REM ================================
 REM Start Flask App
 REM ================================
 echo [INFO] Starting Flask app...
 python ./app.py
+
+
+IF %ERRORLEVEL% NEQ 0 (
+  echo [ERROR] Flask app failed to start.
+  exit /b 1
+)
+
 
 endlocal
