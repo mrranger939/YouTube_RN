@@ -30,7 +30,7 @@ IF NOT EXIST "backend\start.bat" (
     exit /b 1
 )
 
-start "Backend" cmd.exe /k "cd /d \"%~dp0backend\" && start.bat"
+start "Backend" cmd.exe /k "cd /d "%~dp0backend\" && start.bat"
 
 REM ================================
 REM Start Frontend
