@@ -43,7 +43,7 @@ export default function Cards({ vid_list }) {
 
   const formatViews = (views) => {
     if (views >= 1000000) {
-      return (views / 1000000).toFixed(1) + "M"; // Convert to 'k' format
+      return (views / 1000000).toFixed(1) + "M"; // Convert to 'M' format
     }
     if (views >= 1000) {
       if (views >= 10000) {

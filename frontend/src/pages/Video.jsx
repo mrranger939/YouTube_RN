@@ -17,6 +17,8 @@ import SubcrBtn from "../components/SubcrBtn";
 
 const ipAddress = import.meta.env.VITE_IP_ADD;
 
+
+// VIDEO PLAYER
 function Vid({ link }) {
   const videoRef = useRef(null);
   const hlsRef = useRef(null);
@@ -68,6 +70,8 @@ function Vid({ link }) {
   );
 }
 
+
+// Video Page
 export default function Video() {
   const { data_id } = useParams();
   const [VD, setVD] = useState(false);
@@ -86,6 +90,9 @@ export default function Video() {
       console.error("Error fetching video data:", error);
     }
   };
+  
+  
+  
   useEffect(() => {
     const fetchVideoData = async () => {
       try {
@@ -110,11 +117,16 @@ export default function Video() {
     fetchVideoData();
   }, [data_id]); // Dependency array ensures it runs when data_id changes
 
+
+
+
   // Conditional rendering based on loading, error, and video data states
   if (loading) {
     // Show loading skeleton while video data is being fetched
     return <></>;
   }
+
+
 
   if (error) {
     // Show 404 page if there's an error fetching the video data
@@ -126,25 +138,33 @@ export default function Video() {
     );
   }
 
+
+
   return (
     <>
+
       <div
         className="mt-1 mx-8"
-        style={{ display: "grid", gridTemplateColumns: "70% 30%" }}
-      >
+        style={{ display: "grid", gridTemplateColumns: "70% 30%" }} > {/* 2 sections: (Video player,chn-det,desciption,comments), (recommended videos) */}
         <div
           className="video mx-2 flex flex-col"
           // style={{ display: "grid", gridTemplateRows: `${Gr} auto auto` }}
         >
+
+
           {/* <div className="w-full max-w-[640px] h-auto max-h-[360px] flex rounded-xl mx-2 object-contain justify-center items-baseline"> */}
           <div
             className={
               "w-full h-auto flex rounded-xl mt-2 mb-2 object-contain justify-center items-baseline"
             }
           >
+            {/* Video Player */}
             <Vid link={VD.link} />
           </div>
 
+
+
+          {/* Video and channel Details */}
           <div className="video-details bg-light mx-1 rounded-xl">
             <h1
               className="v-title font-bold tracking-tight"
@@ -292,17 +312,33 @@ export default function Video() {
               </div>
             </div>
           </div>
-
+          
+          
+          {/* Chan-Desc Section */}
           <div className="discription bg-gray-400 flex-none h-64 mt-3 rounded-xl"></div>
+
+
+
+          {/* Comment Section */}
+          <div className="discription bg-gray-400 flex-none h-16 mt-3 rounded-xl"></div>
         </div>
 
+
+
+        {/* Side Video Recommendations */}
         <div
           // className="cards bg-gray-400 ml-5 rounded-xl"
           className="cards ml-5 rounded-xl"
           style={{ height: "100vh" }}
         >
           
-          <VCards Vdata={VD.data} Cdata={CD} />:<></>
+          {/*           
+           VCards Component
+          
+           Renders a list of video cards fetched from the API.
+          */}
+          
+          <VCards Vdata={VD.data} Cdata={CD} />
         
         </div>
       </div>

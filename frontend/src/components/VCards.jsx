@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Skeleton, Spinner } from "@heroui/react";
 import React from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const ipAddress = import.meta.env.VITE_IP_ADD; // Fetch IP from environment variable
 
@@ -10,20 +11,39 @@ const fetchChannelDetails = async (channelId) => {
   try {
     const { data } = await axios.get(`http://${ipAddress}:8000/chn/card/${channelId}`);
     console.log("fetched");
-
     return data;
   } catch (error) {
     console.error("Error fetching video data:", error);
+    throw new Error(error?.response?.data?.message || error.message);
   }
 };
 
+
+
+/*
+* VCards Component
+*
+* Renders a list of video cards fetched from the API.
+*
+* `@param` {Object} Vdata  - Reserved for future use: metadata about the currently
+*                          playing video (title, tags, category, etc.) that will
+*                          be used to power personalised / related-video
+*                          recommendations based on the video and channel being
+*                          watched.
+* `@param` {Object} Cdata  - Channel data used to trigger a fresh fetch of the
+*                          video list whenever the active channel changes.
+*/
+
+// Video Cards for Recommendations IG
 export default function VCards({ Vdata, Cdata }) {
+  const n = useNavigate();
   const [vidList, setVidList] = useState(null);
   const [channelDetails, setChannelDetails] = useState({});
-  const [error, setError] = useState(false);
+  const [errorf, setErrorf] = useState(null); //Error Flag contains Error
 
 
-  console.log("from VCARDS : ", Vdata, Cdata);
+  // TODO: use Vdata to fetch recommended/related videos once recommendation logic is implemented
+  console.log("VCards props — Vdata (future recommendations):", Vdata, "| Cdata:", Cdata);
 
   // Helper function to format views, duration, and upload time
   const formatDuration = (seconds) => {
@@ -38,7 +58,7 @@ export default function VCards({ Vdata, Cdata }) {
   const formatViews = (views) => {
     // console.log("the no of views is : ",views," the type is : ",typeof(views)) //for testing purpose
     if (views >= 1000000) {
-      return (views / 1000000).toFixed(1) + "M"; // Convert to 'k' format
+      return (views / 1000000).toFixed(1) + "M"; // Convert to 'M' format
     }
     if (views >= 1000) {
       if (views >= 10000) {
@@ -88,6 +108,8 @@ export default function VCards({ Vdata, Cdata }) {
     }
   };
 
+
+  // Fetching Video List
   useEffect(() => {
     const fetchVidList = async () => {
       try {
@@ -95,49 +117,66 @@ export default function VCards({ Vdata, Cdata }) {
           `http://${ipAddress}:8000/list/videos/cards`
         );
         setVidList(data.data); // Assuming response data is the list of videos
-        console.log("Vide-list :");
+        console.log("Vide0-list :");
         console.log(data.data);
-        // setError(err); // Set error if there is any//testing purposes
+        setErrorf(null); // Set errorf if there is any//testing purposes
 
 
       } catch (err) {
-        setError(err); // Set error if there is any
+        setErrorf({
+          message: err?.message || "Failed to fetch videos",
+          raw: err,
+        }); // Set errorf if there is any //testing purposes
       }
     };
 
     fetchVidList();
-  }, [Cdata]);
+  }, []);
+
+
+
+  // Fetch channel details in parallel after cards are rendered
+  const inFlightChannels = useRef(new Set());
 
   useEffect(() => {
-    // Fetch channel details in parallel after cards are rendered
-    const fetchChannels = () => {
-      if (vidList) {
-        vidList.forEach((item) => {
-          if (!channelDetails[item.channel_id]) {
-            fetchChannelDetails(item.channel_id)
-              .then((data) => {
-                setChannelDetails((prev) => ({
-                  ...prev,
-                  [item.channel_id]: data,
-                }));
-              })
-              .catch((err) => {
-                console.error("Error fetching channel details:", err);
-              });
-          }
+    if (!vidList) return;
+
+    const missing = [...new Set(vidList.map(v => v.channel_id))]
+      .filter(
+        id =>
+          !channelDetails[id] &&
+          !inFlightChannels.current.has(id)
+      );
+
+    missing.forEach((id) => {
+      inFlightChannels.current.add(id);
+
+      fetchChannelDetails(id)
+        .then((data) => {
+          if (!data) return;
+
+          setChannelDetails((prev) => ({
+            ...prev,
+            [id]: data,
+          }));
+        })
+        .catch((err) => {
+          console.error("Error fetching channel details:", err);
+        })
+        .finally(() => {
+          inFlightChannels.current.delete(id);
         });
-      }
-    };
+    });
+  }, [vidList, channelDetails]);
 
-    fetchChannels();
-  }, [vidList]);
 
-  if (error) {
-    console.log(error)
+  if (errorf) {
+    console.log(errorf)
+    console.log(error.raw || error);
     return (
       <div className="rounded-xl m-2 justify-items-center h-full items-center text-center ">
         <div className="flex w-auto  text-center  h-full">
-          <Spinner color="danger" size="lg" label="Error..." />
+          <Spinner color="danger" size="lg" label={errorf.message} />
         </div>
       </div>)
   }
@@ -146,65 +185,70 @@ export default function VCards({ Vdata, Cdata }) {
   return (
     <>
 
-      {vidList ? 
-      
-      (
-        <div className="rounded-xl m-2 ">
-          {
-          vidList.map((item) => {
-            const channel = channelDetails[item.channel_id];
-            // console.log("In return : ", channel,item);//testing purposes
-            return (
+      {vidList ?
 
-              <div className="rounded-xl mb-4 flex flex-row items-start" key={item.video_id}>
-                <div className="w-full">
-                  <img src={`http://${ipAddress}:4566/thumbnail/${item.video_id}.jpg`} className="rounded-xl w-full" alt="" />
-                </div>
+        (
+          <div className="rounded-xl m-2 ">
+            {
+              vidList.map((item) => {
+                const channel = channelDetails[item.channel_id];
+                // console.log("In return : ", channel,item);//testing purposes
+                return (
 
-                <div className="video-details bg-light mx-2 w-full rounded-xl ">
-                  <h3 className="v-title text-base leading-5 line-clamp-2 text-ellipsis whitespace-normal font-medium tracking-tight">
-                    {item.videoTitle ? (
-                      item.videoTitle
-                    ) : (
-                      <>
-                        <Skeleton className="w-full h-3 rounded-xl my-3" />
-                        <Skeleton className="w-1/2 h-3 rounded-xl mb-3" />
-                      </>
-                    )}
-                  </h3>
-                  <div className="ch my-1 text-gray-600 text-sm">
-                    {channel ? (
-                      channel.channelName
-                    ) : (
-                      // <img src={CD.logo}  className="flex rounded-full" />
-                      <Skeleton className="rounded-full w-full h-2" />
-                    )}
+                  <div onClick={() => n(`/v/${item.video_id}`)} className="rounded-xl mb-4 flex flex-row items-start" key={item.video_id}>
+                    <div className="w-full">
+                      <img src={`http://${ipAddress}:4566/thumbnail/${item.video_id}.jpg`} className="rounded-xl w-full" alt={item.videoTitle ? `Thumbnail for ${item.videoTitle}` : "Video thumbnail"} />
+                    </div>
+
+                    <div className="video-details bg-light mx-2 w-full rounded-xl ">
+                      <h3 className="v-title text-base leading-5 line-clamp-2 text-ellipsis whitespace-normal font-medium tracking-tight">
+                        {item.videoTitle ? (
+                          item.videoTitle
+                        ) : (
+                          <>
+                            <Skeleton className="w-full h-3 rounded-xl my-3" />
+                            <Skeleton className="w-1/2 h-3 rounded-xl mb-3" />
+                          </>
+                        )}
+                      </h3>
+                      <div className="ch my-1 text-gray-600 text-sm" style={{ backgroundColor: "cyan" }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          n(`/channel/${item.channel_id}`);
+                        }}>
+                        {channel ? (
+                          channel.channelName
+                        ) : (
+                          // <img src={CD.logo}  className="flex rounded-full" />
+                          <Skeleton className="rounded-full w-full h-2" />
+                        )}
+                      </div>
+                      <div className="vd my-1 text-gray-600 text-xs">
+                        {vidList ? (
+                          `${formatViews(item.views)} views • ${formatUploadTime(item.timestamp)}`
+                        ) : (
+                          // <img src={CD.logo}  className="flex rounded-full" />
+                          <>
+                            <Skeleton className="rounded-full mx-0.5 w-1/2 h-2" />
+                            <Skeleton className="rounded-full mx-0.5 w-1/2 h-2" />
+                          </>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                  <div className="vd my-1 text-gray-600 text-xs">
-                    {vidList? (
-                      `${formatViews(item.views)} views • ${formatUploadTime(item.timestamp)}`
-                    ) : (
-                      // <img src={CD.logo}  className="flex rounded-full" />
-                      <>
-                        <Skeleton className="rounded-full mx-0.5 w-1/2 h-2" />
-                        <Skeleton className="rounded-full mx-0.5 w-1/2 h-2" />
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
 
-            );
-          })}
+                );
+              })}
 
-        </div>
-      ) : (
-        <div className="rounded-xl m-2 justify-items-center h-full items-center text-center ">
-          <div className="flex w-auto  text-center  h-full">
-            <Spinner color="warning" size="lg" label="Loading..." />
           </div>
-        </div>
-      )}
+        ) : (
+          <div className="rounded-xl m-2 justify-items-center h-full items-center text-center ">
+            <div className="flex w-auto  text-center  h-full">
+              <Spinner color="warning" size="lg" label="Error..." />
+              <p>Failed to load videos. Please try again.</p>
+            </div>
+          </div>
+        )}
     </>
   );
 }
