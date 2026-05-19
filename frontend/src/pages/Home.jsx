@@ -42,7 +42,7 @@ export default function Home() {
     );
   }
 
-  if (vidList.length == 0) {
+  if (vidList.length === 0) {
     return <StubCards />;
   }
   console.log(`the vidlist is ${vidList} type is: ${typeof vidList}`);

@@ -3,8 +3,10 @@ import { Skeleton, Spinner } from "@heroui/react";
 import React from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { formatViews, formatDuration, formatUploadTime } from "../utils/formatter";
+import { formatViews, formatUploadTime } from "../utils/formatter";
 import { API_BASE_URL } from "../config/api";
+
+const ipAddress = import.meta.env.VITE_IP_ADD;
 
 // Helper function to fetch channel details from your API
 const fetchChannelDetails = async (channelId) => {
@@ -50,7 +52,7 @@ export default function VCards({ Vdata, Cdata }) {
     const fetchVidList = async () => {
       try {
         const { data } = await axios.get(
-          `http://${ipAddress}:8000/list/videos/cards`
+          `${API_BASE_URL}/list/videos/cards`
         );
         setVidList(data.data); // Assuming response data is the list of videos
         console.log("Vide0-list :");

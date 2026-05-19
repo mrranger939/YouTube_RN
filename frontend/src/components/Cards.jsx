@@ -11,7 +11,6 @@ import {
   Skeleton
 } from "@heroui/react";
 import {
-  formatDuration,
   formatViews,
   formatUploadTime,
 } from "../utils/formatter";
