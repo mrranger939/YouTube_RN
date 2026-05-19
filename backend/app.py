@@ -438,39 +438,39 @@ def index():
     return 'Server is running'
 
 
-
-@app.route('/api/get-video-data', methods=['POST'])
-def get_video_data():
-    data = request.json
-    v_id = data.get('data_id')
-    print(v_id)
-    try:
-        # data_id = ObjectId(data_id)
-        # document = allids.find_one({'_id': data_id})   
-        document = VIDEOS.find_one({'video_id': v_id}) 
-        print(document)  
-        if document:
-            # videoSrc = document.get('videoId', '')
-            # posterSrc = document.get('imageId', '')
-            # return jsonify({
-            #     'videoSrc': str(videoSrc),
-            #     'posterSrc': str(posterSrc)
-            # })
-            print(document["video_id"])
-            return jsonify({
-                'videoSrc': str(document["video_id"]),
-                'posterSrc': str(document["video_id"])
-            })
-        else:
-            return jsonify({'error': 'Document not found'}), 404
+# Old Api
+# @app.route('/api/get-video-data', methods=['POST'])
+# def get_video_data():
+#     data = request.json
+#     print(data)
+#     v_id = data.get('data_id')
+#     print(v_id)
+#     try:
+#         # data_id = ObjectId(data_id)
+#         # document = allids.find_one({'_id': data_id})   
+#         document = VIDEOS.find_one({'video_id': v_id}) 
+#         print(document)  
+#         if document:
+#             # videoSrc = document.get('videoId', '')
+#             # posterSrc = document.get('imageId', '')
+#             # return jsonify({
+#             #     'videoSrc': str(videoSrc),
+#             #     'posterSrc': str(posterSrc)
+#             # })
+#             print(document["video_id"])
+#             return jsonify({
+#                 'videoSrc': str(document["video_id"]),
+#                 'posterSrc': str(document["video_id"])
+#             })
+#         else:
+#             return jsonify({'error': 'Document not found'}), 404
     
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+#     except Exception as e:
+#         return jsonify({'error': str(e)}), 500
 
 
 
-
-
+# Used to access the video stream Id
 @app.get('/v/<video_id>')
 def stream_video(video_id):
     try:
@@ -491,7 +491,7 @@ def stream_video(video_id):
         print(e)
         return jsonify({'error': str(e)}), 500
 
-
+# Created this to use this channel details for rendering cards
 @app.get('/chn/card/<chn_id>')
 def chn_card_det(chn_id):
     try:
@@ -506,7 +506,7 @@ def chn_card_det(chn_id):
         print(e)
         return jsonify({'error': str(e)}), 500
     
-    
+# Created this to use this channel details to display under playing video
 @app.get('/chn/vid/<chn_id>')
 def chn_vid_det(chn_id):
     try:
@@ -549,7 +549,7 @@ def Channelclick(channelId):
 """ nawaz api hahahahahahaha!!! """
 
 
-
+# Returns video details for cards
 @app.get("/list/videos/cards")
 def vc_list():
     vl = VIDEOS.find({},{'_id':0,'channel_id':1,"videoTitle":1,"views":1,'video_id':1,'timestamp':1})
@@ -558,6 +558,7 @@ def vc_list():
     return jsonify(data=a)
 
 
+# Returns all video details
 @app.get("/list/videos")
 def vd_list():
     vl = VIDEOS.find({},{'_id':0,})
@@ -566,6 +567,7 @@ def vd_list():
     return jsonify(data=a)
 
 
+# Returns all Channel details
 @app.get("/list/channels")
 def ch_list():
     ch = CHANNELS.find({},{'_id':0,})
@@ -575,13 +577,13 @@ def ch_list():
 
 # @app.route('/video/<video_id>')
 # def image_data(video_id):
-#     try:
-#         video_object = fs.get(ObjectId(video_id))
-#         video_data = video_object.read()
-#         content_type = video_object.metadata.get('contentType')
-#         return send_file(io.BytesIO(video_data), mimetype=content_type)
-#     except Exception as e:
-#         return str(e)
+    try:
+        video_object = fs.get(ObjectId(video_id))
+        video_data = video_object.read()
+        content_type = video_object.metadata.get('contentType')
+        return send_file(io.BytesIO(video_data), mimetype=content_type)
+    except Exception as e:
+        return str(e)
 
 
 

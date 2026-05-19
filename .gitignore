@@ -12,3 +12,8 @@ venv
 pyvenv.cfg
 .venv
 pip-selfcheck.json
+
+
+
+backend/.env
+frontend/.env
