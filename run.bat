@@ -47,7 +47,7 @@ IF NOT EXIST "package.json" (
     exit /b 1
 )
 
-npm run dev
+call npm run dev
 
 set "EXIT_CODE=%ERRORLEVEL%"
 

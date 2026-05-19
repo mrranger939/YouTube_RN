@@ -13,5 +13,5 @@ pyvenv.cfg
 myenv
 pip-selfcheck.json
 logs/*.jsonl
-+kafka/error_logs*.jsonl
-+error_logs*.jsonl
+kafka/error_logs*.jsonl
+error_logs*.jsonl
