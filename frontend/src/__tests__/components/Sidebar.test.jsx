@@ -12,7 +12,7 @@ vi.mock("../../components/SidebarItem", () => ({
 }));
 
 // Mock sidebarData
-vi.mock("../../Data/sidebarData", () => ({
+vi.mock("../../Data/SidebarData", () => ({
   mainLinks:    [{ label: "Home", href: "/" }],
   youLinks:     [{ label: "History", href: "#" }],
   exploreLinks: [{ label: "Gaming", href: "#" }],
