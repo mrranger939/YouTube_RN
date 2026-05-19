@@ -45,9 +45,6 @@ export default function VCards({ Vdata, Cdata }) {
   // TODO: use Vdata to fetch recommended/related videos once recommendation logic is implemented
   console.log("VCards props — Vdata (future recommendations):", Vdata, "| Cdata:", Cdata);
 
-
-
-
   // Fetching Video List
   useEffect(() => {
     const fetchVidList = async () => {
