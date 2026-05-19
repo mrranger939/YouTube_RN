@@ -17,13 +17,13 @@ import {
 } from "../utils/formatter";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../config/api";
 
-const ip = import.meta.env.VITE_IP_ADD;
 
 // Helper function to fetch channel details from your API
 const fetchChannelDetails = async (channelId) => {
   try {
-    const { data } = await axios.get(`http://${ip}:8000/chn/card/${channelId}`);
+    const { data } = await axios.get(`${API_BASE_URL}/chn/card/${channelId}`);
     console.log("fetched all channel details for card rendering");
     return data;
   } catch (error) {

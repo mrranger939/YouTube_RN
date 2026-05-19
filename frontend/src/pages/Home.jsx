@@ -6,9 +6,9 @@ import axios from "axios";
 import { API_BASE_URL } from "../config/api";
 
 export default function Home() {
-  const [vidList, setVidList] = useState([]);
+  const [vidList, setVidList] = useState([]);  // State to hold video list
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(null);  // State to track errors
 
 
   useEffect(() => {

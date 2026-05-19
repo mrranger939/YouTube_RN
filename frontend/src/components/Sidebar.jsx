@@ -9,7 +9,7 @@ import {
   youLinks,
   exploreLinks,
   accountLinks
-} from "../Data/sidebarData";
+} from "../Data/SidebarData";
 
 const Sidebar = ({ sidebarOpen }) => {
   return (
