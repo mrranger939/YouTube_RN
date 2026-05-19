@@ -9,6 +9,9 @@ load_dotenv()
 
 ip_address = os.getenv("IP_ADD")
 
+if not ip_address:
+    raise RuntimeError("Missing required environment variable: IP_ADD")
+
 # Workaround for Python 3.12
 if sys.version_info >= (3, 12, 0):
     sys.modules['kafka.vendor.six.moves'] = six.moves
@@ -94,7 +97,7 @@ def create_topic_if_not_exists(topics):
             admin_client.close()
         except Exception as close_err:
             print(f"[WARN] Error while closing admin client: {close_err}")
-            return False
+        return False
 
     except Exception as e:
         print(f"[ERROR] Unexpected error while listing topics: {e}")
@@ -102,7 +105,9 @@ def create_topic_if_not_exists(topics):
             admin_client.close()
         except Exception as close_err:
             print(f"[WARN] Error while closing admin client: {close_err}")
-            return False
+        return False
+
+    all_topics_created = True
 
     # Create topics if missing
     for topic_name in topics:
@@ -125,9 +130,11 @@ def create_topic_if_not_exists(topics):
 
             except KafkaError as e:
                 print(f"[ERROR] Error creating topic '{topic_name}': {e}")
+                all_topics_created = False
 
             except Exception as e:
                 print(f"[ERROR] Unexpected error for topic '{topic_name}': {e}")
+                all_topics_created = False
 
         else:
             print(f"[INFO] Topic '{topic_name}' already exists")
@@ -137,7 +144,7 @@ def create_topic_if_not_exists(topics):
     except Exception as close_err:
         print(f"[WARN] Error while closing admin client: {close_err}")
 
-    return True
+    return all_topics_created
 
 
 if __name__ == "__main__":

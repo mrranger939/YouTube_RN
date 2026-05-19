@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Skeleton, Spinner } from "@heroui/react";
 import React from "react";
 import axios from "axios";
@@ -172,7 +172,7 @@ export default function VCards({ Vdata, Cdata }) {
 
   if (errorf) {
     console.log(errorf)
-    console.log(error.raw || error);
+    console.log(errorf.raw || errorf);
     return (
       <div className="rounded-xl m-2 justify-items-center h-full items-center text-center ">
         <div className="flex w-auto  text-center  h-full">
@@ -244,8 +244,9 @@ export default function VCards({ Vdata, Cdata }) {
         ) : (
           <div className="rounded-xl m-2 justify-items-center h-full items-center text-center ">
             <div className="flex w-auto  text-center  h-full">
-              <Spinner color="warning" size="lg" label="Error..." />
-              <p>Failed to load videos. Please try again.</p>
+              {/* <Spinner color="warning" size="lg" label="Error..." />
+              <p>Failed to load videos. Please try again.</p> */}
+              <Spinner color="warning" size="lg" label="Loading..." />
             </div>
           </div>
         )}
