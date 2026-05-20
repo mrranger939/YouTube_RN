@@ -10,4 +10,14 @@ export default defineConfig({
     // }
     host: "0.0.0.0",
   },
+  test: {
+    globals: true,
+    environment: "jsdom",
+    setupFiles: "./src/__tests__/setup.js",
+    css: false,
+    env: {
+      VITE_API_BASE_URL: "http://localhost:3000",
+      VITE_IP_ADD: "localhost",
+    },
+  },
 });

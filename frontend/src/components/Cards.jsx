@@ -17,7 +17,7 @@ import {
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../config/api";
-
+const ip = import.meta.env.VITE_IP_ADD;
 
 // Helper function to fetch channel details from your API
 const fetchChannelDetails = async (channelId) => {
