@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import axios from "axios";
 import { Input } from "@heroui/react";
+import { API_BASE_URL } from "../config/api";
+
 export default function Signup() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -21,9 +23,8 @@ export default function Signup() {
     formData.append("profilePic", profilePic);
 
     try {
-      const ipAddress = import.meta.env.VITE_IP_ADD;
       const response = await axios.post(
-        `http://${ipAddress}:8000/signup`,
+        `${API_BASE_URL}/signup`,
         formData,
         {
           headers: {

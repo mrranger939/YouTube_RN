@@ -1,52 +1,49 @@
 import React, { useState, useEffect } from "react";
 import Cards from "../components/Cards";
 import "./Home.css";
-import OGCards from "../components/Orginal_Cards";
+import StubCards from "../components/StubCards";
 import axios from "axios";
+import { API_BASE_URL } from "../config/api";
 
-// import Hehe from "../components/Hehe";
 export default function Home() {
-  const [vidList, setVidList] = useState([]); // State to hold video list
-  const [loading, setLoading] = useState(true); // State to track loading
-  const [error, setError] = useState(null); // State to track errors
+  const [vidList, setVidList] = useState([]);  // State to hold video list
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);  // State to track errors
 
-  const ipAddress = import.meta.env.VITE_IP_ADD; // Fetch IP from environment variable
 
-  // Fetch video list on component mount
   useEffect(() => {
     const fetchVidList = async () => {
       try {
         const { data } = await axios.get(
-          `http://${ipAddress}:8000/list/videos/cards`
+          `${API_BASE_URL}/list/videos/cards`,
         );
-        setVidList(data.data); // Assuming response data is the list of videos
+        setVidList(data.data);
         console.log(data.data);
-        setLoading(false); // Set loading to false after data is fetched
+        setLoading(false);
       } catch (err) {
-        setError(err); // Set error if there is any
-        setLoading(false); // Set loading to false even on error
+        setError(err);
+        setLoading(false);
       }
     };
 
     fetchVidList();
-  }, [ipAddress]); // Dependency array to ensure fetch happens when component mounts
+  }, []);
 
-  // Render loading, error, or actual content
   if (loading) {
-    return <OGCards />;
+    return <StubCards />;
   }
 
   if (error) {
     return (
       <>
-        <OGCards />
+        <StubCards />
         Error: {error.message}
       </>
     );
   }
 
-  if (vidList.length == 0) {
-    return <OGCards />;
+  if (vidList.length === 0) {
+    return <StubCards />;
   }
   console.log(`the vidlist is ${vidList} type is: ${typeof vidList}`);
   return (
