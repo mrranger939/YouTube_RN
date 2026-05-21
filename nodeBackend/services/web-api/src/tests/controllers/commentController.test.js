@@ -112,14 +112,13 @@ test('postComment returns 404 when parent comment not found', async () => {
     assert.equal(r.statusCode, 404);
 
     assert.deepEqual(r.body, {
-      error: 'Parent comment not found',
+      error: 'Parent comment not found for this video',
     });
   } finally {
     db.Video.findOne = origVideoFindOne;
     db.Comment.findOne = origCommentFindOne;
   }
 });
-
 test('postComment creates comment successfully', async () => {
   const req = {
     body: {
