@@ -57,7 +57,6 @@ export const uploadVideo = async (req, res) => {
       likes: 0,
       dislikes: 0,
       views: 0,
-      comments: [],
       timestamp: new Date(),
     });
 

@@ -6,4 +6,5 @@ test('db exports models', () => {
   assert.equal(typeof db.User, 'function');
   assert.equal(typeof db.Channel, 'function');
   assert.equal(typeof db.Video, 'function');
+  assert.equal(typeof db.Comment, 'function');
 });
