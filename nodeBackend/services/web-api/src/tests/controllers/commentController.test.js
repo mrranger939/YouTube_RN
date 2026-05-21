@@ -67,19 +67,21 @@ test('postComment returns 404 when video not found', async () => {
 
   const origFindOne = db.Video.findOne;
 
-  db.Video.findOne = async () => null;
+  try {
+    db.Video.findOne = async () => null;
 
-  await commentCtrl.postComment(req, res);
+    await commentCtrl.postComment(req, res);
 
-  const r = res._get();
+    const r = res._get();
 
-  assert.equal(r.statusCode, 404);
+    assert.equal(r.statusCode, 404);
 
-  assert.deepEqual(r.body, {
-    error: 'Video not found',
-  });
-
-  db.Video.findOne = origFindOne;
+    assert.deepEqual(r.body, {
+      error: 'Video not found',
+    });
+  } finally {
+    db.Video.findOne = origFindOne;
+  }
 });
 
 test('postComment returns 404 when parent comment not found', async () => {
@@ -99,21 +101,23 @@ test('postComment returns 404 when parent comment not found', async () => {
   const origVideoFindOne = db.Video.findOne;
   const origCommentFindOne = db.Comment.findOne;
 
-  db.Video.findOne = async () => ({});
-  db.Comment.findOne = async () => null;
+  try {
+    db.Video.findOne = async () => ({});
+    db.Comment.findOne = async () => null;
 
-  await commentCtrl.postComment(req, res);
+    await commentCtrl.postComment(req, res);
 
-  const r = res._get();
+    const r = res._get();
 
-  assert.equal(r.statusCode, 404);
+    assert.equal(r.statusCode, 404);
 
-  assert.deepEqual(r.body, {
-    error: 'Parent comment not found',
-  });
-
-  db.Video.findOne = origVideoFindOne;
-  db.Comment.findOne = origCommentFindOne;
+    assert.deepEqual(r.body, {
+      error: 'Parent comment not found',
+    });
+  } finally {
+    db.Video.findOne = origVideoFindOne;
+    db.Comment.findOne = origCommentFindOne;
+  }
 });
 
 test('postComment creates comment successfully', async () => {
@@ -132,23 +136,25 @@ test('postComment creates comment successfully', async () => {
   const origVideoFindOne = db.Video.findOne;
   const origCreate = db.Comment.create;
 
-  db.Video.findOne = async () => ({});
+  try {
+    db.Video.findOne = async () => ({});
 
-  db.Comment.create = async () => ({});
+    db.Comment.create = async () => ({});
 
-  await commentCtrl.postComment(req, res);
+    await commentCtrl.postComment(req, res);
 
-  const r = res._get();
+    const r = res._get();
 
-  assert.equal(r.statusCode, 201);
+    assert.equal(r.statusCode, 201);
 
-  assert.match(
-    r.body.message,
-    /created comment successfully with id:/
-  );
-
-  db.Video.findOne = origVideoFindOne;
-  db.Comment.create = origCreate;
+    assert.match(
+      r.body.message,
+      /created comment successfully with id:/
+    );
+  } finally {
+    db.Video.findOne = origVideoFindOne;
+    db.Comment.create = origCreate;
+  }
 });
 
 /* -------------------------------------------------------------------------- */
@@ -166,21 +172,23 @@ test('getComment returns 404 when comment not found', async () => {
 
   const origFindOne = db.Comment.findOne;
 
-  db.Comment.findOne = () => ({
-    lean: async () => null,
-  });
+  try {
+    db.Comment.findOne = () => ({
+      lean: async () => null,
+    });
 
-  await commentCtrl.getComment(req, res);
+    await commentCtrl.getComment(req, res);
 
-  const r = res._get();
+    const r = res._get();
 
-  assert.equal(r.statusCode, 404);
+    assert.equal(r.statusCode, 404);
 
-  assert.deepEqual(r.body, {
-    error: 'comment not found',
-  });
-
-  db.Comment.findOne = origFindOne;
+    assert.deepEqual(r.body, {
+      error: 'comment not found',
+    });
+  } finally {
+    db.Comment.findOne = origFindOne;
+  }
 });
 
 test('getComment returns comment successfully', async () => {
@@ -194,25 +202,27 @@ test('getComment returns comment successfully', async () => {
 
   const origFindOne = db.Comment.findOne;
 
-  db.Comment.findOne = () => ({
-    lean: async () => ({
+  try {
+    db.Comment.findOne = () => ({
+      lean: async () => ({
+        id: 'c1',
+        commentText: 'hello',
+      }),
+    });
+
+    await commentCtrl.getComment(req, res);
+
+    const r = res._get();
+
+    assert.equal(r.statusCode, null);
+
+    assert.deepEqual(r.body, {
       id: 'c1',
       commentText: 'hello',
-    }),
-  });
-
-  await commentCtrl.getComment(req, res);
-
-  const r = res._get();
-
-  assert.equal(r.statusCode, null);
-
-  assert.deepEqual(r.body, {
-    id: 'c1',
-    commentText: 'hello',
-  });
-
-  db.Comment.findOne = origFindOne;
+    });
+  } finally {
+    db.Comment.findOne = origFindOne;
+  }
 });
 
 /* -------------------------------------------------------------------------- */
@@ -230,25 +240,27 @@ test('getCommentsByVideoId returns comments', async () => {
 
   const origFind = db.Comment.find;
 
-  db.Comment.find = () => ({
-    lean: async () => ([
+  try {
+    db.Comment.find = () => ({
+      lean: async () => ([
+        { id: 'c1' },
+        { id: 'c2' },
+      ]),
+    });
+
+    await commentCtrl.getCommentsByVideoId(req, res);
+
+    const r = res._get();
+
+    assert.equal(r.statusCode, 200);
+
+    assert.deepEqual(r.body, [
       { id: 'c1' },
       { id: 'c2' },
-    ]),
-  });
-
-  await commentCtrl.getCommentsByVideoId(req, res);
-
-  const r = res._get();
-
-  assert.equal(r.statusCode, 200);
-
-  assert.deepEqual(r.body, [
-    { id: 'c1' },
-    { id: 'c2' },
-  ]);
-
-  db.Comment.find = origFind;
+    ]);
+  } finally {
+    db.Comment.find = origFind;
+  }
 });
 
 /* -------------------------------------------------------------------------- */
@@ -266,21 +278,23 @@ test('getRepliesByCommentId returns replies', async () => {
 
   const origFind = db.Comment.find;
 
-  db.Comment.find = () => ({
-    lean: async () => ([
+  try {
+    db.Comment.find = () => ({
+      lean: async () => ([
+        { id: 'r1', parentCommentId: 'c1' },
+      ]),
+    });
+
+    await commentCtrl.getRepliesByCommentId(req, res);
+
+    const r = res._get();
+
+    assert.equal(r.statusCode, 200);
+
+    assert.deepEqual(r.body, [
       { id: 'r1', parentCommentId: 'c1' },
-    ]),
-  });
-
-  await commentCtrl.getRepliesByCommentId(req, res);
-
-  const r = res._get();
-
-  assert.equal(r.statusCode, 200);
-
-  assert.deepEqual(r.body, [
-    { id: 'r1', parentCommentId: 'c1' },
-  ]);
-
-  db.Comment.find = origFind;
+    ]);
+  } finally {
+    db.Comment.find = origFind;
+  }
 });

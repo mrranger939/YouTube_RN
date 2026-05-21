@@ -7,8 +7,8 @@ export const postComment = async (req, res) => {
   try {
     const { videoId, parentCommentId, commentText } = req.body;
     const { user_id } = req.user;
-
-    if (!videoId || !commentText) {
+    const normalizedCommentText = typeof commentText === "string" ? commentText.trim() : "";
+    if (!videoId || !normalizedCommentText) {
       return res.status(400).json({
         error: "videoId and commentText are required",
       });
@@ -24,11 +24,12 @@ export const postComment = async (req, res) => {
     if (parentCommentId) {
       const parentComment = await Comment.findOne({
         id: parentCommentId,
+        videoId
       });
 
       if (!parentComment) {
         return res.status(404).json({
-          error: "Parent comment not found",
+          error: "Parent comment not found for this video",
         });
       }
     }
@@ -45,7 +46,7 @@ export const postComment = async (req, res) => {
       .json({ message: `created comment successfully with id: ${commentId}` });
   } catch (err) {
     console.error(err);
-    return res.status(500).json("failed");
+    return res.status(500).json({ error: "failed" });
   }
 };
 
