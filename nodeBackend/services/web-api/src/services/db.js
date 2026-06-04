@@ -47,11 +47,23 @@ const videoSchema = new mongoose.Schema({
   likes: Number,
   dislikes: Number,
   views: Number,
-  comments: Array,
   timestamp: Date,
+});
+
+// COMMENTS
+const commentSchema = new mongoose.Schema({
+  id: { type: String, required: true, unique: true },
+  userId: { type: String, required: true },
+  videoId: { type: String, required: true },
+  parentCommentId: { type: String, default: null },
+  commentText: { type: String, required: true, trim: true },
+  likes: { type: Number, default: 0 },
+  dislikes: { type: Number, default: 0 },
+  timestamp: { type: Date, default: Date.now },
 });
 
 /* ---------------- MODELS ---------------- */
 export const User = mongoose.model("User", userSchema);
 export const Channel = mongoose.model("Channel", channelSchema);
 export const Video = mongoose.model("Video", videoSchema);
+export const Comment = mongoose.model("Comment", commentSchema);
