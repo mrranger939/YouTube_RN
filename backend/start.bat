@@ -71,7 +71,7 @@ echo [INFO] Starting Kafka...
 docker run -d --rm --name kafka ^
   --network youtubern -p 9092:9092 ^
   -e KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181 ^
-  -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://192.168.1.9:9092 ^
+  -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://192.168.1.4:9092 ^
   -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 ^
   confluentinc/cp-kafka
 
@@ -86,10 +86,10 @@ timeout /t 15
 REM ================================
 REM Enter kafka directory
 REM ================================
-cd /d "%~dp0kafka" || (
-  echo [ERROR] Cannot enter kafka directory.
-  exit /b 1
-)
+@REM cd /d "%~dp0kafka" || (
+@REM   echo [ERROR] Cannot enter kafka directory.
+@REM   exit /b 1
+@REM )
 
 
 
@@ -100,7 +100,7 @@ REM Create Kafka Topic (Python)
 REM ================================
 echo [INFO] Creating Kafka topic...
 
-python create_topic.py
+python -m app.kafka.create_topic
 
 IF %ERRORLEVEL% NEQ 0 (
   echo [ERROR] Kafka topic creation failed.
@@ -119,7 +119,8 @@ REM Start Kafka Consumers (in new window)
 REM ================================
 echo [INFO] Starting Kafka Error consumer...
 @REM start cmd.exe /k python consumer_err.py
-start "Kafka Error Consumer" cmd.exe /k python consumer_err.py
+@REM start "Kafka Error Consumer" cmd.exe /k python consumer_err.py
+start "Kafka Error Consumer" cmd.exe /k python -m app.kafka.consumer_err
 
 
 
@@ -128,7 +129,8 @@ timeout /t 10
 
 echo [INFO] Starting Kafka Video consumer...
 @REM start cmd.exe /k python consumer_vid.py
-start "Kafka Video Consumer" cmd.exe /k python consumer_vid.py
+@REM start "Kafka Video Consumer" cmd.exe /k python consumer_vid.py
+start "Kafka Video Consumer" cmd.exe /k python -m app.kafka.consumer_vid
 
 
 

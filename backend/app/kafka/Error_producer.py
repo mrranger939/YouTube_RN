@@ -1,13 +1,7 @@
 from kafka import KafkaProducer
 from datetime import datetime , timezone
-from dotenv import load_dotenv
-import os
 import json
-
-
-load_dotenv()
-# getting IP 
-ip_address = os.getenv('IP_ADD')
+from app.utils.env import ip_address
 
 producer = KafkaProducer(
     bootstrap_servers=f'{ip_address}:9092',

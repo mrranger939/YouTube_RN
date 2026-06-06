@@ -1,16 +1,8 @@
 import six
 import sys
-import os
 import time
 
-from dotenv import load_dotenv
-
-load_dotenv()
-
-ip_address = os.getenv("IP_ADD")
-
-if not ip_address:
-    raise RuntimeError("Missing required environment variable: IP_ADD")
+from app.utils.env import ip_address
 
 # Workaround for Python 3.12
 if sys.version_info >= (3, 12, 0):
