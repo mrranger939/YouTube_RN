@@ -2,6 +2,15 @@
 setlocal
 
 
+REM ================================
+REM Check if CWD is Backend Directory
+REM ================================
+
+cd /d "%~dp0" || (
+  echo [ERROR] Failed to switch to backend directory.
+  exit /b 1
+)
+
 
 REM ================================
 REM Check if Docker is running

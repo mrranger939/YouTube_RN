@@ -15,7 +15,7 @@ if not kafka_broker:
     raise RuntimeError("Missing required environment variable: KAFKA_BROKER")
 
 # getting GPU Config 
-gpu_config = os.getenv('GPU')
-
-if not gpu_config:
-    raise RuntimeError("Missing required environment variable or Invalid: GPU")
+gpu_config = (os.getenv("GPU") or "").strip().upper()
+allowed_gpu = {"NVIDIA", "INTEGRATED", "NONE"}
+if gpu_config not in allowed_gpu:
+    raise RuntimeError("Invalid environment variable GPU. Allowed: NVIDIA, INTEGRATED, NONE")
