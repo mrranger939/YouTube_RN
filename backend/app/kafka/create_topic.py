@@ -2,7 +2,7 @@ import six
 import sys
 import time
 
-from app.utils.env import ip_address, kafka_broker
+from app.utils.env import kafka_broker
 
 # Workaround for Python 3.12
 if sys.version_info >= (3, 12, 0):

@@ -1,7 +1,7 @@
 from kafka import KafkaProducer
 from datetime import datetime , timezone
 import json
-from app.utils.env import ip_address,kafka_broker
+from app.utils.env import kafka_broker
 
 producer = KafkaProducer(
     bootstrap_servers=kafka_broker,

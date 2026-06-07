@@ -2,7 +2,7 @@ from kafka import KafkaConsumer
 from kafka.errors import NoBrokersAvailable,KafkaError
 import json
 import time
-from app.utils.env import ip_address,kafka_broker
+from app.utils.env import kafka_broker
 
 def create_kafka_consumer(topic :str,groupid :str):
     for _ in range(5):  # Retry up to 5 times

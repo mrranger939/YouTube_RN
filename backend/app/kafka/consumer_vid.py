@@ -88,11 +88,11 @@ def process_videos():
                         ok = s3_client_obj.upload_to_s3(file_path, s3_BUCKET_VIDEO_ABR, s3_key)
                         if not ok:
                             failed_uploads.append(s3_key)
-                            
+
                 if failed_uploads:
                     err_msg = f"Upload failed for {len(failed_uploads)} file(s): {failed_uploads}"
                     print(f"Aborting cleanup — source object preserved.\n{err_msg}")
-                    send_error(video_file, err_msg, "consumer.py")
+                    send_error(video_file, err_msg, __file__)
                     # Do NOT delete local or remote source; skip to next message
                     continue
 
