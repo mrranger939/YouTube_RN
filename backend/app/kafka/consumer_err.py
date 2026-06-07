@@ -1,38 +1,10 @@
 import os
 import json
-from kafka import KafkaConsumer
-from kafka.errors import NoBrokersAvailable,KafkaError
-from dotenv import load_dotenv
-import time
-
-load_dotenv()
-# getting IP 
-ip_address = os.getenv('IP_ADD')
-
-
-def create_kafka_consumer():
-    for _ in range(5):  # Retry up to 5 times
-        try:
-            consumer = KafkaConsumer(
-                'all-errors',
-                bootstrap_servers=f'{ip_address}:9092',
-                auto_offset_reset='latest',
-                enable_auto_commit=True,
-                group_id='error-monitor',
-                value_deserializer=lambda x: json.loads(x.decode('utf-8'))
-            )
-            print("Kafka consumer initialized.")
-            return consumer
-        except NoBrokersAvailable:
-            print("Kafka broker not available. Retrying in 5 seconds...")
-            time.sleep(5)
-    raise Exception("Kafka broker is not available after multiple attempts.")
-
-
+from app.utils.kafka import create_kafka_consumer,KafkaError
 
 
 # Initialize Kafka consumer
-consumer = create_kafka_consumer()
+consumer = create_kafka_consumer('all-errors','error-monitor')
 
 
 LOG_FILE = "./logs/error_logs.jsonl" #JSONL (JSON Lines) is a file format where each line is a valid, independent JSON object, separated by newline characters

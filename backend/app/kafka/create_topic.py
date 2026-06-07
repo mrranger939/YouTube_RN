@@ -1,16 +1,8 @@
 import six
 import sys
-import os
 import time
 
-from dotenv import load_dotenv
-
-load_dotenv()
-
-ip_address = os.getenv("IP_ADD")
-
-if not ip_address:
-    raise RuntimeError("Missing required environment variable: IP_ADD")
+from app.utils.env import kafka_broker
 
 # Workaround for Python 3.12
 if sys.version_info >= (3, 12, 0):
@@ -22,7 +14,7 @@ from kafka.errors import KafkaError
 
 
 # Kafka server configuration
-bootstrap_servers = f"{ip_address}:9092"
+bootstrap_servers = kafka_broker
 
 
 def create_kafka_admin_client(max_retries=5, retry_delay=5):
