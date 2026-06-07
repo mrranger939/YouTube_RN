@@ -2,7 +2,7 @@ import six
 import sys
 import time
 
-from app.utils.env import ip_address
+from app.utils.env import ip_address, kafka_broker
 
 # Workaround for Python 3.12
 if sys.version_info >= (3, 12, 0):
@@ -14,7 +14,7 @@ from kafka.errors import KafkaError
 
 
 # Kafka server configuration
-bootstrap_servers = f"{ip_address}:9092"
+bootstrap_servers = kafka_broker
 
 
 def create_kafka_admin_client(max_retries=5, retry_delay=5):

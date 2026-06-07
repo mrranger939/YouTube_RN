@@ -81,7 +81,7 @@ class S3:
     def upload_to_s3(self,file_path, bucket_name, object_name):
         """Upload a file to s3"""
         try:
-            self.s3_client.upload_file(file_path, bucket_name, object_name)
+            self.s3_class_client.upload_file(file_path, bucket_name, object_name)
             print(f"Uploaded {file_path} to {bucket_name}/{object_name}")
         except Exception as e:
             print(f"Error uploading file to s3: {str(e)}")
