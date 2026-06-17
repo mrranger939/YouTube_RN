@@ -4,8 +4,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
 import { Input } from "@heroui/react";
-import { Textarea } from "@heroui/react";
-import { Spinner } from "@heroui/spinner";
+import { Textarea, Spinner } from "@heroui/react";
 import { resizeImage } from "../utils/imageUtils";
 import { API_BASE_URL } from "../config/api";
 
