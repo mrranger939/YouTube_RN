@@ -21,6 +21,7 @@ vi.mock("../../components/SubcrBtn", () => ({
 vi.mock("@heroui/react", () => ({
   Skeleton: () => <div data-testid="skeleton" />,
   Button: ({ children }) => <button>{children}</button>,
+  Textarea: ({ label }) => <textarea aria-label={label} />,
 }));
 
 import axios from "axios";

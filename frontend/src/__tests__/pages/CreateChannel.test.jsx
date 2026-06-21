@@ -13,9 +13,6 @@ vi.mock("../../config/api", () => ({ API_BASE_URL: "http://localhost:3000" }));
 vi.mock("../../utils/imageUtils", () => ({
   resizeImage: vi.fn().mockResolvedValue(new Blob()),
 }));
-vi.mock("@heroui/spinner", () => ({
-  Spinner: () => <div data-testid="spinner" />,
-}));
 vi.mock("@heroui/react", () => ({
   Input: ({ label, type, value, onChange, required }) => (
     <input
@@ -29,6 +26,7 @@ vi.mock("@heroui/react", () => ({
   Textarea: ({ label, value, onChange }) => (
     <textarea aria-label={label} value={value} onChange={onChange} />
   ),
+    Spinner: () => <div data-testid="spinner" />,
 }));
 
 import Cookies from "js-cookie";

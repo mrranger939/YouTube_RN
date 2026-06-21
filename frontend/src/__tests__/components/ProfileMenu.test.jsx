@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-vi.mock("@heroui/popover", () => ({
+vi.mock("@heroui/react", () => ({
   Popover: ({ children }) => <div>{children}</div>,
   PopoverTrigger: ({ children }) => <div>{children}</div>,
   PopoverContent: ({ children }) => <div data-testid="popover-content">{children}</div>,

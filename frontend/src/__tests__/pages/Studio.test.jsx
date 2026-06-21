@@ -18,9 +18,6 @@ vi.mock("../../Data/VideoGenre", () => ({
 vi.mock("../../Data/VideoType", () => ({
   videoType: [{ key: "video", label: "Video" }],
 }));
-vi.mock("@heroui/spinner", () => ({
-  Spinner: () => <div data-testid="spinner" />,
-}));
 vi.mock("@heroui/react", () => ({
   Textarea: ({ label }) => <textarea aria-label={label} />,
   Autocomplete: ({ children }) => <div data-testid="autocomplete">{children}</div>,
@@ -29,13 +26,10 @@ vi.mock("@heroui/react", () => ({
   Select: ({ children }) => <div data-testid="select">{children}</div>,
   SelectSection: ({ children }) => <div>{children}</div>,
   SelectItem: ({ children }) => <div>{children}</div>,
-}));
-vi.mock("@heroui/autocomplete", () => ({
+  Spinner: () => <div data-testid="spinner" />,
   Autocomplete: ({ children }) => <div data-testid="autocomplete">{children}</div>,
   AutocompleteSection: ({ children }) => <div>{children}</div>,
   AutocompleteItem: ({ children }) => <div>{children}</div>,
-}));
-vi.mock("@heroui/select", () => ({
   Select: ({ children }) => <div data-testid="select">{children}</div>,
   SelectSection: ({ children }) => <div>{children}</div>,
   SelectItem: ({ children }) => <div>{children}</div>,
