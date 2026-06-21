@@ -52,6 +52,12 @@ export const getUserPublicProfile = async (req, res) => {
       data: user,
     });
   } catch (error) {
+    if (error?.name === "CastError") {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid userId",
+      });
+    }
     console.error("Error fetching public user profile:", error);
 
     return res.status(500).json({

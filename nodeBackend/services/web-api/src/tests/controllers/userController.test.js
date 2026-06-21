@@ -260,3 +260,76 @@ test(
     }
   }
 );
+
+test(
+  "getUserPublicProfile returns 400 for invalid userId",
+  async () => {
+    const req = {
+      params: {
+        userId: "",
+      },
+    };
+
+    const res = makeRes();
+
+    const origFindById = db.User.findById;
+
+    try {
+      db.User.findById = () => ({
+        select: async () => {
+          const err = new Error("Cast Error");
+          err.name = "CastError";
+          throw err;
+        },
+      });
+
+      await userCtrl.getUserPublicProfile(req, res);
+
+      const r = res._get();
+
+      assert.equal(r.statusCode, 400);
+
+      assert.deepEqual(r.body, {
+        success: false,
+        message: "Invalid userId",
+      });
+    } finally {
+      db.User.findById = origFindById;
+    }
+  }
+);
+
+test("userDetails returns 400 for invalid userId", async () => {
+  const req = {
+    params: {
+      userId: "",
+    },
+  };
+
+  const res = makeRes();
+
+  const origFindById = db.User.findById;
+
+  try {
+    db.User.findById = () => ({
+      select: async () => {
+        const err = new Error("Cast Error");
+        err.name = "CastError";
+        throw err;
+      },
+    });
+
+    await userCtrl.userDetails(req, res);
+
+    const r = res._get();
+
+    assert.equal(r.statusCode, 400);
+
+    assert.deepEqual(r.body, {
+      success: false,
+      message: "Invalid userId",
+    });
+  } finally {
+    db.User.findById = origFindById;
+  }
+});
