@@ -58,7 +58,7 @@ describe("ReplyItem", () => {
 
     await waitFor(() =>
       expect(axios.get).toHaveBeenCalledWith(
-        "http://localhost:3000/user/user1"
+        "http://localhost:3000/user/profile/user1"
       )
     );
   });

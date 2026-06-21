@@ -7,6 +7,11 @@ import {
 } from "@testing-library/react";
 
 vi.mock("axios");
+const mockNavigate = vi.fn();
+
+vi.mock("react-router-dom", () => ({
+  useNavigate: () => mockNavigate,
+}));
 vi.mock("js-cookie", () => ({
   default: {
     get: vi.fn(),
@@ -69,8 +74,8 @@ const COMMENT = {
   userId: "u1",
   commentText: "Main comment",
   timestamp: "2025-01-01",
-  likesCount: 10,
-  dislikesCount: 2,
+  likes: 10,
+  dislikes: 2,
 };
 
 describe("Comment", () => {

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { Button, Textarea } from "@heroui/react";
 import Cookies from "js-cookie";
 import { API_BASE_URL } from "../config/api";
@@ -8,6 +9,7 @@ import { ReplyItem} from "./ReplyItem";
 import { formatUploadTime } from "../utils/formatter";
 
 export default function Comment({ comment, videoId, refreshComments }) {
+  const navigate = useNavigate();
   const [showReplyBox, setShowReplyBox] = useState(false);
   const [replyText, setReplyText] = useState("");
   const [showReplies, setShowReplies] = useState(false);
@@ -18,7 +20,7 @@ export default function Comment({ comment, videoId, refreshComments }) {
     const fetchUser = async () => {
       try {
         const { data } = await axios.get(
-          `${API_BASE_URL}/user/${comment.userId}`,
+          `${API_BASE_URL}/user/profile/${comment.userId}`,
         );
 
         setUser(data.data);
@@ -49,7 +51,10 @@ export default function Comment({ comment, videoId, refreshComments }) {
     if (!replyText.trim()) return;
 
     const token = Cookies.get("authToken");
-
+    if (!token) {
+      navigate("/login");
+      return;
+    }
     try {
       await axios.post(
         `${API_BASE_URL}/postComment`,
@@ -128,7 +133,7 @@ export default function Comment({ comment, videoId, refreshComments }) {
                       ></path>{" "}
                     </g>
                   </svg>
-                  {comment.likesCount || 0}
+                  {comment.likes || 0}
                 </Button>
 
                 <Button
@@ -158,7 +163,7 @@ export default function Comment({ comment, videoId, refreshComments }) {
                       ></path>{" "}
                     </g>
                   </svg>
-                  {comment.dislikesCount || 0}
+                  {comment.dislikes || 0}
                 </Button>
           <Button
             size="sm"

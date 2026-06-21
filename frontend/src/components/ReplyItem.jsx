@@ -11,7 +11,7 @@ export function ReplyItem({ reply, onReply }) {
     const fetchUser = async () => {
       try {
         const { data } = await axios.get(
-          `${API_BASE_URL}/user/${reply.userId}`
+          `${API_BASE_URL}/user/profile/${reply.userId}`
         );
 
         setUser(data.data);
@@ -112,7 +112,9 @@ export function ReplyItem({ reply, onReply }) {
           size="sm"
           variant="light"
           className="px-0 min-w-0 h-auto mt-1"
-          onPress={() => onReply?.(user?.username)}
+          onPress={() => {
+            if (user?.username) onReply?.(user.username);
+          }}
         >
           Reply
         </Button>

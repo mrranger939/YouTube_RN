@@ -3,7 +3,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 
 vi.mock("axios");
 
-vi.mock("../config/api", () => ({
+vi.mock("../../config/api", () => ({
   API_BASE_URL: "http://localhost:3000",
 }));
 

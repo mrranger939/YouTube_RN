@@ -133,3 +133,130 @@ test("userDetails returns 500 when database throws error", async () => {
     console.error = origConsoleError;
   }
 });
+
+/* -------------------------------------------------------------------------- */
+/* getUserPublicProfile */
+/* -------------------------------------------------------------------------- */
+
+test(
+  "getUserPublicProfile returns 404 when user not found",
+  async () => {
+    const req = {
+      params: {
+        userId: "u1",
+      },
+    };
+
+    const res = makeRes();
+
+    const origFindById = db.User.findById;
+
+    try {
+      db.User.findById = () => ({
+        select: async () => null,
+      });
+
+      await userCtrl.getUserPublicProfile(
+        req,
+        res
+      );
+
+      const r = res._get();
+
+      assert.equal(r.statusCode, 404);
+
+      assert.deepEqual(r.body, {
+        success: false,
+        message: "User not found",
+      });
+    } finally {
+      db.User.findById = origFindById;
+    }
+  }
+);
+
+test(
+  "getUserPublicProfile returns user data successfully",
+  async () => {
+    const req = {
+      params: {
+        userId: "u1",
+      },
+    };
+
+    const res = makeRes();
+
+    const origFindById = db.User.findById;
+
+    try {
+      const mockUser = {
+        _id: "u1",
+        username: "john",
+        profilePic: "profile.jpg",
+      };
+
+      db.User.findById = () => ({
+        select: async () => mockUser,
+      });
+
+      await userCtrl.getUserPublicProfile(
+        req,
+        res
+      );
+
+      const r = res._get();
+
+      assert.equal(r.statusCode, 200);
+
+      assert.deepEqual(r.body, {
+        success: true,
+        data: mockUser,
+      });
+    } finally {
+      db.User.findById = origFindById;
+    }
+  }
+);
+
+test(
+  "getUserPublicProfile returns 500 when database throws error",
+  async () => {
+    const req = {
+      params: {
+        userId: "u1",
+      },
+    };
+
+    const res = makeRes();
+
+    const origFindById = db.User.findById;
+    const origConsoleError = console.error;
+
+    try {
+      console.error = () => {};
+
+      db.User.findById = () => ({
+        select: async () => {
+          throw new Error("Database Error");
+        },
+      });
+
+      await userCtrl.getUserPublicProfile(
+        req,
+        res
+      );
+
+      const r = res._get();
+
+      assert.equal(r.statusCode, 500);
+
+      assert.deepEqual(r.body, {
+        success: false,
+        message: "Internal server error",
+      });
+    } finally {
+      db.User.findById = origFindById;
+      console.error = origConsoleError;
+    }
+  }
+);

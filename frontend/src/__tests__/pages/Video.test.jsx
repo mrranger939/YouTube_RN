@@ -23,6 +23,10 @@ vi.mock("@heroui/react", () => ({
   Button: ({ children }) => <button>{children}</button>,
   Textarea: ({ label }) => <textarea aria-label={label} />,
 }));
+vi.mock("react-router-dom", () => ({
+  useParams: () => ({ id: "123" }),
+  useNavigate: () => vi.fn(),
+}));
 
 import axios from "axios";
 import Video from "../../pages/Video";

@@ -7,8 +7,12 @@ vi.mock("js-cookie", () => ({
     get: vi.fn(),
   },
 }));
+const mockNavigate = vi.fn();
 
-vi.mock("../config/api", () => ({
+vi.mock("react-router-dom", () => ({
+  useNavigate: () => mockNavigate,
+}));
+vi.mock("../../config/api", () => ({
   API_BASE_URL: "http://localhost:3000",
 }));
 
@@ -23,11 +27,7 @@ vi.mock("@heroui/react", () => ({
   ),
 
   Button: ({ children, onPress, isLoading }) => (
-    <button
-      data-testid="comment-button"
-      onClick={onPress}
-      disabled={isLoading}
-    >
+    <button data-testid="comment-button" onClick={onPress} disabled={isLoading}>
       {children}
     </button>
   ),
@@ -51,12 +51,10 @@ describe("PostComment", () => {
   it("renders textarea and comment button", () => {
     render(<PostComment videoId="vid1" />);
 
-    expect(
-      screen.getByPlaceholderText("Add a comment...")
-    ).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("Add a comment...")).toBeInTheDocument();
 
     expect(
-      screen.getByRole("button", { name: /comment/i })
+      screen.getByRole("button", { name: /comment/i }),
     ).toBeInTheDocument();
   });
 
@@ -70,6 +68,21 @@ describe("PostComment", () => {
     });
 
     expect(textarea.value).toBe("Hello world");
+  });
+
+  it("redirects to login when user is not authenticated", async () => {
+    Cookies.get.mockReturnValue(undefined);
+
+    render(<PostComment videoId="vid123" />);
+
+    fireEvent.change(screen.getByTestId("comment-input"), {
+      target: { value: "Test comment" },
+    });
+
+    fireEvent.click(screen.getByTestId("comment-button"));
+
+    expect(mockNavigate).toHaveBeenCalledWith("/login");
+    expect(axios.post).not.toHaveBeenCalled();
   });
 
   it("does not post when comment is empty", async () => {
@@ -117,7 +130,7 @@ describe("PostComment", () => {
           headers: {
             Authorization: "Bearer mock-token",
           },
-        }
+        },
       );
     });
   });
@@ -125,12 +138,7 @@ describe("PostComment", () => {
   it("calls onSuccess after successful post", async () => {
     const onSuccess = vi.fn();
 
-    render(
-      <PostComment
-        videoId="vid123"
-        onSuccess={onSuccess}
-      />
-    );
+    render(<PostComment videoId="vid123" onSuccess={onSuccess} />);
 
     fireEvent.change(screen.getByTestId("comment-input"), {
       target: { value: "Great content!" },
@@ -160,9 +168,7 @@ describe("PostComment", () => {
   });
 
   it("handles API errors gracefully", async () => {
-    const consoleSpy = vi
-      .spyOn(console, "error")
-      .mockImplementation(() => {});
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
     axios.post.mockRejectedValue(new Error("API Error"));
 

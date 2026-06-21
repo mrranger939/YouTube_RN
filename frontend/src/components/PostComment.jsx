@@ -1,19 +1,27 @@
 import { useState } from "react";
 import { Textarea, Button } from "@heroui/react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { API_BASE_URL } from "../config/api";
 
 export default function PostComment({ videoId, onSuccess }) {
+  const navigate = useNavigate();
   const [commentText, setCommentText] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handlePostComment = async () => {
+    const token = Cookies.get("authToken");
+    // Redirect if not logged in
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
     if (!commentText.trim()) return;
 
     try {
       setLoading(true);
-      const token = Cookies.get("authToken");
       await axios.post(
         `${API_BASE_URL}/postComment`,
         {
@@ -35,6 +43,9 @@ export default function PostComment({ videoId, onSuccess }) {
       }
     } catch (err) {
       console.error("Failed to post comment:", err);
+      if (err.response?.status === 401) {
+        navigate("/login");
+      }
     } finally {
       setLoading(false);
     }
