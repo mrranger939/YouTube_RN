@@ -5,14 +5,9 @@ import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import "./Home.css";
 import "./Studio.css";
-import { Spinner } from "@heroui/spinner";
-import { Textarea } from "@heroui/react";
-import {
-  Autocomplete,
+import { Textarea, Spinner,  Autocomplete,
   AutocompleteSection,
-  AutocompleteItem,
-} from "@heroui/autocomplete";
-import { Select, SelectSection, SelectItem } from "@heroui/select";
+  AutocompleteItem, Select, SelectSection, SelectItem} from "@heroui/react";
 import { resizeImage } from "../utils/imageUtils";
 import { genres } from "../Data/VideoGenre";
 import { videoType } from "../Data/VideoType";

@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import "./Home.css";
 import VCards from "../components/VCards";
 import SubcrBtn from "../components/SubcrBtn";
+import CommentSection from "../components/CommentSection";
 import { API_BASE_URL } from "../config/api";
 
 
@@ -310,7 +311,9 @@ export default function Video() {
 
 
           {/* Comment Section */}
-          <div className="discription bg-gray-400 flex-none h-16 mt-3 rounded-xl"></div>
+          <div className="mt-3">
+            <CommentSection videoId={data_id} />
+          </div>
         </div>
 
 

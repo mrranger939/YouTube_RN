@@ -1,5 +1,5 @@
 import React from "react";
-import { Popover, PopoverTrigger, PopoverContent } from "@heroui/popover";
+import { Popover, PopoverTrigger, PopoverContent } from "@heroui/react";
 
 export default function ProfileMenu({profilePic, logout}) {
     return (

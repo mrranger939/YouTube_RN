@@ -10,6 +10,7 @@ vi.mock("hls.js", () => ({
 }));
 vi.mock("react-router-dom", () => ({
   useParams: () => ({ data_id: "vid123" }),
+  useNavigate: () => vi.fn(),
 }));
 vi.mock("../../config/api", () => ({ API_BASE_URL: "http://localhost:3000" }));
 vi.mock("../../components/VCards", () => ({
@@ -21,7 +22,9 @@ vi.mock("../../components/SubcrBtn", () => ({
 vi.mock("@heroui/react", () => ({
   Skeleton: () => <div data-testid="skeleton" />,
   Button: ({ children }) => <button>{children}</button>,
+  Textarea: ({ label }) => <textarea aria-label={label} />,
 }));
+
 
 import axios from "axios";
 import Video from "../../pages/Video";
