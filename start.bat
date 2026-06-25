@@ -41,6 +41,21 @@ echo ============================================================
 echo [STEP 2/10] Detecting Local IP Address
 echo ============================================================
 
+REM ============================================================
+REM Wi-Fi Network Detection
+REM ============================================================
+REM This script is specifically designed to detect the local IP
+REM address from an active Wi-Fi adapter.
+REM
+REM Network Interface Type Codes:
+REM   Ethernet = 6
+REM   Wi-Fi    = 71
+REM   Loopback = 24
+REM
+REM The filter below uses InterfaceType = 71 to ensure that the
+REM IP address is obtained from the active Wi-Fi connection.
+REM ============================================================
+
 set "IP_ADDR="
 
 for /f "delims=" %%a in ('powershell -NoProfile -Command "$iface = Get-NetIPConfiguration | Where-Object { $_.IPv4DefaultGateway -ne $null -and $_.NetAdapter.Status -eq 'Up' -and $_.NetAdapter.InterfaceType -eq 71 } | Select-Object -First 1; if ($iface) { $iface.IPv4Address.IPAddress } else { '' }"') do (
