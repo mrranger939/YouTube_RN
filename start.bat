@@ -43,12 +43,8 @@ echo ============================================================
 
 set "IP_ADDR="
 
-for /f "tokens=2 delims=:" %%a in ('ipconfig ^| findstr /C:"IPv4 Address"') do (
-    set "TMP=%%a"
-    set "TMP=!TMP: =!"
-    if not defined IP_ADDR (
-        set "IP_ADDR=!TMP!"
-    )
+for /f "delims=" %%a in ('powershell -NoProfile -Command "$iface = Get-NetIPConfiguration | Where-Object { $_.IPv4DefaultGateway -ne $null -and $_.NetAdapter.Status -eq 'Up' -and $_.NetAdapter.InterfaceType -eq 71 } | Select-Object -First 1; if ($iface) { $iface.IPv4Address.IPAddress } else { '' }"') do (
+    set "IP_ADDR=%%a"
 )
 
 if not defined IP_ADDR (
@@ -100,7 +96,7 @@ echo.
 echo     PLAINTEXT://%IP_ADDR%:9092
 echo.
 
-start "Kafka" cmd /k "docker run --name kafka -p 9092:9092 -e KAFKA_PROCESS_ROLES=broker,controller -e KAFKA_NODE_ID=1 -e KAFKA_CONTROLLER_QUORUM_VOTERS=1@localhost:9093 -e KAFKA_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093 -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://%IP_ADDR%:9092 -e KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER -e KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 -e KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS=0 confluentinc/cp-kafka"
+start "Kafka" cmd /k "docker run --name kafka -p 9092:9092 -e CLUSTER_ID=MkU3OEVBNTcwNTJENDM2Qk -e KAFKA_PROCESS_ROLES=broker,controller -e KAFKA_NODE_ID=1 -e KAFKA_CONTROLLER_QUORUM_VOTERS=1@localhost:9093 -e KAFKA_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093 -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://%IP_ADDR%:9092 -e KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER -e KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 -e KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS=0 confluentinc/cp-kafka:7.9.0"
 
 echo [SUCCESS] Kafka terminal launched.
 echo.
@@ -142,7 +138,7 @@ if not exist "%BACKEND_ENV%" (
     exit /b 1
 )
 
-powershell -NoProfile -Command "(Get-Content '%BACKEND_ENV%') -replace '^IP_ADD=.*', 'IP_ADD=%IP_ADDR%' | Set-Content '%BACKEND_ENV%'"
+powershell -NoProfile -Command "$c = Get-Content '%BACKEND_ENV%'; if ($c -match '^IP_ADD=') { $c = $c -replace '^IP_ADD=.*', 'IP_ADD=%IP_ADDR%' } else { $c += 'IP_ADD=%IP_ADDR%' }; Set-Content '%BACKEND_ENV%' $c"
 
 if %ERRORLEVEL% NEQ 0 (
     echo [ERROR] Failed to update backend .env
@@ -217,7 +213,7 @@ if not exist "%NODE_ENV%" (
     exit /b 1
 )
 
-powershell -NoProfile -Command "(Get-Content '%NODE_ENV%') -replace '^IP_ADD=.*', 'IP_ADD=%IP_ADDR%' | Set-Content '%NODE_ENV%'"
+powershell -NoProfile -Command "$c = Get-Content '%NODE_ENV%'; if ($c -match '^IP_ADD=') { $c = $c -replace '^IP_ADD=.*', 'IP_ADD=%IP_ADDR%' } else { $c += 'IP_ADD=%IP_ADDR%' }; Set-Content '%NODE_ENV%' $c"
 
 if %ERRORLEVEL% NEQ 0 (
     echo [ERROR] Failed to update Node Backend .env
@@ -259,7 +255,7 @@ if not exist "%FRONTEND_ENV%" (
     exit /b 1
 )
 
-powershell -NoProfile -Command "(Get-Content '%FRONTEND_ENV%') -replace '^VITE_IP_ADD=.*', 'VITE_IP_ADD=%IP_ADDR%' | Set-Content '%FRONTEND_ENV%'"
+powershell -NoProfile -Command "$c = Get-Content '%FRONTEND_ENV%'; if ($c -match '^VITE_IP_ADD=') { $c = $c -replace '^VITE_IP_ADD=.*', 'VITE_IP_ADD=%IP_ADDR%' } else { $c += 'VITE_IP_ADD=%IP_ADDR%' }; Set-Content '%FRONTEND_ENV%' $c"
 
 if %ERRORLEVEL% NEQ 0 (
     echo [ERROR] Failed to update frontend .env
