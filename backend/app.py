@@ -126,9 +126,9 @@ producer = KafkaProducer(
 
 # S3 configuration
 S3_U_BUCKET = 'untranscoded'
-S3_I_BUCKET = 'thumbnail'
+S3_T_BUCKET = 'thumbnail'
 S3_V_BUCKET = 'video-abr'
-S3_X_BUCKET = 'profiles'
+S3_P_BUCKET = 'profiles'
 LOCALSTACK_URL = f'http://{ip_address}:4566'
 
 # Initialize S3 client for LocalStack
@@ -238,7 +238,7 @@ def upload_file():
             extension=image_file.filename.split('.')[-1]
             i_name=v_id+'.'+extension
             
-            if upload_to_s3(video_file, S3_U_BUCKET, v_name) and upload_to_s3(image_file, S3_I_BUCKET, i_name, img=True):
+            if upload_to_s3(video_file, S3_U_BUCKET, v_name) and upload_to_s3(image_file, S3_T_BUCKET, i_name, img=True):
                 
                 print({'Video and Thumbnail ': v_id})
                 print(producer)
@@ -321,9 +321,9 @@ def signin():
             v_id = generate_unique_id(secure_filename(image_file.filename))
             extension=image_file.filename.split('.')[-1]
             i_name=v_id+'.'+extension
-            if upload_to_s3(image_file, S3_X_BUCKET, i_name,img=True,exp=86400):
+            if upload_to_s3(image_file, S3_P_BUCKET, i_name,img=True,exp=86400):
                 print({'uploaded the channel image with video Id: ': v_id})
-                profile_pic_link = f'{LOCALSTACK_URL}/{S3_X_BUCKET}/{i_name}'
+                profile_pic_link = f'{LOCALSTACK_URL}/{S3_P_BUCKET}/{i_name}'
                 user_id = PROFILES.insert_one({
                     "username": username,
                     "email": email,
@@ -408,9 +408,9 @@ def createChannel():
             v_id = generate_unique_id(secure_filename(image_file.filename))
             extension=image_file.filename.split('.')[-1]
             i_name=v_id+'.'+extension
-            if upload_to_s3(image_file, S3_X_BUCKET, i_name,img=True,exp=86400):
+            if upload_to_s3(image_file, S3_P_BUCKET, i_name,img=True,exp=86400):
                 print({'uploaded the channelBanner image with video Id: ': v_id})
-                channelBanner_link = f'{LOCALSTACK_URL}/{S3_X_BUCKET}/{i_name}'
+                channelBanner_link = f'{LOCALSTACK_URL}/{S3_P_BUCKET}/{i_name}'
                 profile_pic_link = PROFILES.find_one({"_id":ObjectId(userId)}, {"profilePic": 1, "_id": 0})
                 print(profile_pic_link)
                 CHANNELS.insert_one({

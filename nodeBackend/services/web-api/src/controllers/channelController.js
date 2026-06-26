@@ -36,7 +36,7 @@ export const createChannel = async (req, res) => {
     // upload banner to S3
     const uploaded = await uploadToS3(
       req.file.buffer,
-      config.S3_X_BUCKET,
+      config.S3_P_BUCKET,
       i_name,
       true,
       86400
@@ -44,7 +44,7 @@ export const createChannel = async (req, res) => {
 
     if (!uploaded) return res.status(500).json("failed");
 
-    const channelBanner = `${config.LOCALSTACK_URL}/${config.S3_X_BUCKET}/${i_name}`;
+    const channelBanner = `${config.LOCALSTACK_URL}/${config.S3_P_BUCKET}/${i_name}`;
 
     // get user's profile pic for logo
     const user = await User.findById(usedId, { profilePic: 1 });

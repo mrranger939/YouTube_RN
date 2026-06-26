@@ -15,7 +15,7 @@ export const config = {
   LOCALSTACK_URL: `http://${process.env.IP_ADD}:4566`,
 
   S3_U_BUCKET: "untranscoded",
-  S3_I_BUCKET: "thumbnail",
+  S3_T_BUCKET: "thumbnail",
   S3_V_BUCKET: "video-abr",
-  S3_X_BUCKET: "profiles",
+  S3_P_BUCKET: "profiles",
 };

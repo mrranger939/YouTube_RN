@@ -24,7 +24,7 @@ export const signup = async (req, res) => {
 
     const uploaded = await uploadToS3(
       req.file.buffer,
-      config.S3_X_BUCKET,
+      config.S3_P_BUCKET,
       i_name,
       true,
       86400
@@ -32,7 +32,7 @@ export const signup = async (req, res) => {
 
     if (!uploaded) return res.status(500).json("failed");
 
-    const profilePic = `${config.LOCALSTACK_URL}/${config.S3_X_BUCKET}/${i_name}`;
+    const profilePic = `${config.LOCALSTACK_URL}/${config.S3_P_BUCKET}/${i_name}`;
 
     await User.create({
       username,

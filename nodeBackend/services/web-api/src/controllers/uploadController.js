@@ -35,7 +35,7 @@ export const uploadVideo = async (req, res) => {
 
     const imageUploaded = await uploadToS3(
       imageFile.buffer,
-      config.S3_I_BUCKET,
+      config.S3_T_BUCKET,
       i_name,
       true
     );
