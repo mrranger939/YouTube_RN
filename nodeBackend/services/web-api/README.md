@@ -45,9 +45,9 @@ JWT_SECRET=your_secret_key
 LOCALSTACK_URL=http://10.53.207.1:4566
 
 S3_U_BUCKET=untranscoded
-S3_I_BUCKET=thumbnail
+S3_T_BUCKET=thumbnail
 S3_V_BUCKET=video-abr
-S3_X_BUCKET=profiles
+S3_P_BUCKET=profiles
 
 KAFKA_BROKER=10.53.207.1:9092
 KAFKA_TOPIC=video-uploads
